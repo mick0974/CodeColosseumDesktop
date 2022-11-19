@@ -1,8 +1,11 @@
 # CodeColosseumDesktop
 
 This app in intended to be used as Graphic client for Code Colosseum
-
 https://github.com/dariost/CodeColosseum
+
+## Functionalities
+
+
 
 ## Install
 
@@ -42,6 +45,8 @@ CodeColosseum ( for the server )
   git clone https://github.com/dariost/CodeColosseum 
   cd CodeColosseum/
   cargo build --release
+  cd target/release/
+  ./cocod
 ```
 
 
