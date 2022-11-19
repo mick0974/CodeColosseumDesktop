@@ -1,27 +1,73 @@
 # CodeColosseumDesktop
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.5.
+This app in intended to be used as Graphic client for Code Colosseum
 
-## Development server
+https://github.com/dariost/CodeColosseum
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Install
 
-## Code scaffolding
+TODO: Download a binary release
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Setup Development Environment 
+The project by default is intended to be used with Visual Studio Code.
+The app is a client and in order to be used it requires to connect to instance of CodeColosseum server (cocod).
 
-## Build
+Dependencies:
+- NodeJS
+- TypeScript
+- Angular
+- CodeColosseum 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- NodeJS
+```bash
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+  source ~/.bashrc
+  nvm list-remote
+  nvm install --lts
+```
+  
+- TypeScript
+```bash
+  npm install -g typescript
+```
 
-## Running unit tests
+Angular
+```bash
+  npm install -g @angular/cli
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+CodeColosseum ( for the server ) 
+```bash
+  sudo apt install cargo
+  git clone https://github.com/dariost/CodeColosseum 
+  cd CodeColosseum/
+  cargo build --release
+```
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Running the app
 
-## Further help
+From the main folder of the app ( same location as package.json )     
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Install node dependencies (run once):     
+```bash
+npm install
+```
+
+To run the actuall app during development ( it autoreload when files are changed )     
+Then navigate to `http://localhost:4200/`
+```bash
+ng serve
+```
+
+To create new components (ex: views ) 
+```bash
+ng generate component component-name
+```
+
+To build a "production" version, the build artifacts will be stored in the `dist/` directory.
+```bash
+ng build
+```
+
+__This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.5.__
