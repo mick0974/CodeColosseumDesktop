@@ -1,6 +1,6 @@
 # CodeColosseumDesktop
 
-This app in intended to be used as Graphic client for Code Colosseum
+This app in intended to be used as Graphic client for Code Colosseum     
 https://github.com/dariost/CodeColosseum
 
 ## Functionalities
