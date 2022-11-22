@@ -42,10 +42,7 @@ Angular
 CodeColosseum ( for the server ) 
 ```bash
   sudo apt install cargo
-  git clone https://github.com/dariost/CodeColosseum 
-  cd CodeColosseum/
-  cargo build --release
-  cd target/release/
+  source install_coco.sh
   ./cocod
 ```
 
