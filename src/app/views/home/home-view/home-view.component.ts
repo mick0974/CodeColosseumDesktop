@@ -15,7 +15,7 @@ export class HomeViewComponent implements OnInit {
     let api = new ApiService();
     
     api.gameList((gameList)=>{
-      //alert(gameList);
+      console.log(gameList);
     });
 
     api.gameNew((gameNew) => {
@@ -23,7 +23,7 @@ export class HomeViewComponent implements OnInit {
     }, "roshambo", "PorcoRonco");
 
     api.lobbyList((lobbyList) => {
-      console.log(lobbyList.forEach(prop => console.log(prop)))
+      console.log(lobbyList)
     });
   }
 
