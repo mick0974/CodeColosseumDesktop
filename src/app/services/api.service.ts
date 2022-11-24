@@ -29,8 +29,8 @@ export class ApiService {
     return cmdLobbyList;
   }
 
-  public gameNew( result:(newGame:string) =>void, game_name:string, lobby_name:string, error?:(error:String)=>void ){
-    let cmdNewGame = new Commands.GameNew(this.url, game_name, lobby_name);
+  public gameNew( result:(newGame:string) =>void, lobby_name:string, game_name:string, players?:number, bots?:number, timeout?:number, args?:{}, password?:string, verification?:string, error?:(error:string)=>void){
+    let cmdNewGame = new Commands.GameNew(this.url, lobby_name, game_name, players, bots, timeout, args, password, verification);
     cmdNewGame.gameNewCreated = (message)=>{
       if(result){result(message.id)}
       console.log(message);
@@ -47,7 +47,6 @@ export class CoCoSocket{
   public resultError?:(error:string)=>void;
   public resultClosed?:()=>void;
   
-
   constructor(url:string){
     this.url = url;
   }
@@ -182,34 +181,20 @@ export namespace Commands{
 
   export class GameNew extends Command {
     public gameId?:(message:Packets.Reply.GameNew)=>void;
-    public msg = new Packets.Request.GameNew();
+    private msg?:Packets.Request.GameNew;
 
-    constructor(url:string, game_name?:string, lobby_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
+    constructor(url:string, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
       super(url);
+      console.log(game_name);
 
-      if(game_name)
-        this.msg.game = game_name;
-      if(lobby_name)
-        this.msg.name = lobby_name;
-      if(num_palyer)
-        this.msg.params.players=num_palyer;
-      if(num_bots)
-        this.msg.params.bots=num_bots;
-      if(timeout)
-        this.msg.params.timeout=timeout;
-      if(args)
-        this.msg.args = args;
-      if(password)
-        this.msg.password = password;
-      if(verification)
-        this.msg.verification = verification;
+      this.msg = new Packets.Request.GameNew(lobby_name, game_name, num_palyer, num_bots, timeout, args, password, verification);
     }
 
     public override handshakeRecieved( message: Packets.Reply.Handshake){
       super.handshakeRecieved(message);
 
       console.log(this.msg);
-      this.ws!.send(this.msg, Packets.Reply.GameNew, (message)=>{ this.gameNewCreated(message) });
+      this.ws!.send(this.msg!, Packets.Reply.GameNew, (message)=>{ this.gameNewCreated(message) });
     }
 
     public gameNewCreated(message:Packets.Reply.GameNew){
@@ -267,9 +252,15 @@ export namespace Packets{
   }
 
   export class GameParams {
-    public players:number=2;
-    public bots: number=0;
-    public timeout: number=30.0;
+    public players?:number;
+    public bots?:number;
+    public timeout?:number;
+
+    constructor(players=0, bots=0, timeout=30.0){
+      this.players = players;
+      this.bots = bots;
+      this.timeout = timeout;
+    }
   }
 
   export class Result<T1,T2>{}
@@ -302,12 +293,22 @@ export namespace Packets{
       name: string = "";
     }
     export class GameNew extends Message  {
-      name: string = "";
-      game: string = "";
-      params = new GameParams();
-      args = {};   
-      password: string="";
+      name?:string;
+      game?:string;
+      params?:GameParams;
+      args?:{};   
+      password?:string;
       verification?:string;
+
+      constructor(name="", game="", players?:number, bots?:number, timeout?:number, args={}, password="", verification?:string) {
+        super();
+        this.name = name;
+        this.game = game;
+        this.params = new GameParams(players, bots, timeout);
+        this.args = args;
+        this.password = password;
+        this.verification = verification;
+      }
     }
     export class LobbyList extends Message  {}
     export class LobbySubscribe extends Message {}
