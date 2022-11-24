@@ -24,6 +24,8 @@ export class HomeViewComponent implements OnInit {
 
     api.lobbyList((lobbyList) => {
       console.log(lobbyList)
+    }, (error) => {
+      alert("error 3")
     });
   }
 

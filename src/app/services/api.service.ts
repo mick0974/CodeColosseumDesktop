@@ -9,20 +9,22 @@ export class ApiService {
   public url = 'ws://localhost:8088';
 
   
-  public gameList( result:(gameList:String[])=>void ){
+  public gameList(result:(gameList:String[])=>void, error?:(error: String)=>void){
     let cmdGameList = new Commands.GameList(this.url);
     cmdGameList.resultGameList = (message)=>{
       if(result){result(message.games)}
     }
+    cmdGameList.resultError = error;
     cmdGameList.run();
     return cmdGameList;
   }
 
-  public lobbyList( result:(lobbyList:Packets.MatchInfo[])=>void ){
+  public lobbyList( result:(lobbyList:Packets.MatchInfo[])=>void, error?:(error:String)=>void ){
     let cmdLobbyList = new Commands.LobbyList(this.url);
     cmdLobbyList.resultLobbyList = (message)=>{
       if(result){result(message.info)}
     }
+    cmdLobbyList.resultError = error;
     cmdLobbyList.run();
     return cmdLobbyList;
   }
@@ -33,6 +35,7 @@ export class ApiService {
       if(result){result(message.id)}
       console.log(message);
     }
+    cmdNewGame.resultError = error;
     cmdNewGame.run();
     return cmdNewGame;
   }
@@ -170,9 +173,9 @@ export namespace Commands{
     }
 
     public lobbyListRecieved(message:Packets.Reply.LobbyList){
-      console.log("LobbyList: list received");
+      //console.log("LobbyList: list received");
       if (this.resultLobbyList && message) { this.resultLobbyList(message) };
-      console.log(this.resultLobbyList);
+      //console.log(this.resultLobbyList);
     }
   }
 
