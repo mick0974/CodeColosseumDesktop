@@ -20,10 +20,14 @@ export class HomeViewComponent implements OnInit {
 
     api.gameNew((gameNew) => {
       console.log(gameNew)
-    }, "roshambo", "PorcoRonco");
+    }, "roshambo", "PorcoRonco", (error) => {
+      alert("error 2");
+    });
 
     api.lobbyList((lobbyList) => {
       console.log(lobbyList)
+    }, (error) => {
+      alert("error 3")
     });
   }
 
