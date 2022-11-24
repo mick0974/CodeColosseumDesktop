@@ -20,7 +20,7 @@ export class HomeViewComponent implements OnInit {
 
     api.gameNew((gameNew) => {
       console.log(gameNew)
-    }, "roshambo", "PorcoRonco");
+    }, "Lobby", "roshambo");
 
     api.lobbyList((lobbyList) => {
       console.log(lobbyList)
