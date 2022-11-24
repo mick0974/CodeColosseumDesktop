@@ -27,7 +27,7 @@ export class ApiService {
     return cmdLobbyList;
   }
 
-  public gameNew( result:(newGame:string) =>void, lobby_name:string, game_name:string){
+  public gameNew( result:(newGame:string) =>void, lobby_name:string, game_name:string, error?:(error:string)=>void){
     let cmdNewGame = new Commands.GameNew(this.url, lobby_name, game_name);
     cmdNewGame.gameNewCreated = (message)=>{
       if(result){result(message.id)}
