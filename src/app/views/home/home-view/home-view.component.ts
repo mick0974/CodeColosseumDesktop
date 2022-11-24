@@ -11,9 +11,19 @@ export class HomeViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    alert("API is available");
     let api = new ApiService();
+    
     api.gameList((gameList)=>{
-      alert(gameList);
+      console.log(gameList);
+    });
+
+    api.gameNew((gameNew) => {
+      console.log(gameNew)
+    }, "roshambo", "PorcoRonco");
+
+    api.lobbyList((lobbyList) => {
+      console.log(lobbyList)
     });
   }
 

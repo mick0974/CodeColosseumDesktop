@@ -13,10 +13,28 @@ export class ApiService {
     let cmdGameList = new Commands.GameList(this.url);
     cmdGameList.resultGameList = (message)=>{
       if(result){result(message.games)}
-      alert(message.games);
     }
     cmdGameList.run();
     return cmdGameList;
+  }
+
+  public lobbyList( result:(lobbyList:Packets.MatchInfo[])=>void ){
+    let cmdLobbyList = new Commands.LobbyList(this.url);
+    cmdLobbyList.resultLobbyList = (message)=>{
+      if(result){result(message.info)}
+    }
+    cmdLobbyList.run();
+    return cmdLobbyList;
+  }
+
+  public gameNew( result:(newGame:string) =>void, game_name:string, lobby_name:string ){
+    let cmdNewGame = new Commands.GameNew(this.url, game_name, lobby_name);
+    cmdNewGame.gameNewCreated = (message)=>{
+      if(result){result(message.id)}
+      console.log(message);
+    }
+    cmdNewGame.run();
+    return cmdNewGame;
   }
 }
 
@@ -141,6 +159,63 @@ export namespace Commands{
       if (this.resultGameList && message) { this.resultGameList(message) };
     }
   }
+
+  export class LobbyList extends Command{
+    public resultLobbyList?:(message:Packets.Reply.LobbyList)=>void;
+    
+    public override handshakeRecieved( message: Packets.Reply.Handshake){
+      super.handshakeRecieved(message);
+      
+      let msg = new Packets.Request.LobbyList();
+      this.ws!.send(msg, Packets.Reply.LobbyList, (message)=>{ this.lobbyListRecieved(message) });
+    }
+
+    public lobbyListRecieved(message:Packets.Reply.LobbyList){
+      console.log("LobbyList: list received");
+      if (this.resultLobbyList && message) { this.resultLobbyList(message) };
+      console.log(this.resultLobbyList);
+    }
+  }
+
+  export class GameNew extends Command {
+    public gameId?:(message:Packets.Reply.GameNew)=>void;
+    public msg = new Packets.Request.GameNew();
+
+    constructor(url:string, game_name?:string, lobby_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
+      super(url);
+
+      if(game_name)
+        this.msg.game = game_name;
+      if(lobby_name)
+        this.msg.name = lobby_name;
+      if(num_palyer)
+        this.msg.params.players=num_palyer;
+      if(num_bots)
+        this.msg.params.bots=num_bots;
+      if(timeout)
+        this.msg.params.timeout=timeout;
+      if(args)
+        this.msg.args = args;
+      if(password)
+        this.msg.password = password;
+      if(verification)
+        this.msg.verification = verification;
+    }
+
+    public override handshakeRecieved( message: Packets.Reply.Handshake){
+      super.handshakeRecieved(message);
+
+      console.log(this.msg);
+      this.ws!.send(this.msg, Packets.Reply.GameNew, (message)=>{ this.gameNewCreated(message) });
+    }
+
+    public gameNewCreated(message:Packets.Reply.GameNew){
+      console.log("GameNew");
+      if (this.gameId && message) { this.gameId(message); }
+      console.log(this.gameId);
+    }
+
+  }
 }
 
 
@@ -189,7 +264,7 @@ export namespace Packets{
   }
 
   export class GameParams {
-    public players:number=0;
+    public players:number=2;
     public bots: number=0;
     public timeout: number=30.0;
   }
@@ -229,7 +304,7 @@ export namespace Packets{
       params = new GameParams();
       args = {};   
       password: string="";
-      verification: string="";
+      verification?:string;
     }
     export class LobbyList extends Message  {}
     export class LobbySubscribe extends Message {}
