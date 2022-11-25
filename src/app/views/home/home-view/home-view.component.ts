@@ -14,21 +14,30 @@ export class HomeViewComponent implements OnInit {
     alert("API is available");
     let api = new ApiService();
     
+    /*
     api.gameList((gameList)=>{
       console.log(gameList);
     });
+    */
 
     api.gameNew((gameNew) => {
-      console.log(gameNew)
+      alert(gameNew);
+      
+      
+      api.connect((lobbyData) => {
+        alert(lobbyData);
+      }, gameNew, "Lollo123");
     }, "Lobby", "roshambo", 2, undefined, undefined, undefined, undefined, undefined, (error) => {
       alert("error 3")
     });
 
+    /*
     api.lobbyList((lobbyList) => {
       console.log(lobbyList)
     }, (error) => {
       alert("error 3")
     });
+    */
   }
 
 }
