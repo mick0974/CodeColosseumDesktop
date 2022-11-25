@@ -31,13 +31,32 @@ export class ApiService {
 
   public gameNew( result:(newGame:string) =>void, lobby_name:string, game_name:string, players?:number, bots?:number, timeout?:number, args?:{}, password?:string, verification?:string, error?:(error:string)=>void){
     let cmdNewGame = new Commands.GameNew(this.url, lobby_name, game_name, players, bots, timeout, args, password, verification);
-    cmdNewGame.gameNewCreated = (message)=>{
-      if(result){result(message.id)}
-      console.log(message);
+    cmdNewGame.gameId = (message)=>{
+      if(result){
+        if(message.id["Err"] != undefined){
+          if(cmdNewGame.resultError){
+            cmdNewGame.resultError(message.id["Err"]);
+          }
+        }
+        else{
+          result(message.id["Ok"])
+        }
+      }
     }
     cmdNewGame.resultError = error;
     cmdNewGame.run();
     return cmdNewGame;
+  }
+
+  public connect( result:(lobbyData:Packets.Result<Packets.MatchInfo, string>) => void, lobby_id:string, lobby_name:string, password?:string, error?:(error:string)=>void){
+    let cmdConnect = new Commands.Connect(this.url, lobby_id, lobby_name, password);
+    cmdConnect.lobbyData = (message) => {
+      if(result) {result(message.info)}
+      console.log(message);
+    }
+    cmdConnect.resultError = error;
+    cmdConnect.run();
+    return cmdConnect;
   }
 }
 
@@ -185,7 +204,6 @@ export namespace Commands{
 
     constructor(url:string, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
       super(url);
-      console.log(game_name);
 
       this.msg = new Packets.Request.GameNew(lobby_name, game_name, num_palyer, num_bots, timeout, args, password, verification);
     }
@@ -193,16 +211,31 @@ export namespace Commands{
     public override handshakeRecieved( message: Packets.Reply.Handshake){
       super.handshakeRecieved(message);
 
-      console.log(this.msg);
-      this.ws!.send(this.msg!, Packets.Reply.GameNew, (message)=>{ this.gameNewCreated(message) });
+      this.ws!.send(this.msg!, Packets.Reply.GameNew, (message)=>{ if(this.gameId && message) this.gameId(message) });
     }
 
-    public gameNewCreated(message:Packets.Reply.GameNew){
-      console.log("GameNew");
-      if (this.gameId && message) { this.gameId(message); }
-      console.log(this.gameId);
+  }
+
+  export class Connect extends Command{
+    public lobbyData?:(message:Packets.Reply.LobbyJoinedMatch)=>void;
+    private msg?:Packets.Request.LobbyJoinMatch;
+
+    constructor(url:string, lobby_id:string, player_name:string, lobby_password?:string){
+      super(url);
+
+      this.msg = new Packets.Request.LobbyJoinMatch(lobby_id, player_name, lobby_password);
     }
 
+    public override handshakeRecieved( message: Packets.Reply.Handshake){
+      super.handshakeRecieved(message);
+
+      this.ws!.send(this.msg!, Packets.Reply.LobbyJoinedMatch, (message)=>{ this.lobbyJoined(message) });
+    }
+
+    public lobbyJoined(message:Packets.Reply.LobbyJoinedMatch){
+      if (this.lobbyData && message) { this.lobbyData(message); }
+      console.log(this.lobbyData);
+    }
   }
 }
 
@@ -263,7 +296,15 @@ export namespace Packets{
     }
   }
 
-  export class Result<T1,T2>{}
+  export class Result<T1,T2>{
+    public var1?: T1;
+    public var2?: T2;
+
+    constructor(var1?: T1, var2?: T2){
+      this.var1 = var1;
+      this.var2 = var2;
+    }
+  }
 
   export class MatchInfo {
       public players: number=0;
@@ -314,9 +355,16 @@ export namespace Packets{
     export class LobbySubscribe extends Message {}
     export class LobbyUnsubscribe extends Message {}
     export class LobbyJoinMatch extends Message {
-      id: string="";
-      name: string="";
-      password: string="";
+      id?: string;
+      name?: string;
+      password?: string;
+
+      constructor(id="", name="", password?: string){
+        super();
+        this.id = id;
+        this.name = name;
+        this.password = password;
+      }
     }
     export class LobbyLeaveMatch extends Message {}
     export class SpectateJoin extends Message {
@@ -341,7 +389,7 @@ export namespace Packets{
       public  description: string = "" 
     }
     export class GameNew extends Message { 
-      public id:string="" 
+      public id = {"Ok": "", "Err": ""}
     }
     export class LobbyList extends Message { 
       public info= new Array<MatchInfo>() 
