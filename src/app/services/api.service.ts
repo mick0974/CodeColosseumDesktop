@@ -8,10 +8,9 @@ import { WebSocketSubject } from 'rxjs/webSocket';
 export class ApiService {
   public url = 'ws://localhost:8088';
 
-  
   public gameList(result:(gameList:String[])=>void, error?:(error: String)=>void){
     let cmdGameList = new Commands.GameList(this.url);
-    cmdGameList.resultGameList = (message)=>{
+    cmdGameList.gameListReceived = (message)=>{
       if(result){result(message.games)}
     }
     cmdGameList.resultError = error;
@@ -21,7 +20,7 @@ export class ApiService {
 
   public lobbyList( result:(lobbyList:Packets.MatchInfo[])=>void, error?:(error:String)=>void ){
     let cmdLobbyList = new Commands.LobbyList(this.url);
-    cmdLobbyList.resultLobbyList = (message)=>{
+    cmdLobbyList.lobbyListReceived = (message)=>{
       if(result){result(message.info)}
     }
     cmdLobbyList.resultError = error;
@@ -29,9 +28,9 @@ export class ApiService {
     return cmdLobbyList;
   }
 
-  public gameNew( result:(newGame:string) =>void, lobby_name:string, game_name:string, players?:number, bots?:number, timeout?:number, args?:{}, password?:string, verification?:string, error?:(error:string)=>void){
-    let cmdNewGame = new Commands.GameNew(this.url, lobby_name, game_name, players, bots, timeout, args, password, verification);
-    cmdNewGame.gameId = (message)=>{
+  public createNewGame( result:(newGame:string) =>void, lobby_name:string, game_name:string, players?:number, bots?:number, timeout?:number, args?:{}, password?:string, verification?:string, error?:(error:string)=>void){
+    let cmdNewGame = new Commands.CreateNewLobby(this.url, lobby_name, game_name, players, bots, timeout, args, password, verification);
+    cmdNewGame.newLobbyCreated = (message)=>{
       if(result){
         if(message.id["Err"] != undefined){
           if(cmdNewGame.resultError){
@@ -48,10 +47,16 @@ export class ApiService {
     return cmdNewGame;
   }
 
-  public connect( result:(lobbyData:Packets.Result<Packets.MatchInfo, string>) => void, lobby_id:string, lobby_name:string, password?:string, error?:(error:string)=>void){
+  public connect( result:(lobbyData:Packets.Result<Packets.MatchInfo, string>) => void, 
+  result2:(lobbyData:Packets.MatchInfo) => void,
+  lobby_id:string, lobby_name:string, password?:string, error?:(error:string)=>void){
+    
     let cmdConnect = new Commands.Connect(this.url, lobby_id, lobby_name, password);
-    cmdConnect.lobbyData = (message) => {
+    cmdConnect.lobbyJoined = (message) => {
       if(result) {result(message.info)}
+    }
+    cmdConnect.lobbyUpdated = (message) => {
+      if(result2) {result2(message.info)}
       console.log(message);
     }
     cmdConnect.resultError = error;
@@ -165,41 +170,30 @@ export namespace Commands{
   }
 
   export class GameList extends Command{
-    public resultGameList?:(message:Packets.Reply.GameList)=>void
+    public gameListReceived?:(message:Packets.Reply.GameList)=>void
     
     public override handshakeRecieved( message: Packets.Reply.Handshake){
       //alert("GameList:handshakeRecieved");
       super.handshakeRecieved(message);
 
       let msg = new Packets.Request.GameList();
-      this.ws!.send(msg, Packets.Reply.GameList, (message)=>{ this.gameListRecieved(message) });
-    }
-
-    public gameListRecieved(message:Packets.Reply.GameList){
-      //alert("GameList:gameListRecieved");
-      if (this.resultGameList && message) { this.resultGameList(message) };
+      this.ws!.send(msg, Packets.Reply.GameList, (message)=>{ if(this.gameListReceived && message) this.gameListReceived(message) });
     }
   }
 
   export class LobbyList extends Command{
-    public resultLobbyList?:(message:Packets.Reply.LobbyList)=>void;
+    public lobbyListReceived?:(message:Packets.Reply.LobbyList)=>void;
     
     public override handshakeRecieved( message: Packets.Reply.Handshake){
       super.handshakeRecieved(message);
       
       let msg = new Packets.Request.LobbyList();
-      this.ws!.send(msg, Packets.Reply.LobbyList, (message)=>{ this.lobbyListRecieved(message) });
-    }
-
-    public lobbyListRecieved(message:Packets.Reply.LobbyList){
-      //console.log("LobbyList: list received");
-      if (this.resultLobbyList && message) { this.resultLobbyList(message) };
-      //console.log(this.resultLobbyList);
+      this.ws!.send(msg, Packets.Reply.LobbyList, (message)=>{ if(this.lobbyListReceived && message) this.lobbyListReceived(message)});
     }
   }
 
-  export class GameNew extends Command {
-    public gameId?:(message:Packets.Reply.GameNew)=>void;
+  export class CreateNewLobby extends Command {
+    public newLobbyCreated?:(message:Packets.Reply.GameNew)=>void;
     private msg?:Packets.Request.GameNew;
 
     constructor(url:string, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
@@ -211,13 +205,14 @@ export namespace Commands{
     public override handshakeRecieved( message: Packets.Reply.Handshake){
       super.handshakeRecieved(message);
 
-      this.ws!.send(this.msg!, Packets.Reply.GameNew, (message)=>{ if(this.gameId && message) this.gameId(message) });
+      this.ws!.send(this.msg!, Packets.Reply.GameNew, (message)=>{ if(this.newLobbyCreated && message) this.newLobbyCreated(message) });
     }
 
   }
 
   export class Connect extends Command{
-    public lobbyData?:(message:Packets.Reply.LobbyJoinedMatch)=>void;
+    public lobbyJoined?:(message:Packets.Reply.LobbyJoinedMatch )=>void;
+    public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
     private msg?:Packets.Request.LobbyJoinMatch;
 
     constructor(url:string, lobby_id:string, player_name:string, lobby_password?:string){
@@ -228,13 +223,13 @@ export namespace Commands{
 
     public override handshakeRecieved( message: Packets.Reply.Handshake){
       super.handshakeRecieved(message);
-
-      this.ws!.send(this.msg!, Packets.Reply.LobbyJoinedMatch, (message)=>{ this.lobbyJoined(message) });
-    }
-
-    public lobbyJoined(message:Packets.Reply.LobbyJoinedMatch){
-      if (this.lobbyData && message) { this.lobbyData(message); }
-      console.log(this.lobbyData);
+      this.ws!.send(this.msg!, Packets.Reply.LobbyJoinedMatch || Packets.Reply.LobbyUpdate, (message)=>{ 
+        if(this.lobbyJoined && message && message.messageName() === "LobbyJoinedMatch")
+          this.lobbyJoined(message as Packets.Reply.LobbyJoinedMatch);
+        else if(this.lobbyUpdated && message && message.messageName() === "LobbyUpdated")
+          this.lobbyUpdated(message as Packets.Reply.LobbyUpdate);
+        alert("recv with " + message);
+      });
     }
   }
 }
@@ -297,13 +292,8 @@ export namespace Packets{
   }
 
   export class Result<T1,T2>{
-    public var1?: T1;
-    public var2?: T2;
-
-    constructor(var1?: T1, var2?: T2){
-      this.var1 = var1;
-      this.var2 = var2;
-    }
+    public Ok?: T1;
+    public Err?: T2;
   }
 
   export class MatchInfo {
@@ -341,7 +331,7 @@ export namespace Packets{
       password?:string;
       verification?:string;
 
-      constructor(name="", game="", players?:number, bots?:number, timeout?:number, args={}, password="", verification?:string) {
+      constructor(name="", game="", players?:number, bots?:number, timeout?:number, args={}, password?:string, verification?:string) {
         super();
         this.name = name;
         this.game = game;
@@ -359,7 +349,7 @@ export namespace Packets{
       name?: string;
       password?: string;
 
-      constructor(id="", name="", password?: string){
+      constructor(id="", name="", password?:string){
         super();
         this.id = id;
         this.name = name;
