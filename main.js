@@ -60,11 +60,11 @@ app.whenReady().then(() => {
     });
 
 
-    setInterval(() => {
-        let str = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-        console.log(str);
+    // setInterval(() => {
+    //     let str = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+    //     console.log(str);
 
-        win.webContents.send("pipeTest", str);
-    }, 1000);
+    //     win.webContents.send("pipeTest", str);
+    // }, 1000);
 
 })

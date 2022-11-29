@@ -23,3 +23,11 @@ contextBridge.exposeInMainWorld(
         }
     }
 );
+
+contextBridge.exposeInMainWorld(
+    "shell", {
+        execute: (path, test) =>{
+            console.log(path);
+        }
+    }
+);
