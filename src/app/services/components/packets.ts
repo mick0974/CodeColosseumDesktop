@@ -59,19 +59,20 @@ export namespace Packets{
         const packet = { [messageName]:this };
         return packet;
       }
+
+      public static findPacketName(msgClasses: Array<string>, packet: any): string{
+        var msgClass = "";
   
-      public fromPacketStr(packet:any): string{
-        var msgClass;
-  
-        this.msgClasses.forEach((msgName) => {
+        msgClasses.forEach((msgName) => {
           if(msgName in packet){
             msgClass = msgName;
           }
         });
   
-        if (!msgClass){ 
-          return ""; 
-        }
+        return msgClass;
+      }
+  
+      public fromMultiPacket(packet:any, msgClass: string){
   
         const msgData = packet[msgClass];
         
@@ -86,8 +87,6 @@ export namespace Packets{
             this[msgField] = msgData[msgField];
           }
         }
-  
-        return msgClass;
       }
     }
   

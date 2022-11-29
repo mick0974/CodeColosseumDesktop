@@ -88,26 +88,14 @@ export namespace CoCoSockets{
     public send<T extends Packets.MultiTypeMessage>(
       request: Packets.Request.Message, 
       reply: new (msgClasses: Array<string>)=>T, 
-      recieved?:(message:T, messageName: string) => void,
+      recieved?:(payload: string, msgClasses: Array<string>) => void,
       ...msgClasses: Array<string>){
         
       if (this.ws == null) {return false}
-      
-      /*
-      let messageType = request.messageName()
-      let messageObserver = this.ws.multiplex(
-        ()=>({subscribe: messageType}),
-        ()=>({unsubscribe: messageType}),
-        (message:any) => message.type === messageType
-      )
-      */
   
       this.ws.subscribe({
         next: (payload) => { // Called whenever there is a message from the server.
-          let msg = new reply(msgClasses);
-          let messageName = msg.fromPacketStr(payload);
-          
-          if (messageName !== "" && recieved){ recieved(msg, messageName); }
+          if (recieved){ recieved(payload, msgClasses); }
         } 
       });
   
