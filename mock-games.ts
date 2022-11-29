@@ -2,7 +2,7 @@ import { Game } from "src/app/Game";
 
 export const GAMES:Game[] = [
     {
-        id:0,
+        id:"ftgHyo0",
         verified:true,
         game:"royalur",
         spectators:10,
@@ -13,7 +13,7 @@ export const GAMES:Game[] = [
         current:true,
     },
     {
-    id:1,
+    id:"hHdeTTr",
     verified:false,
     game:"royalur",
     spectators:20,

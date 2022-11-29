@@ -15,14 +15,18 @@
         </ng-template>
         <ng-template pTemplate="body" let-game>
             <tr>
-                <td>{{game.verified}}</td>
+                <td>
+                    <i class="pi pi-check" *ngIf="game.verified"></i>
+                </td>
                 <td>{{game.id}}</td>
                 <td>{{game.game}}</td>
                 <td>{{game.players}} / {{game.maxplayers}}</td>
                 <td>{{game.spectators}}</td>
                 <td>{{game.timeout}}</td>
                 <td>{{game.password}}</td>
-                <td>{{game.current}}</td>
+                <td>
+                    <p-tag value="{{game.current ? 'Current':'Past'}}"></p-tag>
+                </td>
                 <td>
                     <p-button label="Play" icon="pi pi-play" iconPos="left"></p-button>
                 </td>
