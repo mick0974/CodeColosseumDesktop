@@ -2,6 +2,25 @@
   "name": "code-colosseum-desktop",
   "version": "0.0.0",
   "main": "main.js",
+  "build": {
+    "appId": "com.talcoteam.CoCo",
+    "productName": "CodeColosseum",
+    "files": [
+      "**/*",
+      "dist/**/*"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "dist"
+    },
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "src/favicon.ico"
+    }
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
