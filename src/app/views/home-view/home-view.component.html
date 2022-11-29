@@ -1,1 +1,32 @@
-<p>home-view works!</p>
+<div class="cc-game-list" style="margin: 0px 40px">
+    <p-table [value]="gamelist">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Verified</th>
+                <th>ID</th>
+                <th>Game</th>
+                <th>Players</th>
+                <th>Spectators</th>
+                <th>Timeout</th>
+                <th>Password</th>
+                <th>Time</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-game>
+            <tr>
+                <td>{{game.verified}}</td>
+                <td>{{game.id}}</td>
+                <td>{{game.game}}</td>
+                <td>{{game.players}} / {{game.maxplayers}}</td>
+                <td>{{game.spectators}}</td>
+                <td>{{game.timeout}}</td>
+                <td>{{game.password}}</td>
+                <td>{{game.current}}</td>
+                <td>
+                    <p-button label="Play" icon="pi pi-play" iconPos="left"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
