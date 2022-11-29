@@ -22,5 +22,27 @@ export const GAMES:Game[] = [
     timeout:200,
     password:"abcd",
     current:false,
-}
+    },
+    {
+    id:"gtrsdgg",
+    verified:true,
+    game:"royalur",
+    spectators:20,
+    players:20,
+    maxplayers:25,
+    timeout:200,
+    password:"abcd",
+    current:true,
+    },
+    {
+    id:"poigfhb",
+    verified:false,
+    game:"royalur",
+    spectators:20,
+    players:20,
+    maxplayers:25,
+    timeout:200,
+    password:"abcd",
+    current:true,
+    }   
 ]

@@ -1,16 +1,11 @@
 <div class="cc-game-list" style="margin: 0px 40px">
-    <p-table [value]="gamelist">
-        <ng-template pTemplate="header">
+    <p-table [value]="gamelist" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header" let-columns>
             <tr>
-                <th>Verified</th>
-                <th>ID</th>
-                <th>Game</th>
-                <th>Players</th>
-                <th>Spectators</th>
-                <th>Timeout</th>
-                <th>Password</th>
-                <th>Time</th>
-                <th></th>
+                <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-game>
