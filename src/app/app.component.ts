@@ -7,7 +7,10 @@ import { ConnectionManagerService } from './services/connection-manager.service'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
+  title: string = 'Code Colosseum';
+  path: string = "../assets/images/colosseum-72.png";
+  alttext: string = "code colossem image";
+  
   constructor(
     private readonly connectionManager: ConnectionManagerService,
   ) { }
