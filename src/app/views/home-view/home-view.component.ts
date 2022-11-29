@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ElectronBridgeService } from 'src/app/services/electron-bridge.service';
 
 @Component({
   selector: 'app-home-view',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private electronBridgeSrv: ElectronBridgeService
+  ) { 
+    this.electronBridgeSrv.pipeTest.subscribe();
+  }
 
   ngOnInit(): void {
   }
