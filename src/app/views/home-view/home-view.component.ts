@@ -10,17 +10,6 @@ import { TagModule } from 'primeng/tag';
 })
 export class HomeViewComponent implements OnInit {
   gamelist:Game[] = GAMES;
-  columns:string[]= ["Verified","ID","Game","Players","Spectators","Timeout","Password","Time",""]
-  cols = [
-    { field: 'verified', header: 'Verified' },
-    { field: 'id', header: 'ID' },
-    { field: 'game', header: 'Game' },
-    { field: 'players', header: 'Players' },
-    { field: 'spectators', header: 'Spectators' },
-    { field: 'timeout', header: 'Timeout' },
-    { field: 'password', header: 'Password' },
-    { field: 'current', header: 'Time' },
-    { field: ' ', header: ' ' }];
 
   constructor() { }
 
