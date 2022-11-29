@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService, Commands } from 'src/app/services/api.service';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'tal-home-view',
@@ -7,8 +7,6 @@ import { ApiService, Commands } from 'src/app/services/api.service';
   styleUrls: ['./home-view.component.scss']
 })
 export class HomeViewComponent implements OnInit {
-
-  public var1?: Commands.Connect;
 
   constructor() { }
 
@@ -24,16 +22,20 @@ export class HomeViewComponent implements OnInit {
 
     api.createNewGame((gameNew) => {
       alert('New game created');
-      this.var1 = api.connect((lobbyData) => {
+      api.connect((lobbyData) => {
         alert("lobbyData: " + lobbyData);
       }, 
-      (lobbyUpdated) => alert("LobbyUpdated: " + lobbyUpdated), gameNew, "Lollo123",
+      (lobbyUpdated) => alert("LobbyUpdated: " + lobbyUpdated),
+      (matchStarted) => alert("MatchStarted: " + matchStarted),
+       gameNew, "Lollo123",
       undefined, (error) => {
-        alert("error 4");
+        alert("error 4 " + error);
       });
     }, "Lobby", "roshambo", 2, undefined, undefined, undefined, undefined, undefined, (error) => {
       alert("error 3");
     });
+
+    api.createNewGame
   }
 
 }
