@@ -60,8 +60,15 @@ export namespace Commands{
         this.ws.connect();
   
         let msg = new Packets.Request.Handshake();
-        this.ws.send(msg, Packets.Reply.Handshake, (message, messageName)=>{
-          this.handshakeRecieved(message)
+        this.ws.send(msg, Packets.Reply.Handshake, (payload, msgClasses)=>{
+          let msgName = Packets.MultiTypeMessage.findPacketName(msgClasses, payload);
+
+          if(msgName === Packets.Reply.Handshake.name){
+            let message = new Packets.Reply.Handshake();
+            message.fromMultiPacket(payload, msgName);
+            this.handshakeRecieved(message);
+          }
+          
         }, Packets.Reply.Handshake.name);
       }
   
@@ -137,14 +144,24 @@ export namespace Commands{
         super.handshakeRecieved(message);
   
         this.ws!.send(this.msg!, Packets.Reply.ConnectReply,
-          (message, messageName)=>{ 
-          
-          if(this.lobbyJoined && message && messageName === Packets.Reply.LobbyJoinedMatch.name)
-            this.lobbyJoined(message as Packets.Reply.LobbyJoinedMatch);
-          else if(this.lobbyUpdated && message && messageName === Packets.Reply.LobbyUpdate.name)
-            this.lobbyUpdated(message as Packets.Reply.LobbyUpdate);
-          else if(this.matchStarted && message && messageName === Packets.Reply.MatchStarted.name)
-            this.matchStarted(message as Packets.Reply.MatchStarted);
+          (payload, msgClasses)=>{ 
+            let msgName = Packets.MultiTypeMessage.findPacketName(msgClasses, payload);
+
+          if(this.lobbyJoined && message && msgName === Packets.Reply.LobbyJoinedMatch.name){
+            let message = new Packets.Reply.LobbyJoinedMatch(msgClasses);
+            message.fromMultiPacket(payload, msgName);
+            this.lobbyJoined(message);
+          }
+          else if(this.lobbyUpdated && message && msgName === Packets.Reply.LobbyUpdate.name){
+            let message = new Packets.Reply.LobbyUpdate(msgClasses);
+            message.fromMultiPacket(payload, msgName);
+            this.lobbyUpdated(message);
+          }
+          else if(this.matchStarted && message && msgName === Packets.Reply.MatchStarted.name){
+            let message = new Packets.Reply.MatchStarted(msgClasses);
+            message.fromMultiPacket(payload, msgName);
+            this.matchStarted(message);
+          }
         }, Packets.Reply.LobbyJoinedMatch.name, Packets.Reply.LobbyUpdate.name,
           Packets.Reply.MatchStarted.name);
       }

@@ -21,15 +21,15 @@ export class HomeViewComponent implements OnInit {
     */
 
     api.createNewGame((gameNew) => {
-      alert('New game created');
+      alert('New game created: ' + gameNew);
       api.connect((lobbyData) => {
-        alert("lobbyData: " + lobbyData);
+        alert(lobbyData);
       }, 
-      (lobbyUpdated) => alert("LobbyUpdated: " + lobbyUpdated),
-      (matchStarted) => alert("MatchStarted: " + matchStarted),
+      (lobbyUpdated) => console.log(lobbyUpdated),
+      (matchStarted) => console.log(matchStarted),
        gameNew, "Lollo123",
       undefined, (error) => {
-        alert("error 4 " + error);
+        alert(error);
       });
     }, "Lobby", "roshambo", 2, undefined, undefined, undefined, undefined, undefined, (error) => {
       alert("error 3");
