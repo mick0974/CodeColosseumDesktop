@@ -10,6 +10,7 @@ import { TagModule } from 'primeng/tag';
 })
 export class HomeViewComponent implements OnInit {
   gamelist:Game[] = GAMES;
+  isLoading:boolean = false;
 
   constructor() { }
 

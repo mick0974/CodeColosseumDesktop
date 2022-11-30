@@ -17,6 +17,8 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TooltipModule } from 'primeng/tooltip';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import {RippleModule} from 'primeng/ripple';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { TagModule } from 'primeng/tag';
     ConfirmPopupModule,
     TooltipModule,
     TableModule,
-    TagModule
+    TagModule,
+    RippleModule,
+    ScrollPanelModule
   ],
   providers: [],
   bootstrap: [AppComponent]
