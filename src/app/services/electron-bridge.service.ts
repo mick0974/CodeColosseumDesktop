@@ -40,7 +40,7 @@ export class ElectronBridgeService {
 
 export interface ElectronProcessDescriptor{
   path:string,
-  args:string[],
+  args?:string[],
   uid?:string,
 
   onStart?: (data:string) => void;

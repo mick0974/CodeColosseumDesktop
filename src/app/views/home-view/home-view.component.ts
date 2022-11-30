@@ -65,7 +65,6 @@ export class HomeViewComponent implements OnInit {
     
     let descriptor = {
       path: "./data/rock-paper-scissor.sh",
-      args: [],
       onStart: (proc_uid:string)=>{
         this.output = "actionCompile:\n";
         console.log("actionCompile:\n");
