@@ -39,7 +39,6 @@ export class HomeViewComponent implements OnInit {
 
 
   actionExec(){
-    
     let descriptor = {
       path: "./data/rock-paper-scissor",
       args: ["3","1"],
@@ -48,7 +47,6 @@ export class HomeViewComponent implements OnInit {
         this.refreshOutput();
       },
       onStdout: (data:string)=>{
-        //this.setOutput(this.output + " OUT: "+ data);
         this.output += " OUT: "+ data
         console.log("OUT: "+data);
         this.refreshOutput();
@@ -69,20 +67,15 @@ export class HomeViewComponent implements OnInit {
       path: "./data/rock-paper-scissor.sh",
       args: [],
       onStart: (proc_uid:string)=>{
-        this.output = "";
+        this.output = "actionCompile:\n";
+        console.log("actionCompile:\n");
         this.refreshOutput();
       },
       onStdout: (data:string)=>{
-        //this.setOutput(this.output + " OUT: "+ data);
         this.output += " OUT: "+ data
         console.log("OUT: "+data);
         this.refreshOutput();
-      },
-      onStdin: (data:string)=>{
-        this.output += " IN: "+ data;
-        console.log("IN: "+data);
-        this.refreshOutput();
-      },
+      }
     };
 
     this.process = this.electronBridgeSrv.exec(descriptor);

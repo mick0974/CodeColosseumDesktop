@@ -1,8 +1,42 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 
-const SHELL_EXEC = (<any>window).shell.exec;
-const SHELL_STDIN = (<any>window).shell.stdin;
+
+const SHELL_EXEC = (<any>window).shell.exec; // from preload.js
+const SHELL_STDIN = (<any>window).shell.stdin; // from preload.js
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ElectronBridgeService {
+  pipeTest = new Subject<string>();
+  
+
+  constructor() { 
+
+  }
+
+  exec(descriptor: ElectronProcessDescriptor):ElectronProcess{
+    let process = new ElectronProcess(descriptor);
+    process.exec();
+    return process;
+  }
+
+  /*
+  execute(path:string,args:string[], start?:(uid:string)=>void, stdout?:(data:string)=>void, stderr?:(data:string)=>void, exit?:(code:string)=>void){
+  
+    
+    let uid = SHELL_EXEC(path, args, start, stdout, stderr, exit);
+
+    return (data:string)=>{ SHELL_STDIN(uid, data ); }
+  }
+  */
+
+}
+
+
 
 export interface ElectronProcessDescriptor{
   path:string,
@@ -56,33 +90,3 @@ export class ElectronProcess{
     if(this.stdin){this.stdin(data);}
   }
 }
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ElectronBridgeService {
-  pipeTest = new Subject<string>();
-  
-
-  constructor() { 
-
-  }
-
-  exec(descriptor: ElectronProcessDescriptor):ElectronProcess{
-    let process = new ElectronProcess(descriptor);
-    process.exec();
-    return process;
-  }
-
-  /*
-  execute(path:string,args:string[], start?:(uid:string)=>void, stdout?:(data:string)=>void, stderr?:(data:string)=>void, exit?:(code:string)=>void){
-  
-    
-    let uid = SHELL_EXEC(path, args, start, stdout, stderr, exit);
-
-    return (data:string)=>{ SHELL_STDIN(uid, data ); }
-  }
-  */
-
-}
-
