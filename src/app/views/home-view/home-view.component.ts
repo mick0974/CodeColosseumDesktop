@@ -13,7 +13,7 @@ export class HomeViewComponent implements OnInit {
   isLoading:boolean = false;
   loading:boolean = true;
   stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
-  view_mode: string = "table";
+  view_mode: string = "card";
 
   constructor() { }
 

@@ -31,7 +31,7 @@
                                         <div class="text-xl font-medium text-900 mb-2">{{game.game}}  <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified!" tooltipPosition="top"></i></div>
                                         <p class="mt-0 mb-3 text-600">{{game.id}} <p-tag value="{{game.current ? 'Current':'Ended'}}" [severity]="game.current ? 'primary' : 'warning'"></p-tag></p>
                                     </div>
-                                    <button pButton pRipple icon="pi pi-play" class="p-button-round" routerLink="/game"></button>
+                                    <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game', game.id]"></button>
                                 </div>
                                 <ul class="list-none m-0 p-0">
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
@@ -100,7 +100,7 @@
                             <p-tag value="{{game.current ? 'Current':'Ended'}}" [severity]="game.current ? 'primary' : 'warning'"></p-tag>
                         </td>
                         <td>
-                            <p-button label="Play" icon="pi pi-play" iconPos="left" routerLink="/game"></p-button>
+                            <p-button label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game', game.id]"></p-button>
                         </td>
                     </tr>
                 </ng-template>

@@ -20,7 +20,7 @@ import { TagModule } from 'primeng/tag';
 import {RippleModule} from 'primeng/ripple';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {SelectButtonModule} from 'primeng/selectbutton';
-import {TimelineModule} from 'primeng/timeline';
+import {MenuModule} from 'primeng/menu';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import {TimelineModule} from 'primeng/timeline';
     RippleModule,
     ScrollPanelModule,
     SelectButtonModule,
-    TimelineModule
+    MenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

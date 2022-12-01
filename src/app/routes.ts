@@ -20,7 +20,7 @@ export const routes: Routes = [
         component: HomeViewComponent
     },
     {
-        path: 'game',
+        path: 'game/:id',
         canActivate: [AuthGuard],
         component: GameViewComponent
     },
