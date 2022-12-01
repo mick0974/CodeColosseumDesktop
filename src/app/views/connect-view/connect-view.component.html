@@ -1,6 +1,31 @@
-<div class="cc-center-layout">
-  <h1>Welcome to Code Colosseum.</h1> <br> <br>
-  <div class="fromgrid grid">
+<div class="card" className="cc-card">
+  <h1>Welcome to Code Colosseum.</h1> 
+  <div class="fromgrid grid" className="cc-grid">
+      <div class="field col-12">
+        <span class="p-float-label">
+          <input type="text" id="server-url" class="text-base text-color surface-overlay p-2 border-solid surface-border border-round appearance-none focus:border-primary w-full" pInputText/>
+          <label for="server-url">Server URL</label>
+        </span>
+      </div>
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <input type="text" id="username" class="text-base text-color surface-overlay p-2 border-solid surface-border border-round appearance-none focus:border-primary w-full" pInputText/>
+          <label for="username">Username</label>
+        </span>
+      </div>
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <input type="password" id="password"class="text-base text-color surface-overlay p-2 border-solid surface-border border-round appearance-none focus:border-primary w-full" pPassword/>
+          <label for="password">Password</label>
+        </span>
+      </div>
+      <div class="field col-12">
+        <button pButton type="button" label="CONNECT" class="border-round  w-full"></button>
+      </div>
+  </div> 
+</div>
+  <!--
+<div class="fromgrid grid">
     <div class="field col-8">
       <span class="p-float-label">
         <input type="text" id="server-url" class="p-inputtext-sm" pInputText/>
@@ -22,6 +47,6 @@
     <div class="field col-8">
       <button pButton type="button" label="CONNECT"></button>
     </div>
-  </div>
-    
+  </div>    
 </div>
+ --> 
