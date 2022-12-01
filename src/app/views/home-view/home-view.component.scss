@@ -1,8 +1,11 @@
 
 .cc-gamelist-header {
-    text-align: right;
-    * {
-        margin: 20px;
+    justify-content: space-between;
+    > * {
+        margin: 10px;
+    }
+    button {
+        margin:0 10px 0 0;
     }
 }
 
@@ -15,12 +18,7 @@
     }
 }
 
-
-.p-scrollpanel {
-    p {
-        padding: .5rem;
-        line-height: 1.5;
-        margin: 0;
-    }
-
+p-selectbutton {
+    display:flex;
+    align-self:center;
 }

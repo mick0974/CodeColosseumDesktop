@@ -19,6 +19,7 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import {RippleModule} from 'primeng/ripple';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
+import {SelectButtonModule} from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import {ScrollPanelModule} from 'primeng/scrollpanel';
     TableModule,
     TagModule,
     RippleModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    SelectButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
