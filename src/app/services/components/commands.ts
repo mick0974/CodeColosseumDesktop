@@ -2,7 +2,7 @@ import { CoCoSockets } from "./socket";
 import { Packets } from "./packets";
 
 export namespace Commands{
-
+    /*
     export class Command{
       public ws?: CoCoSockets.CoCoSocket;
       public url?:string;
@@ -21,8 +21,13 @@ export namespace Commands{
         this.ws.connect();
   
         let msg = new Packets.Request.Handshake();
-        this.ws.send(msg, Packets.Reply.Handshake, 
-          (message)=>{this.handshakeRecieved(message)} );
+        this.ws.send(msg,
+          (payload, msgClass)=>{
+            let msgName = Packets.Message.findPacketName(msgClass, payload);
+            let message = new Packets.Reply.Handshake();
+            message.fromMultiPacket(payload, msgName);
+            this.handshakeRecieved(message)}, 
+        Packets.Reply.Handshake.name );
       }
   
       public connectionClosed(){
@@ -41,9 +46,10 @@ export namespace Commands{
         if (this.resultHandshake && message) { this.resultHandshake(message); }
       }
     }
+    */
   
     export class MultiTypeCommand{
-      public ws?: CoCoSockets.MultiTypeCoCoSocket;
+      public ws?: CoCoSockets.CoCoSocket;
       public url?:string; 
       public resultHandshake?:(message:Packets.Reply.Handshake)=>void; 
       public resultClosed?:()=>void;
@@ -54,21 +60,21 @@ export namespace Commands{
       }
   
       public run(){
-        this.ws = new CoCoSockets.MultiTypeCoCoSocket(this.url!);
+        this.ws = new CoCoSockets.CoCoSocket(this.url!);
         this.ws.resultError = (error)=>{ this.connectionError(error); };
         this.ws.resultClosed = ()=>{ this.connectionClosed(); };
+        //this.ws.recieved = (payload, msgClasses)=> {this.handshakeRecieved(payload);}
         this.ws.connect();
   
         let msg = new Packets.Request.Handshake();
-        this.ws.send(msg, Packets.Reply.Handshake, (payload, msgClasses)=>{
-          let msgName = Packets.MultiTypeMessage.findPacketName(msgClasses, payload);
+        this.ws.send(msg, (payload, msgClasses)=>{
+          let msgName = Packets.Message.findPacketName(msgClasses, payload);
 
           if(msgName === Packets.Reply.Handshake.name){
             let message = new Packets.Reply.Handshake();
             message.fromMultiPacket(payload, msgName);
             this.handshakeRecieved(message);
           }
-          
         }, Packets.Reply.Handshake.name);
       }
   
@@ -88,30 +94,51 @@ export namespace Commands{
       }
     }
   
-    export class GameList extends Command{
+    export class GameList extends MultiTypeCommand{
       public gameListReceived?:(message:Packets.Reply.GameList)=>void
       
-      public override handshakeRecieved( message: Packets.Reply.Handshake){
+      
+      public override handshakeRecieved( handshake: Packets.Reply.Handshake){
         //alert("GameList:handshakeRecieved");
-        super.handshakeRecieved(message);
+        super.handshakeRecieved(handshake);
   
         let msg = new Packets.Request.GameList();
-        this.ws!.send(msg, Packets.Reply.GameList, (message)=>{ if(this.gameListReceived && message) this.gameListReceived(message) });
+        this.ws!.send(msg, (payload, msgClass) => {
+          let msgName = Packets.Message.findPacketName(msgClass, payload);
+          
+          if(this.gameListReceived) {
+            let message = new Packets.Reply.GameList();
+            message.fromMultiPacket(payload, msgName);
+            
+            if(message)
+              this.gameListReceived(message as Packets.Reply.GameList);
+          }
+        }, Packets.Reply.GameList.name);
       }
     }
   
-    export class LobbyList extends Command{
+    export class LobbyList extends MultiTypeCommand{
       public lobbyListReceived?:(message:Packets.Reply.LobbyList)=>void;
       
-      public override handshakeRecieved( message: Packets.Reply.Handshake){
-        super.handshakeRecieved(message);
+      public override handshakeRecieved( handshake: Packets.Reply.Handshake){
+        super.handshakeRecieved(handshake);
         
         let msg = new Packets.Request.LobbyList();
-        this.ws!.send(msg, Packets.Reply.LobbyList, (message)=>{ if(this.lobbyListReceived && message) this.lobbyListReceived(message)});
+        this.ws!.send(msg, (payload, msgClass)=>{ 
+          let msgName = Packets.Message.findPacketName(msgClass, payload);
+
+          if(this.lobbyListReceived){
+            let message = new Packets.Reply.LobbyList();
+            message.fromMultiPacket(payload, msgName);
+            
+            if(message)
+              this.lobbyListReceived(message);
+          }
+        }, Packets.Reply.LobbyList.name);
       }
     }
   
-    export class CreateNewLobby extends Command {
+    export class CreateNewLobby extends MultiTypeCommand {
       public newLobbyCreated?:(message:Packets.Reply.GameNew)=>void;
       private msg?:Packets.Request.GameNew;
   
@@ -121,10 +148,21 @@ export namespace Commands{
         this.msg = new Packets.Request.GameNew(lobby_name, game_name, num_palyer, num_bots, timeout, args, password, verification);
       }
   
-      public override handshakeRecieved( message: Packets.Reply.Handshake){
-        super.handshakeRecieved(message);
+      public override handshakeRecieved( handshake: Packets.Reply.Handshake){
+        super.handshakeRecieved(handshake);
   
-        this.ws!.send(this.msg!, Packets.Reply.GameNew, (message)=>{ if(this.newLobbyCreated && message) this.newLobbyCreated(message) });
+        this.ws!.send(this.msg!, 
+          (payload, msgClass)=>{ 
+            let msgName = Packets.Message.findPacketName(msgClass, payload);
+            
+            if(this.newLobbyCreated){
+              let message = new Packets.Reply.GameNew();
+              message.fromMultiPacket(payload, msgName);
+
+              if(message)
+                this.newLobbyCreated(message);
+          }
+        }, Packets.Reply.GameNew.name);
       }
     }
   
@@ -132,7 +170,33 @@ export namespace Commands{
       public lobbyJoined?:(message:Packets.Reply.LobbyJoinedMatch )=>void;
       public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
       public matchStarted?:(message:Packets.Reply.MatchStarted)=>void;
+      public binaryInfo?: (payload:string, socket:CoCoSockets.CoCoSocket) => void;
       private msg?:Packets.Request.LobbyJoinMatch;
+      
+      /*
+      public decodeBinary(binary:any){
+
+        // Step 1 
+        // Split the binary into an array of strings using the .split() method
+        binary = binary.split(' ');
+        
+        // Step 2
+        // Iterate over the elements of the new array create to change each element to a decimal
+        binary = binary.map(elem => parseInt(elem,2));
+
+        // Step 3
+        // Use String.fromCharCode with .map() to change each element of the array to text 
+        binary = binary.map(elem => String.fromCharCode(elem));
+        
+        // Step 4
+        // Add the element of the new array together to create a string. Save it to a new Variable.
+        let newText = binary.join("").toUpperCase();
+        
+        // Step 5 
+        // The new string is returned
+        return newText;
+      }
+      */
   
       constructor(url:string, lobby_id:string, player_name:string, lobby_password?:string){
         super(url);
@@ -140,29 +204,31 @@ export namespace Commands{
         this.msg = new Packets.Request.LobbyJoinMatch(lobby_id, player_name, lobby_password);
       }
   
-      public override handshakeRecieved(message: Packets.Reply.Handshake){
-        super.handshakeRecieved(message);
+      public override handshakeRecieved(handshake: Packets.Reply.Handshake){
+        super.handshakeRecieved(handshake);
   
-        this.ws!.send(this.msg!, Packets.Reply.ConnectReply,
+        this.ws!.send(this.msg!,
           (payload, msgClasses)=>{ 
-            let msgName = Packets.MultiTypeMessage.findPacketName(msgClasses, payload);
+            let msgName = Packets.Message.findPacketName(msgClasses, payload);
 
-          if(this.lobbyJoined && message && msgName === Packets.Reply.LobbyJoinedMatch.name){
-            let message = new Packets.Reply.LobbyJoinedMatch(msgClasses);
+          if(this.lobbyJoined && handshake && msgName === Packets.Reply.LobbyJoinedMatch.name){
+            let message = new Packets.Reply.LobbyJoinedMatch();
             message.fromMultiPacket(payload, msgName);
             this.lobbyJoined(message);
           }
-          else if(this.lobbyUpdated && message && msgName === Packets.Reply.LobbyUpdate.name){
-            let message = new Packets.Reply.LobbyUpdate(msgClasses);
+          else if(this.lobbyUpdated && handshake && msgName === Packets.Reply.LobbyUpdate.name){
+            let message = new Packets.Reply.LobbyUpdate();
             message.fromMultiPacket(payload, msgName);
             this.lobbyUpdated(message);
           }
-          else if(this.matchStarted && message && msgName === Packets.Reply.MatchStarted.name){
-            let message = new Packets.Reply.MatchStarted(msgClasses);
+          else if(this.matchStarted && handshake && msgName === Packets.Reply.MatchStarted.name){
+            let message = new Packets.Reply.MatchStarted();
             message.fromMultiPacket(payload, msgName);
             this.matchStarted(message);
           }
-        }, Packets.Reply.LobbyJoinedMatch.name, Packets.Reply.LobbyUpdate.name,
+          
+        }, 
+        Packets.Reply.LobbyJoinedMatch.name, Packets.Reply.LobbyUpdate.name,
           Packets.Reply.MatchStarted.name);
       }
     }

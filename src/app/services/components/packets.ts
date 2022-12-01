@@ -1,6 +1,6 @@
 
 export namespace Packets{
-
+    /*
     export class Message{
       public messageName():string{
         return this.constructor.name;
@@ -42,17 +42,23 @@ export namespace Packets{
         return msg;
       }
     }
+    */
   
-    export class MultiTypeMessage extends Message{
+    export class Message{
+      /*
       public msgClasses: Array<string>;
   
       constructor(msgClasses: Array<string>){
-        super();
         this.msgClasses = [];
   
         msgClasses.forEach((msgClass) => {
           this.msgClasses.push(msgClass);
         });
+      }
+      */
+
+      public messageName():string{
+        return this.constructor.name;
       }
   
       public toPacketWithName(messageName: string){
@@ -60,11 +66,16 @@ export namespace Packets{
         return packet;
       }
 
+      public toPacket(): any{
+        const packetName = this.messageName();
+        const packet = { [packetName]:this };
+        return packet;
+      }
+
       public static findPacketName(msgClasses: Array<string>, packet: any): string{
         var msgClass = "";
-  
         msgClasses.forEach((msgName) => {
-          if(msgName in packet){
+          if(msgName in JSON.parse(packet)){
             msgClass = msgName;
           }
         });
@@ -74,7 +85,7 @@ export namespace Packets{
   
       public fromMultiPacket(packet:any, msgClass: string){
   
-        const msgData = packet[msgClass];
+        const msgData = JSON.parse(packet)[msgClass];
         
         for (var msgField in this) {
           if (! (msgField in msgData)){ continue; }
@@ -126,13 +137,9 @@ export namespace Packets{
     // Requests ---------------------------------
     export namespace Request{
       export class Message extends Packets.Message {}
-      export class Handshake extends MultiTypeMessage {
+      export class Handshake extends Message {
         public version: number = 1;
         public magic: string = "coco";
-  
-        constructor(){
-          super(['Handshake']);
-        }
       }
       export class GameList extends Message  {}
       export class GameDescription extends Message  {
@@ -181,12 +188,8 @@ export namespace Packets{
 
   export namespace Reply{
     export class Message extends Packets.Message {}
-    export class Handshake extends MultiTypeMessage {
+    export class Handshake extends Message {
       public magic: string = "";
-
-      constructor(){
-        super(['Handshake']);
-      }
     }
     export class GameList extends Message { 
       public games= new Array<string>() 
@@ -206,7 +209,7 @@ export namespace Packets{
       public seed = Array<MatchInfo>() 
     }
 
-    export class ConnectReply extends MultiTypeMessage {}
+    export class ConnectReply extends Message {}
 
     export class LobbyJoinedMatch extends ConnectReply { 
       public info = new Result<MatchInfo,string>() 
