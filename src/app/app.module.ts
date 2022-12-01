@@ -15,8 +15,8 @@ import { StepsModule } from 'primeng/steps';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TooltipModule } from 'primeng/tooltip';
-import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { TableModule } from 'primeng/table';
 import {RippleModule} from 'primeng/ripple';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {SelectButtonModule} from 'primeng/selectbutton';
@@ -42,8 +42,8 @@ import {MenuModule} from 'primeng/menu';
     TooltipModule,
     TableModule,
     TagModule,
-    RippleModule,
     ScrollPanelModule,
+    RippleModule,
     SelectButtonModule,
     MenuModule,
   ],
