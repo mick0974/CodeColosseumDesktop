@@ -10,10 +10,18 @@ import { TagModule } from 'primeng/tag';
 })
 export class HomeViewComponent implements OnInit {
   gamelist:Game[] = GAMES;
+  isLoading:boolean = false;
+  loading:boolean = true;
+  stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
+  view_mode: string = "table";
 
   constructor() { }
 
   ngOnInit(): void {
+        setTimeout(() => {
+            this.gamelist = GAMES;
+            this.loading = false;
+        }, 1000);
   }
 
 }
