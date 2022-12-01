@@ -15,7 +15,6 @@ import { StepsModule } from 'primeng/steps';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TooltipModule } from 'primeng/tooltip';
-import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -34,8 +33,7 @@ import { TableModule } from 'primeng/table';
     StepsModule,
     FileUploadModule,
     ConfirmPopupModule,
-    TooltipModule,
-    TableModule
+    TooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
