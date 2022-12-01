@@ -17,6 +17,7 @@ The app is a client and in order to be used it requires to connect to instance o
 
 Dependencies:
 - NodeJS
+- Yarn
 - TypeScript
 - Angular
 - CodeColosseum 
@@ -28,15 +29,21 @@ Dependencies:
   nvm list-remote
   nvm install --lts
 ```
+
+- Yarn
+```bash
+  npm install -g yarn
+```
+
   
 - TypeScript
 ```bash
-  npm install -g typescript
+  yarn install -g typescript
 ```
 
 Angular
 ```bash
-  npm install -g @angular/cli
+  yarn install -g @angular/cli
 ```
 
 CodeColosseum ( for the server ) 
@@ -51,12 +58,20 @@ CodeColosseum ( for the server )
 
 From the main folder of the app ( same location as package.json )     
 
+** USE `yarn` INSTEAD OF `npm` OR YOU WOULD GET `errors` **
+
 Install node dependencies (run once):     
 ```bash
-npm install
+yarn install
 ```
 
-To run the actuall app during development ( it autoreload when files are changed )     
+To run the app in Electron, during development 
+Then navigate to `http://localhost:4200/`
+```bash
+npm run hotreload
+```
+
+To run the app during development in a standard browser environment ( it autoreloads when files are changed )     
 Then navigate to `http://localhost:4200/`
 ```bash
 ng serve
@@ -70,6 +85,11 @@ ng generate component component-name
 To build a "production" version, the build artifacts will be stored in the `dist/` directory.
 ```bash
 ng build
+```
+
+To build a "production" version, the build artifacts will be stored in the `dist/` directory.
+```bash
+npm run electron-build-linux
 ```
 
 __This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.5.__
