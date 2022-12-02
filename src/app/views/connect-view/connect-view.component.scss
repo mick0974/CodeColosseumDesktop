@@ -1,0 +1,62 @@
+/* example to use selector in scss
+.fromgrid>div{
+    background-color: red;
+}*/
+h1{
+    text-align: center;
+}
+
+#server-div{
+    text-align: center;
+    display: center;
+    justify-content: center;
+}
+#server-span{
+    display: inline-block;
+    position: relative;
+    align-items: center;
+}
+#username-div{
+    text-align: right;
+    
+}
+#username-span{
+    display: inline-block;
+    position: relative;
+    
+}
+#password-div{
+    text-align: left;
+}
+#password-span{
+    display: inline-block;
+    position: relative;
+    margin: 0 auto;
+    
+}
+#div-button{
+    text-align: center;
+}
+#span-button{
+    display: inline;
+    position: relative;
+}
+#button{
+    margin:0 auto;
+    display: block;
+    width: 429px;
+    height: 43px;
+
+}
+#server-url{
+    height: 51px;
+    width: 429px;
+}
+#username{
+    height: 51px;
+    width: 205px;
+}
+#password{
+    height: 51px;
+    width: 205px;
+}
