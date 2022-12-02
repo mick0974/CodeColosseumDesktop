@@ -1,6 +1,5 @@
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { Packets } from './packets';
-//import { isText, isBinary, getEncoding } from 'istextorbinary'
 
 export namespace CoCoSockets{
   /*
@@ -68,10 +67,7 @@ export namespace CoCoSockets{
     
     constructor(url:string){
       this.url = url;
-    }
-  
-    public connect():boolean{
-  
+
       if (!this.ws || this.ws.closed ){
         this.ws = new WebSocketSubject(
           {
@@ -88,7 +84,9 @@ export namespace CoCoSockets{
 
           console.log("Created new socket");
       }
-      
+    }
+  
+    public setSubscription():boolean{
       this.ws.subscribe({
         error: (err:string) => { // Called whenever there is a message from the server.
           let errorMsg = JSON.stringify(err);
@@ -112,11 +110,9 @@ export namespace CoCoSockets{
   
       this.ws.subscribe({
         next: (payload:any) => { // Called whenever there is a message from the server.
-          console.log(typeof payload.data);
           
           if(typeof payload.data === "object") {
             var enc = new TextDecoder("utf-8");
-            console.log(enc.decode(payload.data));
             if(recieved){recieved( enc.decode(payload.data), ["binary"]); }
           } else {
             if (recieved){ recieved(payload.data, msgClasses); }
@@ -139,11 +135,10 @@ export namespace CoCoSockets{
   
       this.ws.subscribe({
         next: (payload:any) => { // Called whenever there is a message from the server.
-          console.log(typeof payload.data);
+          console.log("sendBinary subscribe");
           
           if(typeof payload.data === "object") {
             var enc = new TextDecoder("utf-8");
-            console.log(enc.decode(payload.data));
             if(recieved){recieved( enc.decode(payload.data), ["binary"]); }
           } else {
             if (recieved){ recieved(payload.data, msgClasses); }

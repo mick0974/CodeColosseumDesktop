@@ -24,7 +24,7 @@ export class HomeViewComponent implements OnInit {
         (lobbyData) => console.log(lobbyData), 
         (lobbyUpdated) => console.log(lobbyUpdated),
         (matchStarted) => console.log(matchStarted),
-        (binaryInfo) => { api.play("ROCK\n")},
+        (binaryInfo) => console.log(binaryInfo),
        gameNew, "Lollo123",
       undefined, (error) => {
         alert(error);
@@ -32,6 +32,11 @@ export class HomeViewComponent implements OnInit {
     }, "Lobby", "roshambo", 2, 1, undefined, undefined, undefined, undefined, (error) => {
       alert("error 3");
     });
+
+    (new Promise(resolve => setTimeout(resolve, 5000))).then(() => api.play("ROCK\n",
+                                                                      (binaryInfo) => console.log("########## " + binaryInfo)));
+
+
   }
 
 }

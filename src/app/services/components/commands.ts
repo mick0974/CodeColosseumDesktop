@@ -47,24 +47,24 @@ export namespace Commands{
       }
     }
     */
-  
-    export class MultiTypeCommand{
-      public ws?: CoCoSockets.CoCoSocket;
-      public url?:string; 
+
+    export class Command{
+      public ws!: CoCoSockets.CoCoSocket;
+      //public url?:string; 
       public resultHandshake?:(message:Packets.Reply.Handshake)=>void; 
       public resultClosed?:()=>void;
       public resultError?:(error:any)=>void;
   
-      constructor(url:string){
-        this.url = url;
+      constructor(ws:CoCoSockets.CoCoSocket){
+        this.ws = ws;
       }
   
       public run(){
-        this.ws = new CoCoSockets.CoCoSocket(this.url!);
         this.ws.resultError = (error)=>{ this.connectionError(error); };
-        this.ws.resultClosed = ()=>{ this.connectionClosed(); };
+        //this.ws.resultClosed = ()=>{ this.connectionClosed(); };
+        this.ws.resultClosed = ()=>{ console.log("---- Connessione chiusa ----") };
         //this.ws.recieved = (payload, msgClasses)=> {this.handshakeRecieved(payload);}
-        this.ws.connect();
+        this.ws.setSubscription();
   
         let msg = new Packets.Request.Handshake();
         this.ws.send(msg, (payload, msgClasses)=>{
@@ -96,7 +96,7 @@ export namespace Commands{
       }
     }
   
-    export class GameList extends MultiTypeCommand{
+    export class GameList extends Command{
       public gameListReceived?:(message:Packets.Reply.GameList)=>void
       
       
@@ -119,7 +119,7 @@ export namespace Commands{
       }
     }
   
-    export class LobbyList extends MultiTypeCommand{
+    export class LobbyList extends Command{
       public lobbyListReceived?:(message:Packets.Reply.LobbyList)=>void;
       
       public override handshakeRecieved( handshake: Packets.Reply.Handshake){
@@ -140,12 +140,12 @@ export namespace Commands{
       }
     }
   
-    export class CreateNewLobby extends MultiTypeCommand {
+    export class CreateNewLobby extends Command {
       public newLobbyCreated?:(message:Packets.Reply.GameNew)=>void;
       private msg?:Packets.Request.GameNew;
   
-      constructor(url:string, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
-        super(url);
+      constructor(ws:CoCoSockets.CoCoSocket, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
+        super(ws);
   
         this.msg = new Packets.Request.GameNew(lobby_name, game_name, num_palyer, num_bots, timeout, args, password, verification);
       }
@@ -168,15 +168,15 @@ export namespace Commands{
       }
     }
   
-    export class Connect extends MultiTypeCommand{
+    export class Connect extends Command{
       public lobbyJoined?:(message:Packets.Reply.LobbyJoinedMatch )=>void;
       public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
       public matchStarted?:(message:Packets.Reply.MatchStarted)=>void;
       public binaryInfo?: (payload:string) => void;
       private msg?:Packets.Request.LobbyJoinMatch;
   
-      constructor(url:string, lobby_id:string, player_name:string, lobby_password?:string){
-        super(url);
+      constructor(ws:CoCoSockets.CoCoSocket, lobby_id:string, player_name:string, lobby_password?:string){
+        super(ws);
   
         this.msg = new Packets.Request.LobbyJoinMatch(lobby_id, player_name, lobby_password);
       }
@@ -214,16 +214,14 @@ export namespace Commands{
       }
     }
 
-    export class Play extends MultiTypeCommand{
+    export class Play extends Command{
       public matchEnded?:(message:Packets.Reply.MatchEnded)=>void;
       public binaryInfo?: (payload:string) => void;
       public msg?: ArrayBuffer;
       
-      constructor(url:string, inputString:string){
-        super(url);
-
+      constructor(ws:CoCoSockets.CoCoSocket, inputString:string){
+        super(ws);
         //this.msg = this.str2ab(inputString);
-
 
         var enc = new TextEncoder(); // always utf-8
         this.msg = (enc.encode(inputString)).buffer;
@@ -240,10 +238,9 @@ export namespace Commands{
       }
 
       public override run(){
-        this.ws = new CoCoSockets.CoCoSocket(this.url!);
         this.ws.resultError = (error)=>{ this.connectionError(error); };
         this.ws.resultClosed = ()=>{ this.connectionClosed(); };
-        this.ws.connect();
+        this.ws.setSubscription();
 
         console.log("Run play");
 
@@ -256,8 +253,10 @@ export namespace Commands{
               message.fromMultiPacket(payload, msgName);
               this.handshakeRecieved(message);
             } else {
-              console.log("Risposta bot: " + payload);
+              console.log("Match finito: " + payload);
             }
+          } else {
+            console.log("Risposta bot: " + payload);
           }
         }, Packets.Reply.MatchEnded.name);
       }
