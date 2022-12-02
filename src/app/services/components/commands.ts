@@ -68,12 +68,14 @@ export namespace Commands{
   
         let msg = new Packets.Request.Handshake();
         this.ws.send(msg, (payload, msgClasses)=>{
-          let msgName = Packets.Message.findPacketName(msgClasses, payload);
+          if(msgClasses[0] !== "binary") {
+            let msgName = Packets.Message.findPacketName(msgClasses, payload);
 
-          if(msgName === Packets.Reply.Handshake.name){
-            let message = new Packets.Reply.Handshake();
-            message.fromMultiPacket(payload, msgName);
-            this.handshakeRecieved(message);
+            if(msgName === Packets.Reply.Handshake.name){
+              let message = new Packets.Reply.Handshake();
+              message.fromMultiPacket(payload, msgName);
+              this.handshakeRecieved(message);
+            }
           }
         }, Packets.Reply.Handshake.name);
       }
@@ -170,33 +172,8 @@ export namespace Commands{
       public lobbyJoined?:(message:Packets.Reply.LobbyJoinedMatch )=>void;
       public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
       public matchStarted?:(message:Packets.Reply.MatchStarted)=>void;
-      public binaryInfo?: (payload:string, socket:CoCoSockets.CoCoSocket) => void;
+      public binaryInfo?: (payload:string) => void;
       private msg?:Packets.Request.LobbyJoinMatch;
-      
-      /*
-      public decodeBinary(binary:any){
-
-        // Step 1 
-        // Split the binary into an array of strings using the .split() method
-        binary = binary.split(' ');
-        
-        // Step 2
-        // Iterate over the elements of the new array create to change each element to a decimal
-        binary = binary.map(elem => parseInt(elem,2));
-
-        // Step 3
-        // Use String.fromCharCode with .map() to change each element of the array to text 
-        binary = binary.map(elem => String.fromCharCode(elem));
-        
-        // Step 4
-        // Add the element of the new array together to create a string. Save it to a new Variable.
-        let newText = binary.join("").toUpperCase();
-        
-        // Step 5 
-        // The new string is returned
-        return newText;
-      }
-      */
   
       constructor(url:string, lobby_id:string, player_name:string, lobby_password?:string){
         super(url);
@@ -209,27 +186,82 @@ export namespace Commands{
   
         this.ws!.send(this.msg!,
           (payload, msgClasses)=>{ 
-            let msgName = Packets.Message.findPacketName(msgClasses, payload);
+            if(msgClasses[0] === "binary") {
+              if(this.binaryInfo) {this.binaryInfo(payload);}
+            } else {
+              let msgName = Packets.Message.findPacketName(msgClasses, payload);
 
-          if(this.lobbyJoined && handshake && msgName === Packets.Reply.LobbyJoinedMatch.name){
-            let message = new Packets.Reply.LobbyJoinedMatch();
-            message.fromMultiPacket(payload, msgName);
-            this.lobbyJoined(message);
-          }
-          else if(this.lobbyUpdated && handshake && msgName === Packets.Reply.LobbyUpdate.name){
-            let message = new Packets.Reply.LobbyUpdate();
-            message.fromMultiPacket(payload, msgName);
-            this.lobbyUpdated(message);
-          }
-          else if(this.matchStarted && handshake && msgName === Packets.Reply.MatchStarted.name){
-            let message = new Packets.Reply.MatchStarted();
-            message.fromMultiPacket(payload, msgName);
-            this.matchStarted(message);
-          }
+              if(this.lobbyJoined && handshake && msgName === Packets.Reply.LobbyJoinedMatch.name){
+                let message = new Packets.Reply.LobbyJoinedMatch();
+                message.fromMultiPacket(payload, msgName);
+                this.lobbyJoined(message);
+              }
+              else if(this.lobbyUpdated && handshake && msgName === Packets.Reply.LobbyUpdate.name){
+                let message = new Packets.Reply.LobbyUpdate();
+                message.fromMultiPacket(payload, msgName);
+                this.lobbyUpdated(message);
+              }
+              else if(this.matchStarted && handshake && msgName === Packets.Reply.MatchStarted.name){
+                let message = new Packets.Reply.MatchStarted();
+                message.fromMultiPacket(payload, msgName);
+                this.matchStarted(message);
+              }
+            }
           
         }, 
         Packets.Reply.LobbyJoinedMatch.name, Packets.Reply.LobbyUpdate.name,
           Packets.Reply.MatchStarted.name);
       }
+    }
+
+    export class Play extends MultiTypeCommand{
+      public matchEnded?:(message:Packets.Reply.MatchEnded)=>void;
+      public binaryInfo?: (payload:string) => void;
+      public msg?: ArrayBuffer;
+      
+      constructor(url:string, inputString:string){
+        super(url);
+
+        //this.msg = this.str2ab(inputString);
+
+
+        var enc = new TextEncoder(); // always utf-8
+        this.msg = (enc.encode(inputString)).buffer;
+        console.log(this.msg);
+      }
+
+      private str2ab(str:string) {
+        var buf = new ArrayBuffer(str.length); // 2 bytes for each char
+        var bufView = new Uint8Array(buf);
+        for (var i=0, strLen=str.length; i < strLen; i++) {
+        bufView[i] = str.charCodeAt(i);
+        }
+        return buf;
+      }
+
+      public override run(){
+        this.ws = new CoCoSockets.CoCoSocket(this.url!);
+        this.ws.resultError = (error)=>{ this.connectionError(error); };
+        this.ws.resultClosed = ()=>{ this.connectionClosed(); };
+        this.ws.connect();
+
+        console.log("Run play");
+
+        this.ws.sendBinary(this.msg!, (payload, msgClasses)=>{
+          if(msgClasses[0] !== "binary") {
+            let msgName = Packets.Message.findPacketName(msgClasses, payload);
+
+            if(msgName === Packets.Reply.Handshake.name){
+              let message = new Packets.Reply.Handshake();
+              message.fromMultiPacket(payload, msgName);
+              this.handshakeRecieved(message);
+            } else {
+              console.log("Risposta bot: " + payload);
+            }
+          }
+        }, Packets.Reply.MatchEnded.name);
+      }
+
+
     }
   }

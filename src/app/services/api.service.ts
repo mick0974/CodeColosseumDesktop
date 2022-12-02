@@ -52,6 +52,7 @@ export class ApiService {
   public connect( result:(lobbyData:Packets.Reply.LobbyJoinedMatch) => void, 
   result2:(lobbyData:Packets.Reply.LobbyUpdate) => void,
   result3:(lobbyData:Packets.Reply.MatchStarted) => void,
+  result4:(message:string) => void,
   lobby_id:string, lobby_name:string, password?:string, error?:(error:string)=>void){
     
     let cmdConnect = new Commands.Connect(this.url, lobby_id, lobby_name, password);
@@ -65,10 +66,21 @@ export class ApiService {
     cmdConnect.matchStarted = (message) => {
       if(result3) {result3(message)}
     }
+    cmdConnect.binaryInfo = (message) => { 
+      if(result4) {result4(message)}
+    }
 
     cmdConnect.resultError = error;
     cmdConnect.run();
 
     return cmdConnect;
+  }
+
+  public play(inputString:string) {
+    console.log("start play");
+    let cmdPlay = new Commands.Play(this.url, inputString);
+    cmdPlay.run();
+
+    return cmdPlay;
   }
 }

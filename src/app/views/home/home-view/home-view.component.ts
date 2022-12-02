@@ -14,19 +14,17 @@ export class HomeViewComponent implements OnInit {
     alert("API is available");
     let api = new ApiService();
     
-    
     api.gameList((gameList)=>{
       console.log(gameList);
     });
-    
 
     api.createNewGame((gameNew) => {
       console.log('New game created: ' + gameNew);
-      api.connect((lobbyData) => {
-        console.log(lobbyData);
-      }, 
-      (lobbyUpdated) => console.log(lobbyUpdated),
-      (matchStarted) => console.log(matchStarted),
+      api.connect(
+        (lobbyData) => console.log(lobbyData), 
+        (lobbyUpdated) => console.log(lobbyUpdated),
+        (matchStarted) => console.log(matchStarted),
+        (binaryInfo) => { api.play("ROCK\n")},
        gameNew, "Lollo123",
       undefined, (error) => {
         alert(error);
@@ -34,8 +32,6 @@ export class HomeViewComponent implements OnInit {
     }, "Lobby", "roshambo", 2, 1, undefined, undefined, undefined, undefined, (error) => {
       alert("error 3");
     });
-
-    api.createNewGame
   }
 
 }

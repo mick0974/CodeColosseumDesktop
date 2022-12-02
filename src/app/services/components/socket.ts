@@ -59,7 +59,7 @@ export namespace CoCoSockets{
   
   export class CoCoSocket{
     public url = 'ws://localhost:8088';
-    public ws?:WebSocketSubject<MessageEvent<any>>;
+    public ws?:any;
     public resultError?:(error:string)=>void;
     public resultClosed?:()=>void;
     
@@ -78,11 +78,19 @@ export namespace CoCoSockets{
             url: this.url,
             binaryType: "arraybuffer",
             deserializer: msg => msg,
+            serializer: msg => {
+              if (msg instanceof ArrayBuffer)
+                return msg;
+              else
+                return JSON.stringify(msg);
+            }
           });
+
+          console.log("Created new socket");
       }
       
       this.ws.subscribe({
-        error: (err) => { // Called whenever there is a message from the server.
+        error: (err:string) => { // Called whenever there is a message from the server.
           let errorMsg = JSON.stringify(err);
           if (this.resultError) {this.resultError(errorMsg );}
         },
@@ -94,7 +102,7 @@ export namespace CoCoSockets{
       return !this.ws.closed;
     }
     
-    public send<T extends Packets.Message>(
+    public send(
       request: Packets.Request.Message, 
       recieved?:(payload: string, msgClasses: Array<string>) => void,
       //recievedBinary?:(payload: string) => void,
@@ -103,13 +111,13 @@ export namespace CoCoSockets{
       if (this.ws == null) {return false} 
   
       this.ws.subscribe({
-        next: (payload) => { // Called whenever there is a message from the server.
+        next: (payload:any) => { // Called whenever there is a message from the server.
           console.log(typeof payload.data);
           
           if(typeof payload.data === "object") {
             var enc = new TextDecoder("utf-8");
             console.log(enc.decode(payload.data));
-            //if(recievedBinary){recievedBinary( enc.decode(payload.data)); }
+            if(recieved){recieved( enc.decode(payload.data), ["binary"]); }
           } else {
             if (recieved){ recieved(payload.data, msgClasses); }
           }
@@ -119,6 +127,32 @@ export namespace CoCoSockets{
       let packet = request.toPacket();
       this.ws.next(packet);
   
+      return this.ws;
+    }
+
+    public sendBinary(
+      request: ArrayBuffer, 
+      recieved?:(payload: string, msgClasses: Array<string>) => void,
+      ...msgClasses: Array<string>) {
+
+      if (this.ws == null) {return false} 
+  
+      this.ws.subscribe({
+        next: (payload:any) => { // Called whenever there is a message from the server.
+          console.log(typeof payload.data);
+          
+          if(typeof payload.data === "object") {
+            var enc = new TextDecoder("utf-8");
+            console.log(enc.decode(payload.data));
+            if(recieved){recieved( enc.decode(payload.data), ["binary"]); }
+          } else {
+            if (recieved){ recieved(payload.data, msgClasses); }
+          }
+        } 
+      });
+
+      console.log(request);
+      this.ws.next(request);
       return this.ws;
     }
   }
