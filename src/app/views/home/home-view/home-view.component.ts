@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -8,11 +8,18 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class HomeViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+   public zone:NgZone  
+  ) { 
+    
+  }
+
 
   ngOnInit(): void {
     alert("API is available");
     let api = new ApiService();
+
+    api.actionCompile("./data/rock-paper-shissor.sh", (str) => (console.log("start")), (str) => (console.log("end")));
     
     api.gameList((gameList)=>{
       console.log(gameList);

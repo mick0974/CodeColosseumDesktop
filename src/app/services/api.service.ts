@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Packets } from './components/packets';
 import { Commands } from './components/commands';
 import { CoCoSockets } from './components/socket';
+import { ElectronBridgeService, ElectronProcess, ElectronProcessDescriptor } from 'src/app/services/electron-bridge.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,9 @@ import { CoCoSockets } from './components/socket';
 export class ApiService {
   public url = 'ws://localhost:8088';
   public ws?:CoCoSockets.CoCoSocket;
-  
+  public process?:ElectronProcess;
+  public electronBridgeSrv = new ElectronBridgeService();
+
   private createCoCosocket(url:string) {
     this.ws = new CoCoSockets.CoCoSocket(url);
   }
@@ -100,5 +104,48 @@ export class ApiService {
     cmdPlay.run();
 
     return cmdPlay;
+  }
+
+  public actionExec(
+    path:string, 
+    args:Array<string>,
+    onStart: (proc_uid:string) => void,
+    onStdout: (data:string) => void,    
+    onStdin: (data:string) => void){
+    
+      let descriptor = {
+      path: path,
+      args: args,
+      onStart: (proc_uid:string)=>{
+        if(onStart) {onStart(proc_uid)}
+      },
+      onStdout: (data:string)=>{
+        if(onStdout) {onStdout(data)}
+      },
+      onStdin: (data:string)=>{
+        if(onStdin) {onStdin(data)}
+      },
+    };
+
+    this.process = this.electronBridgeSrv!.exec(descriptor);
+  }
+
+  public actionCompile(
+    path:string, 
+    onStart: (proc_uid:string) => void,
+    onStdout: (data:string) => void
+  ){
+    
+    let descriptor = {
+      path: path,
+      onStart: (proc_uid:string)=>{
+        if(onStart) {onStart(proc_uid)}
+      },
+      onStdout: (data:string)=>{
+        if(onStdout) {onStdout(data)}
+      }
+    };
+
+    this.process = this.electronBridgeSrv!.exec(descriptor);
   }
 }
