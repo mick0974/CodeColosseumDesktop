@@ -9,6 +9,7 @@ import { HomeViewComponent } from './views/home-view/home-view.component';
 import { ConnectViewComponent } from './views/connect-view/connect-view.component';
 import { GameViewComponent } from './views/game-view/game-view.component';
 import { InputTextModule } from 'primeng/inputtext';
+import {PasswordModule} from 'primeng/password';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DropdownModule } from 'primeng/dropdown';
 import { StepsModule } from 'primeng/steps';
@@ -33,6 +34,7 @@ import {SelectButtonModule} from 'primeng/selectbutton';
     FormsModule,
     RouterModule.forRoot(routes),
     InputTextModule,
+    PasswordModule,
     InputSwitchModule,
     DropdownModule,
     StepsModule,

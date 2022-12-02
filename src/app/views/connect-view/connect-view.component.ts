@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
-
+import { RippleModule } from 'primeng/ripple';
 @Component({
   selector: 'app-connect-view',
   templateUrl: './connect-view.component.html',
