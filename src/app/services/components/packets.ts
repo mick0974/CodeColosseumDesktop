@@ -180,7 +180,12 @@ export namespace Packets{
       }
       export class LobbyLeaveMatch extends Message {}
       export class SpectateJoin extends Message {
-        id: string=""
+        id?: string;
+
+        constructor(id="") {
+          super();
+          this.id = id;
+        }
       }
       export class SpectateLeave extends Message  {}
     }

@@ -61,26 +61,32 @@ export class ApiService {
     return cmdNewGame;
   }
 
-  public connect( result:(lobbyData:Packets.Reply.LobbyJoinedMatch) => void, 
-  result2:(lobbyData:Packets.Reply.LobbyUpdate) => void,
-  result3:(lobbyData:Packets.Reply.MatchStarted) => void,
-  result4:(message:string) => void,
-  lobby_id:string, lobby_name:string, password?:string, error?:(error:string)=>void){
+  public connectToPlay( 
+    lobbyJoined:(message:Packets.Reply.LobbyJoinedMatch) => void, 
+    lobbyUpdated:(message:Packets.Reply.LobbyUpdate) => void,
+    matchStarted:(message:Packets.Reply.MatchStarted) => void,
+    binaryMessage:(message:string) => void,
+    matchEnded:(message:Packets.Reply.MatchEnded) => void,
+    lobby_id:string, lobby_name:string, password?:string, 
+    error?:(error:string)=>void){
     
     this.createCoCosocket(this.url);
     
     let cmdConnect = new Commands.Connect(this.ws!, lobby_id, lobby_name, password);
     cmdConnect.lobbyJoined = (message) => {
-      if(result) {result(message)}
+      if(lobbyJoined) {lobbyJoined(message)}
     }
     cmdConnect.lobbyUpdated = (message) => {
-      if(result2) {result2(message)}
+      if(lobbyUpdated) {lobbyUpdated(message)}
     }
     cmdConnect.matchStarted = (message) => {
-      if(result3) {result3(message)}
+      if(matchStarted) {matchStarted(message)}
     }
     cmdConnect.binaryInfo = (message) => { 
-      if(result4) {result4(message)}
+      if(binaryMessage) {binaryMessage(message)}
+    }
+    cmdConnect.matchEnded = (message) => { 
+      if(matchEnded) {matchEnded(message)}
     }
 
     cmdConnect.resultError = error;
@@ -89,16 +95,49 @@ export class ApiService {
     return cmdConnect;
   }
 
-  public play(inputString:string, result:(message:string) => void) {
-    console.log("start play");
+  public play(inputString:string) {
     let cmdPlay = new Commands.Play(this.ws!, inputString);
-    
-    cmdPlay.binaryInfo = (message) => {
-      if(result) {result(message)}
-    };
     
     cmdPlay.run();
 
     return cmdPlay;
+  }
+
+  public connectToSpectate( 
+    spectateJoined:(message:Packets.Reply.SpectateJoined )=>void,
+    spectateStarted:(message:Packets.Reply.SpectateStarted)=>void,
+    spectatSynced:(message:Packets.Reply.SpectateSynced)=>void,
+    lobbyUpdated:(message:Packets.Reply.LobbyUpdate)=>void,
+    binaryMessage: (message:string) => void,
+    spectateEnded:(message:Packets.Reply.SpectateEnded)=>void,
+    lobby_id:string, 
+    error?:(error:string)=>void){
+    
+    this.createCoCosocket(this.url);
+    
+    let cmdSpectate = new Commands.Spectate(this.ws!, lobby_id);
+    cmdSpectate.spectateJoined = (message) => {
+      if(spectateJoined) {spectateJoined(message)}
+    }
+    cmdSpectate.spectateStarted = (message) => {
+      if(spectateStarted) {spectateStarted(message)}
+    }
+    cmdSpectate.spectatSynced = (message) => {
+      if(spectatSynced) {spectatSynced(message)}
+    }
+    cmdSpectate.lobbyUpdated = (message) => { 
+      if(lobbyUpdated) {lobbyUpdated(message)}
+    }
+    cmdSpectate.binaryMessage = (message) => { 
+      if(binaryMessage) {binaryMessage(message)}
+    }
+    cmdSpectate.spectateEnded = (message) => { 
+      if(spectateEnded) {spectateEnded(message)}
+    }
+
+    cmdSpectate.resultError = error;
+    cmdSpectate.run();
+
+    return cmdSpectate;
   }
 }
