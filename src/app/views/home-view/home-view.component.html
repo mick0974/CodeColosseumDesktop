@@ -31,7 +31,11 @@
                                         <div class="text-xl font-medium text-900 mb-2">{{game.game}}  <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified!" tooltipPosition="top"></i></div>
                                         <p class="mt-0 mb-3 text-600">{{game.id}} <p-tag value="{{game.current ? 'Current':'Ended'}}" [severity]="game.current ? 'primary' : 'warning'"></p-tag></p>
                                     </div>
-                                    <button pButton pRipple icon="pi pi-play" class="p-button-round" routerLink="/game"></button>
+                                    <div class="p-buttonset">
+                                            <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game', game.id,'upload']"></button>
+                                            <button pButton class="p-button-round p-button-secondary" disabled="true"  icon="pi pi-eye" pTooltip="Coming soon!" tooltipPosition="top"></button>
+                                        <!--TODO: routerlink per spectating-->
+                                    </div>
                                 </div>
                                 <ul class="list-none m-0 p-0">
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
@@ -52,9 +56,9 @@
     </p-scrollPanel>
 
 
-    <p-scrollPanel *ngIf="view_mode === 'table'" [style]="{width:'100%',height:'600px'}" >
+    <p-scrollPanel *ngIf="view_mode === 'table'" [style]="{width:'100%',height:'600px'}">
         <div class="cc-gamelist">
-            <p-table [value]="gamelist" [loading]="loading" responsiveLayout="scroll" [breakpoint]="'960px'" [tableStyle]="{'min-width': '50rem'}">
+            <p-table [value]="gamelist" [loading]="loading" responsiveLayout="scroll" [breakpoint]="'960px'">
                 <ng-template pTemplate="header">
                     <tr>
                         <th [pSortableColumn]="'verified'">
@@ -100,7 +104,11 @@
                             <p-tag value="{{game.current ? 'Current':'Ended'}}" [severity]="game.current ? 'primary' : 'warning'"></p-tag>
                         </td>
                         <td>
-                            <p-button label="Play" icon="pi pi-play" iconPos="left" routerLink="/game"></p-button>
+                            <div class="cc-play-buttons">
+                                <button pButton class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game', game.id,'/upload']"></button>
+                                <button pButton class="p-button-sm p-button-secondary" disabled="true" label="Spectate" icon="pi pi-eye" iconPos="left" pTooltip="Coming soon!" tooltipPosition="top"></button>
+                                <!--TODO: routerlink per spectating-->
+                            </div>
                         </td>
                     </tr>
                 </ng-template>

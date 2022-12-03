@@ -3,7 +3,9 @@ import { AuthGuard } from './guards/auth.guard';
 import { ConnectViewComponent } from './views/connect-view/connect-view.component';
 import { GameViewComponent } from './views/game-view/game-view.component';
 import { HomeViewComponent } from './views/home-view/home-view.component';
-
+import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.component';
+import { CcResultsComponent } from './views/game-view/cc-results/cc-results.component';
+import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
 export const routes: Routes = [
     {
         path: '',
@@ -20,9 +22,15 @@ export const routes: Routes = [
         component: HomeViewComponent
     },
     {
-        path: 'game',
+        path: 'game/:id',
         canActivate: [AuthGuard],
-        component: GameViewComponent
+        component: GameViewComponent,
+        children: [
+            { path: 'upload', component: CcUploadComponent, pathMatch: 'full'  },
+            { path: 'results', component: CcResultsComponent, pathMatch: 'full'  },
+            { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
+        ]
     },
-    { path: "**", redirectTo: "/connect" },
+/*
+    { path: "**", redirectTo: "/connect" },*/
 ];
