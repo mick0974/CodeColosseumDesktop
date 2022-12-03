@@ -21,7 +21,17 @@ export class CcResultsComponent implements OnInit {
       if (token){
         this.gameId = token;
         this.router.navigate(['/game/'+this.gameId+'/review'])
+      }
     }
   }
+
+  navigateToPrevious() {
+    if(this.activatedroute.parent){
+      let token = this.activatedroute.parent.snapshot.paramMap.get('id');
+      if (token){
+      this.gameId = token;
+      this.router.navigate(['/game/'+this.gameId+'/upload'])
+      }
+    }
   }
 }

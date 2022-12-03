@@ -13,6 +13,8 @@ export class CcUploadComponent implements OnInit {
   constructor(private router: Router,private activatedroute:ActivatedRoute ) { }
 
   ngOnInit(): void {
+
+    
   }
 
   navigateToNext() {
@@ -26,5 +28,7 @@ export class CcUploadComponent implements OnInit {
       }
     }
   }
+
+
 
 }
