@@ -1,13 +1,20 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+
 import { RouterModule } from '@angular/router';
+import { routes } from './routes';
+import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { routes } from './routes';
 import { HomeViewComponent } from './views/home-view/home-view.component';
 import { ConnectViewComponent } from './views/connect-view/connect-view.component';
 import { GameViewComponent } from './views/game-view/game-view.component';
+import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.component';
+import { CcResultsComponent } from './views/game-view/cc-results/cc-results.component';
+import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
+
+
 import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DropdownModule } from 'primeng/dropdown';
@@ -15,18 +22,22 @@ import { StepsModule } from 'primeng/steps';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TooltipModule } from 'primeng/tooltip';
-import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import {RippleModule} from 'primeng/ripple';
-import {ScrollPanelModule} from 'primeng/scrollpanel';
-import {SelectButtonModule} from 'primeng/selectbutton';
+import { TableModule } from 'primeng/table';
+import { RippleModule } from 'primeng/ripple';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { MenuModule } from 'primeng/menu';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeViewComponent,
     ConnectViewComponent,
-    GameViewComponent
+    GameViewComponent,
+    CcUploadComponent,
+    CcResultsComponent,
+    CcReviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,9 +52,10 @@ import {SelectButtonModule} from 'primeng/selectbutton';
     TooltipModule,
     TableModule,
     TagModule,
-    RippleModule,
     ScrollPanelModule,
-    SelectButtonModule
+    RippleModule,
+    SelectButtonModule,
+    MenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
