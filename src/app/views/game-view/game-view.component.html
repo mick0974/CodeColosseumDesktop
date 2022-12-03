@@ -5,13 +5,16 @@
         <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'"></button>
     </div>
 
-    <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
+    <div>
+        <h1> Play the game!</h1>
+    </div>
 
 
     <p-steps [(activeIndex)]="currStep" [model]="items" ></p-steps>
 
     <router-outlet></router-outlet>
 
+    <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
 
 
 </div>
