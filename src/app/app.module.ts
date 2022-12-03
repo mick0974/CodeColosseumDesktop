@@ -21,13 +21,19 @@ import {RippleModule} from 'primeng/ripple';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {MenuModule} from 'primeng/menu';
+import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.component';
+import { CcResultsComponent } from './views/game-view/cc-results/cc-results.component';
+import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeViewComponent,
     ConnectViewComponent,
-    GameViewComponent
+    GameViewComponent,
+    CcUploadComponent,
+    CcResultsComponent,
+    CcReviewComponent,
   ],
   imports: [
     BrowserModule,

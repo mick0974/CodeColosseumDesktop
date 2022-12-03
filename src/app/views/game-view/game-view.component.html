@@ -5,13 +5,13 @@
         <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'"></button>
     </div>
 
-    <div class="cc-play-page" *ngIf="!(game===null)" style="width:80%">
+    <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
 
-        <p-steps [model]="items" [readonly]="false"></p-steps>
-        
 
-        <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'"></button>
-    </div>
+    <p-steps [(activeIndex)]="currStep" [model]="items" ></p-steps>
+
+    <router-outlet></router-outlet>
+
 
 
 </div>
