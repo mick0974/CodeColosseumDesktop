@@ -1,6 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 // import { ElectronBridgeService, ElectronProcess, ElectronProcessDescriptor } from 'src/app/services/electron-bridge.service';
 import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell'
+import { open as DialogOpen } from '@tauri-apps/api/dialog';
 
 @Component({
   selector: 'app-home-view',
@@ -9,6 +10,7 @@ import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell'
 })
 export class HomeViewComponent implements OnInit {
   child: Child | undefined;
+  filename: String="";
   output = "";
 
   constructor(
@@ -49,7 +51,7 @@ export class HomeViewComponent implements OnInit {
   async actionExec() {
     console.log("EXEC!")
     this.output = "";
-    const command = new Command("sh", ["-c", "../data/rock-paper-scissor 3 1"]);
+    const command = new Command("sh", ["-c", `${this.filename} 3 1`]);
     command.stdout.on("data", (line: any) => {
       this.output += `OUT: ${line}\n`;
       console.log(`OUT: ${line}`);
@@ -66,7 +68,7 @@ export class HomeViewComponent implements OnInit {
   async actionCompile() {
     console.log("COMPILE!")
     this.output = "";
-    const command = new Command("sh", ["-c", "../data/rock-paper-scissor.sh"])
+    const command = new Command("sh", ["-c", `${this.filename} 3 1`])
     command.stdout.on("data", (line: any) => {
       this.output += `OUT: ${line}\n`;
       console.log(`OUT: ${line}`);
@@ -78,6 +80,14 @@ export class HomeViewComponent implements OnInit {
       this.refreshOutput();
     });
     this.child = await command.spawn();
+  }
+
+  async actionSearch() {
+    console.log("SEARCH!")
+    this.filename = <string>await DialogOpen({
+      multiple: false,
+    });
+    console.log(this.filename);
   }
 }
 
