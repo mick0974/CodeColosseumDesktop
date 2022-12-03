@@ -34,10 +34,10 @@ import { MenuModule } from 'primeng/menu';
     AppComponent,
     HomeViewComponent,
     ConnectViewComponent,
-    GameViewComponent,
     CcUploadComponent,
     CcResultsComponent,
     CcReviewComponent,
+    GameViewComponent,
   ],
   imports: [
     BrowserModule,
