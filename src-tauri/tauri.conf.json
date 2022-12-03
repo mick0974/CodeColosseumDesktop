@@ -4,7 +4,7 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run start",
     "devPath": "http://localhost:4200",
-    "distDir": "../dist",
+    "distDir": "../dist/code-colosseum-desktop",
     "withGlobalTauri": true
   },
   "package": {
@@ -17,7 +17,7 @@
         "all": true,
         "execute": true,
         "sidecar": true,
-        "open": "^.",
+        "open": true,
         "scope": [
           {
             "name": "sh",
@@ -42,7 +42,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.TalCoTeam.CoCo",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
