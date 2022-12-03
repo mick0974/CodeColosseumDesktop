@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CcUploadComponent implements OnInit {
 
   gameId : string = "";
+  uploadedFiles:any[]=[];
 
   constructor(private router: Router,private activatedroute:ActivatedRoute ) { }
 
@@ -16,6 +17,12 @@ export class CcUploadComponent implements OnInit {
 
     
   }
+
+  uploadFile(event:Event){
+    console.log(event)
+  }
+
+
 
   navigateToNext() {
     // TODO: check if token is fine, if not redirect or smth

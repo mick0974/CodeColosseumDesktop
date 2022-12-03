@@ -26,12 +26,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         component: GameViewComponent,
         children: [
-            { path: '', redirectTo: 'upload', pathMatch: 'full' },
             { path: 'upload', component: CcUploadComponent, pathMatch: 'full'  },
             { path: 'results', component: CcResultsComponent, pathMatch: 'full'  },
             { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
         ]
     },
-
-    { path: "**", redirectTo: "/connect" },
+/*
+    { path: "**", redirectTo: "/connect" },*/
 ];

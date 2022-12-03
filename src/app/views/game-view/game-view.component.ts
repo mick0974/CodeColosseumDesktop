@@ -16,9 +16,9 @@ export class GameViewComponent implements OnInit {
   currStep : number = 0;
   
   items: MenuItem[]= [
-    {label: 'Step 1', routerLink: ['upload']},
-    {label: 'Step 2', routerLink:['results']},
-    {label: 'Step 3', routerLink:['review']}
+    {label: 'Match setup', routerLink: ['upload']},
+    {label: 'Match results', routerLink:['results']},
+    {label: 'Match review', routerLink:['review']}
 ];
 
 
