@@ -16,10 +16,26 @@ The project by default is intended to be used with Visual Studio Code.
 The app is a client and in order to be used it requires to connect to instance of CodeColosseum server (cocod).
 
 Dependencies:
+- Rust
 - NodeJS
 - TypeScript
 - Angular
+- Tauri
 - CodeColosseum 
+
+- Rust
+```bash
+  sudo apt update
+  sudo apt install libwebkit2gtk-4.0-dev \
+      build-essential \
+      curl \
+      wget \
+      libssl-dev \
+      libgtk-3-dev \
+      libayatana-appindicator3-dev \
+      librsvg2-dev
+  curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+```
 
 - NodeJS
 ```bash
@@ -53,13 +69,13 @@ From the main folder of the app ( same location as package.json )
 
 Install node dependencies (run once):     
 ```bash
-npm install
+yarn
 ```
 
 To run the actuall app during development ( it autoreload when files are changed )     
 Then navigate to `http://localhost:4200/`
 ```bash
-ng serve
+yarn tauri dev
 ```
 
 To create new components (ex: views ) 
@@ -69,7 +85,7 @@ ng generate component component-name
 
 To build a "production" version, the build artifacts will be stored in the `dist/` directory.
 ```bash
-ng build
+yarn tauri build
 ```
 
 __This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.5.__
