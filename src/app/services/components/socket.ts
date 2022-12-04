@@ -1,4 +1,5 @@
 import { WebSocketSubject } from 'rxjs/webSocket';
+import { webSocket } from 'rxjs/webSocket';
 import { Packets } from './packets';
 
 export namespace CoCoSockets{
@@ -27,13 +28,14 @@ export namespace CoCoSockets{
           });
 
           console.log("Created new socket");
+          console.log(this.ws);
       }
     }
 
     public closeConnection(){
       this.ws!.complete();
     }
-  
+
     public setSubscription():boolean{
       this.ws.subscribe({
         error: (err:string) => { // Called whenever there is a message from the server.
@@ -41,6 +43,7 @@ export namespace CoCoSockets{
           if (this.resultError) {this.resultError(errorMsg );}
         },
         complete: () => {
+          console.log("COMPLETE");
           if (this.resultClosed) {this.resultClosed();}
         }
       });

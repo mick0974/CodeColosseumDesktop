@@ -7,28 +7,39 @@ import { CoCoSockets } from './components/socket';
   providedIn: 'root'
 })
 
+export class MatchInfo extends Packets.MatchInfo{
+
+}
+
 export class ApiService {
   public url = 'ws://localhost:8088';
   public ws?:CoCoSockets.CoCoSocket;
-  
+
   private createCoCosocket(url:string) {
     this.ws = new CoCoSockets.CoCoSocket(url);
   }
 
-  public gameList(gameListed:(gameList:String[])=>void, error?:(error: String)=>void){
+  public gameList(
+    gameListed?:(gameList:String[])=>void, 
+    webSocketError?:(error: String)=>void){
+    
     this.createCoCosocket(this.url);
     
     let cmdGameList = new Commands.GameList(this.ws!);
     cmdGameList.gameListed = (message)=>{
-      if(gameListed){gameListed(message.games)}
+      if(gameListed) {gameListed(message.games);}
     }
-    
-    cmdGameList.resultError = error;
+
+    cmdGameList.webSocketError = webSocketError;
     cmdGameList.run();
     return cmdGameList;
   }
 
-  public gameDescription(gameDescripted:(gameDescription:String)=>void, game:string, error?:(error: String)=>void){
+  public gameDescription(
+    game:string,
+    gameDescripted?:(gameDescription?:string)=>void, 
+    webSocketError?:(error: String)=>void){
+    
     this.createCoCosocket(this.url);
 
     let cmdGameList = new Commands.GameDescription(this.ws!, game);
@@ -36,75 +47,93 @@ export class ApiService {
       if(gameDescripted){gameDescripted(message.description)}
     }
     
-    cmdGameList.resultError = error;
+    cmdGameList.webSocketError = webSocketError;
     cmdGameList.run();
     
     return cmdGameList;
   }
 
-  public lobbyList( lobbyListed:(lobbyList:Packets.MatchInfo[])=>void, error?:(error:String)=>void ){
+  public lobbyList( 
+    lobbyListed?:(lobbyList:MatchInfo[])=>void, 
+    webSocketError?:(error:String)=>void ){
+    
     this.createCoCosocket(this.url);
     
     let cmdLobbyList = new Commands.LobbyList(this.ws!);
     cmdLobbyList.lobbyListReceived = (message)=>{
       if(lobbyListed){lobbyListed(message.info)}
     }
-    cmdLobbyList.resultError = error;
+    cmdLobbyList.webSocketError = webSocketError;
     cmdLobbyList.run();
     return cmdLobbyList;
   }
 
-  public createNewGame( result:(newGame:string) =>void, lobby_name:string, game_name:string, players?:number, bots?:number, timeout?:number, args?:{}, password?:string, verification?:string, error?:(error:string)=>void){
+  public createNewLobby( 
+    lobby_name:string, 
+    game_name:string, 
+    players?:number, 
+    bots?:number, 
+    timeout?:number, 
+    args?:{}, 
+    password?:string, 
+    verification?:string,
+    lobbyCreated?:(newGame:string) =>void,  
+    apiError?:(error:string)=>void,
+    webSocketError?:(error:string)=>void ){
+
     this.createCoCosocket(this.url);
     
     let cmdNewGame = new Commands.CreateNewLobby(this.ws!, lobby_name, game_name, players, bots, timeout, args, password, verification);
     cmdNewGame.newLobbyCreated = (message)=>{
-      if(result){
-        if(message.id["Err"] != undefined){
-          if(cmdNewGame.resultError){
-            cmdNewGame.resultError(message.id["Err"]);
-          }
-        }
-        else{
-          result(message.id["Ok"])
-        }
+      if(message.id["Err"] != undefined){
+        if(apiError){apiError(message.id["Err"]);}
+      }
+      else{
+          if(lobbyCreated){lobbyCreated(message.id["Ok"])}
       }
     }
 
-    cmdNewGame.resultError = error;
+    cmdNewGame.webSocketError = webSocketError;
     cmdNewGame.run();
     return cmdNewGame;
   }
 
   public connectToPlay( 
-    lobbyJoined:(message:Packets.Reply.LobbyJoinedMatch) => void, 
-    lobbyUpdated:(message:Packets.Reply.LobbyUpdate) => void,
-    matchStarted:(message:Packets.Reply.MatchStarted) => void,
-    binaryMessage:(message:string) => void,
-    matchEnded:(message:Packets.Reply.MatchEnded) => void,
-    lobby_id:string, lobby_name:string, password?:string, 
-    error?:(error:string)=>void){
+    lobby_id:string, lobby_name:string, password?:string,
+    lobbyJoined?:(message:MatchInfo) => void, 
+    lobbyUpdated?:(message:MatchInfo) => void,
+    matchStarted?:() => void,
+    binaryMessage?:(message:string) => void,
+    matchEnded?:() => void,
+    apiError?:(error:string) => void, 
+    webSocketError?:(error:string)=>void){
     
     this.createCoCosocket(this.url);
     
     let cmdConnect = new Commands.Connect(this.ws!, lobby_id, lobby_name, password);
     cmdConnect.lobbyJoined = (message) => {
-      if(lobbyJoined) {lobbyJoined(message)}
+      if(message.info["Err"] != undefined) {
+        if(apiError) {apiError(message.info.Err)}
+      }
+      else {
+        console.log(message.info);
+        if(lobbyJoined) {lobbyJoined(message.info["Ok"])}
+      }
     }
     cmdConnect.lobbyUpdated = (message) => {
-      if(lobbyUpdated) {lobbyUpdated(message)}
+      if(lobbyUpdated) {lobbyUpdated(message.info)}
     }
     cmdConnect.matchStarted = (message) => {
-      if(matchStarted) {matchStarted(message)}
+      if(matchStarted) {matchStarted()}
     }
     cmdConnect.binaryInfo = (message) => { 
       if(binaryMessage) {binaryMessage(message)}
     }
     cmdConnect.matchEnded = (message) => { 
-      if(matchEnded) {matchEnded(message)}
+      if(matchEnded) {matchEnded()}
     }
 
-    cmdConnect.resultError = error;
+    cmdConnect.webSocketError = webSocketError;
     cmdConnect.run();
 
     return cmdConnect;
@@ -119,38 +148,44 @@ export class ApiService {
   }
 
   public connectToSpectate( 
-    spectateJoined:(message:Packets.Reply.SpectateJoined )=>void,
-    spectateStarted:(message:Packets.Reply.SpectateStarted)=>void,
-    spectatSynced:(message:Packets.Reply.SpectateSynced)=>void,
-    lobbyUpdated:(message:Packets.Reply.LobbyUpdate)=>void,
-    binaryMessage: (message:string) => void,
-    spectateEnded:(message:Packets.Reply.SpectateEnded)=>void,
-    lobby_id:string, 
-    error?:(error:string)=>void){
+    lobby_id:string,
+    spectateJoined?:(message:MatchInfo )=>void,
+    spectateStarted?:()=>void,
+    spectatSynced?:()=>void,
+    lobbyUpdated?:(message:MatchInfo)=>void,
+    binaryMessage?: (message:string) => void,
+    spectateEnded?:()=>void,
+    apiError?:(error:string) => void,
+    webSocketError?:(error:string)=>void){
     
     this.createCoCosocket(this.url);
     
     let cmdSpectate = new Commands.Spectate(this.ws!, lobby_id);
     cmdSpectate.spectateJoined = (message) => {
-      if(spectateJoined) {spectateJoined(message)}
+      if(message.info["Err"] != undefined) {
+        if(apiError) {apiError(message.info["Err"])}
+      }
+      else {
+        if(spectateJoined) {spectateJoined(message.info["Ok"])}
+      }
     }
     cmdSpectate.spectateStarted = (message) => {
-      if(spectateStarted) {spectateStarted(message)}
+      if(spectateStarted) {spectateStarted()}
     }
     cmdSpectate.spectatSynced = (message) => {
-      if(spectatSynced) {spectatSynced(message)}
+      if(spectatSynced) {spectatSynced()}
     }
     cmdSpectate.lobbyUpdated = (message) => { 
-      if(lobbyUpdated) {lobbyUpdated(message)}
+      if(lobbyUpdated) {lobbyUpdated(message.info)}
     }
     cmdSpectate.binaryMessage = (message) => { 
       if(binaryMessage) {binaryMessage(message)}
     }
     cmdSpectate.spectateEnded = (message) => { 
-      if(spectateEnded) {spectateEnded(message)}
+      if(spectateEnded) {spectateEnded()}
     }
 
-    cmdSpectate.resultError = error;
+    cmdSpectate.webSocketError = webSocketError;
     cmdSpectate.run();
 
     return cmdSpectate;

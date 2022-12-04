@@ -141,7 +141,6 @@ export namespace Packets{
       export class SpectateLeave extends Message  {}
     }
 
-
   export namespace Reply{
     export class Message extends Packets.Message {}
     export class Handshake extends Message {
@@ -168,7 +167,8 @@ export namespace Packets{
     export class ConnectReply extends Message {}
 
     export class LobbyJoinedMatch extends ConnectReply { 
-      public info = new Result<MatchInfo,string>() 
+      //public info = new Result<MatchInfo,string>() 
+      public info = {"Ok": new MatchInfo(), "Err": ""};
     }
     export class LobbyNew extends Message { 
       public info = new MatchInfo() 
@@ -184,7 +184,8 @@ export namespace Packets{
     export class LobbyLeavedMatch extends Message {}
     export class MatchEnded extends Message {}
     export class SpectateJoined extends Message { 
-      public info=new Result<MatchInfo,string>()
+      //public info=new Result<MatchInfo,string>();
+      public info = {"Ok": new MatchInfo(), "Err": ""};
     }
     export class SpectateStarted extends Message {}
     export class SpectateSynced extends Message {}
