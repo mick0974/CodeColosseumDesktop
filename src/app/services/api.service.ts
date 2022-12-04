@@ -15,24 +15,39 @@ export class ApiService {
     this.ws = new CoCoSockets.CoCoSocket(url);
   }
 
-  public gameList(result:(gameList:String[])=>void, error?:(error: String)=>void){
+  public gameList(gameListed:(gameList:String[])=>void, error?:(error: String)=>void){
     this.createCoCosocket(this.url);
     
     let cmdGameList = new Commands.GameList(this.ws!);
-    cmdGameList.gameListReceived = (message)=>{
-      if(result){result(message.games)}
+    cmdGameList.gameListed = (message)=>{
+      if(gameListed){gameListed(message.games)}
     }
+    
     cmdGameList.resultError = error;
     cmdGameList.run();
     return cmdGameList;
   }
 
-  public lobbyList( result:(lobbyList:Packets.MatchInfo[])=>void, error?:(error:String)=>void ){
+  public gameDescription(gameDescripted:(gameDescription:String)=>void, game:string, error?:(error: String)=>void){
+    this.createCoCosocket(this.url);
+
+    let cmdGameList = new Commands.GameDescription(this.ws!, game);
+    cmdGameList.gameDescripted = (message)=>{
+      if(gameDescripted){gameDescripted(message.description)}
+    }
+    
+    cmdGameList.resultError = error;
+    cmdGameList.run();
+    
+    return cmdGameList;
+  }
+
+  public lobbyList( lobbyListed:(lobbyList:Packets.MatchInfo[])=>void, error?:(error:String)=>void ){
     this.createCoCosocket(this.url);
     
     let cmdLobbyList = new Commands.LobbyList(this.ws!);
     cmdLobbyList.lobbyListReceived = (message)=>{
-      if(result){result(message.info)}
+      if(lobbyListed){lobbyListed(message.info)}
     }
     cmdLobbyList.resultError = error;
     cmdLobbyList.run();

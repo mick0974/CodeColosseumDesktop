@@ -19,6 +19,11 @@ export class HomeViewComponent implements OnInit {
       console.log(gameList);
     });
 
+    api.gameDescription((gameDescription)=>{
+      console.log("gameDescription");
+      console.log(gameDescription);
+    }, "roshambo");
+
     if(type === "play") {
       api.createNewGame((gameNew) => {
         console.log('New game created: ' + gameNew);

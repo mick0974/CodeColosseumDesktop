@@ -2,55 +2,9 @@ import { CoCoSockets } from "./socket";
 import { Packets } from "./packets";
 
 export namespace Commands{
-    /*
-    export class Command{
-      public ws?: CoCoSockets.CoCoSocket;
-      public url?:string;
-      public resultHandshake?:(message:Packets.Reply.Handshake)=>void; 
-      public resultClosed?:()=>void;
-      public resultError?:(error:any)=>void;
-  
-      constructor(url:string){
-        this.url = url;
-      }
-  
-      public run(){
-        this.ws = new CoCoSockets.CoCoSocket(this.url!);
-        this.ws.resultError = (error)=>{ this.connectionError(error); };
-        this.ws.resultClosed = ()=>{ this.connectionClosed(); };
-        this.ws.connect();
-  
-        let msg = new Packets.Request.Handshake();
-        this.ws.send(msg,
-          (payload, msgClass)=>{
-            let msgName = Packets.Message.findPacketName(msgClass, payload);
-            let message = new Packets.Reply.Handshake();
-            message.fromMultiPacket(payload, msgName);
-            this.handshakeRecieved(message)}, 
-        Packets.Reply.Handshake.name );
-      }
-  
-      public connectionClosed(){
-  
-        //alert("Command:connectionClosed");
-        if (this.resultClosed){ this.resultClosed();}
-      }
-  
-      public connectionError(error:any){
-        //alert("Command:connectionError "+error);
-        if (this.resultError){ this.resultError(error);}
-      }
-  
-      public handshakeRecieved(message:Packets.Reply.Handshake){
-        //alert("Command:handshakeRecieved");
-        if (this.resultHandshake && message) { this.resultHandshake(message); }
-      }
-    }
-    */
 
     export class Command{
       public ws!: CoCoSockets.CoCoSocket;
-      //public url?:string; 
       public resultHandshake?:(message:Packets.Reply.Handshake)=>void; 
       public resultClosed?:()=>void;
       public resultError?:(error:any)=>void;
@@ -81,23 +35,20 @@ export namespace Commands{
       }
   
       public connectionClosed(){
-        //alert("Command:connectionClosed");
         if (this.resultClosed){ this.resultClosed();}
       }
   
       public connectionError(error:any){
-        //alert("Command:connectionError "+error);
         if (this.resultError){ this.resultError(error);}
       }
   
       public handshakeRecieved(message:Packets.Reply.Handshake){
-        //alert("Command:handshakeRecieved");
         if (this.resultHandshake && message) { this.resultHandshake(message); }
       }
     }
   
     export class GameList extends Command{
-      public gameListReceived?:(message:Packets.Reply.GameList)=>void
+      public gameListed?:(message:Packets.Reply.GameList)=>void
       
       public override handshakeRecieved( handshake: Packets.Reply.Handshake){
         super.handshakeRecieved(handshake);
@@ -106,16 +57,44 @@ export namespace Commands{
         this.ws!.send(msg, (payload, msgClass) => {
           let msgName = Packets.Message.findPacketName(msgClass, payload);
           
-          if(this.gameListReceived) {
+          if(this.gameListed) {
             let message = new Packets.Reply.GameList();
             message.fromMultiPacket(payload, msgName);
             
             if(message){
               this.ws.closeConnection();
-              this.gameListReceived(message as Packets.Reply.GameList);
+              this.gameListed(message as Packets.Reply.GameList);
             }
           }
         }, Packets.Reply.GameList.name);
+      }
+    }
+
+    export class GameDescription extends Command{
+      public gameDescripted?:(message:Packets.Reply.GameDescription)=>void
+      private msg?: Packets.Request.GameDescription;
+
+      constructor(ws:CoCoSockets.CoCoSocket, game:string) {
+        super(ws);
+        this.msg = new Packets.Request.GameDescription(game);
+      }
+      
+      public override handshakeRecieved( handshake: Packets.Reply.Handshake){
+        super.handshakeRecieved(handshake);
+  
+        this.ws!.send(this.msg!, (payload, msgClass) => {
+          let msgName = Packets.Message.findPacketName(msgClass, payload);
+          
+          if(this.gameDescripted) {
+            let message = new Packets.Reply.GameDescription();
+            message.fromMultiPacket(payload, msgName);
+            
+            if(message){
+              this.ws.closeConnection();
+              this.gameDescripted(message as Packets.Reply.GameDescription);
+            }
+          }
+        }, Packets.Reply.GameDescription.name);
       }
     }
   
