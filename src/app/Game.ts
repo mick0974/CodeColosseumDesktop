@@ -7,5 +7,6 @@ export interface Game{
     spectators:number;
     timeout:number;
     password:boolean;
-    current:boolean;
+    current:boolean; // true=running, false=waiting
+    time:number //  expiration information for waiting to start matches and running time for running matches.
 }
