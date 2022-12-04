@@ -35,7 +35,7 @@ export class UploadService {
     }
     else {
       // No ID was given: redirect
-      console.log("[Service] No ID given; redirect")
+      console.log("[Service] No ID found; gotta redirect...")
       return (null)
     }
   }
@@ -47,8 +47,11 @@ export class UploadService {
   isGameSet(){
     return this.game !== null
   }
+  
+  
   reset(){
     this.game=null;
     this.gameId=""
+    console.log("[Service] Gameplay was reset.")
   }
 }

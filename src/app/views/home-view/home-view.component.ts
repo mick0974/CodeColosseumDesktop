@@ -19,8 +19,8 @@ export class HomeViewComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log("[Homeview] Resetting gameplay...")
     this.uploadService.reset()
-    console.log("Gameplay was reset.")
         setTimeout(() => {
             this.gamelist = GAMES;
             this.loading = false;

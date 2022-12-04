@@ -28,23 +28,42 @@ export class GameViewComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //TODO: redirect to a 404 page rather than displaying the message here
+    //TODO: redirect to a 404 page rather than displaying the message in the same page
+
+
+    /*The flow here is:
+    
+    User clicks on play
+     --> go to /game/set/<id> 
+     --> this component catches it and sets the id in service
+     --> this components redirects to /game
+     --> this component checks if id was set or not
+       --> if id was set, redirect to /upload
+       --> if not, redirect to home
+
+    User tries to access game screen directly through URL
+    --> this component catches it and checks if id was set
+      --> if yes, everything's fine
+      --> if na, redirect to home
+    
+      // todo: if user accesses /game/upload with no id set, redirect to home. Might be worth it to move all these controls inside the service?
+    */
     
     let token = this.activatedroute.snapshot.paramMap.get('id');
 
     if (token){
       this.uploadService.setGame(token);
-      console.log("[Gameview] Setting game! Redirecting...")
+      console.log("[Gameview] Gameplay set to "+this.uploadService.getGameId()+"! Reloading...")
       this.router.navigate(['game'])
   }
     else{
       if (this.uploadService.isGameSet()){
-        console.log("[Gameview] Game was already set to "+this.uploadService.getGameId())
+        console.log("[Gameview] Gameplay was already set to "+this.uploadService.getGameId()+". Loading upload view...")
         this.router.navigate(['game/upload'])
       }
       else{
-        console.log("[Gameview] Game was not set! ")
-        //this.router.navigateByUrl("/home")
+        console.log("[Gameview] Game was not set! Redirecting to Homeview. ")
+        this.router.navigate(['home'])
       }
     }
 
