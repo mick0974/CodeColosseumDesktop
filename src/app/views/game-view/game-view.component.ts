@@ -3,6 +3,8 @@ import { Game } from 'src/app/Game';
 import { GAMES } from 'mock-games';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { UploadService } from 'src/app/services/upload.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-view',
@@ -11,7 +13,7 @@ import { MenuItem } from 'primeng/api';
 })
 export class GameViewComponent implements OnInit {
   gameExists : boolean = false;
-  gameId : string="" ;
+  gameId : string= this.uploadService.getGameId() ;
   game! : Game | null;
   currStep : number = 0;
   
@@ -22,17 +24,47 @@ export class GameViewComponent implements OnInit {
 ];
 
 
-  constructor(private activatedroute:ActivatedRoute) { }
+  constructor(private router:Router,private activatedroute:ActivatedRoute, private uploadService:UploadService) { }
 
   ngOnInit(): void {
 
-    //TODO: redirect to a 404 page rather than displaying the message here
+    //TODO: redirect to a 404 page rather than displaying the message in the same page
+
+
+    /*The flow here is:
+    
+    User clicks on play
+     --> go to /game/set/<id> 
+     --> this component catches it and sets the id in service
+     --> this components redirects to /game
+     --> this component checks if id was set or not
+       --> if id was set, redirect to /upload
+       --> if not, redirect to home
+
+    User tries to access game screen directly through URL
+    --> this component catches it and checks if id was set
+      --> if yes, everything's fine
+      --> if na, redirect to home
+    
+      // todo: if user accesses /game/upload with no id set, redirect to home. Might be worth it to move all these controls inside the service?
+    */
+    
     let token = this.activatedroute.snapshot.paramMap.get('id');
 
     if (token){
-      this.gameId=token;
-      // This has to be substituted with getting the game from the API
-      GAMES.find( (g) => (this.game = g.id === this.gameId ? g : null) )
+      this.uploadService.setGame(token);
+      console.log("[Gameview] Gameplay set to "+this.uploadService.getGameId()+"! Reloading...")
+      this.router.navigate(['game'])
+  }
+    else{
+      if (this.uploadService.isGameSet()){
+        console.log("[Gameview] Gameplay was already set to "+this.uploadService.getGameId()+". Loading upload view...")
+        this.router.navigate(['game/upload'])
+      }
+      else{
+        console.log("[Gameview] Game was not set! Redirecting to Homeview. ")
+        this.router.navigate(['home'])
+      }
     }
 
     
