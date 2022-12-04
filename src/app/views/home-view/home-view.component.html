@@ -66,6 +66,11 @@
                             <p-sortIcon [field]="'verified'"></p-sortIcon>
                         </th>
 
+                        <th [pSortableColumn]="'password'">
+                            Psw
+                            <p-sortIcon [field]="'password'"></p-sortIcon>
+                        </th>
+
                         <th [pSortableColumn]="'id'">
                             ID
                             <p-sortIcon [field]="'id'"></p-sortIcon>
@@ -79,7 +84,6 @@
                         <th>Players</th>
                         <th>Spectators</th>
                         <th>Timeout</th>
-                        <th>Password</th>
 
                         <th [pSortableColumn]="'current'">
                             Time
@@ -94,12 +98,15 @@
                         <td>
                             <i class="pi pi-check" *ngIf="game.verified"></i>
                         </td>
+                        <td>
+                            <i class="pi pi-unlock" *ngIf="game.password"></i>
+                        </td>
                         <td>{{game.id}}</td>
                         <td>{{game.game}}</td>
                         <td>{{game.players}} / {{game.maxplayers}}</td>
                         <td>{{game.spectators}}</td>
                         <td>{{game.timeout}}</td>
-                        <td>{{game.password}}</td>
+
                         <td>
                             <p-tag value="{{game.current ? 'Current':'Ended'}}" [severity]="game.current ? 'primary' : 'warning'"></p-tag>
                         </td>
@@ -107,7 +114,6 @@
                             <div class="cc-play-buttons">
                                 <button pButton class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/set', game.id]"></button>
                                 <button pButton class="p-button-sm p-button-secondary" disabled="true" label="Spectate" icon="pi pi-eye" iconPos="left" pTooltip="Coming soon!" tooltipPosition="top"></button>
-                                <!--TODO: routerlink per spectating-->
                             </div>
                         </td>
                     </tr>

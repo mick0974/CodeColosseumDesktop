@@ -6,6 +6,6 @@ export interface Game{
     maxplayers:number;
     spectators:number;
     timeout:number;
-    password:string;
+    password:boolean;
     current:boolean;
 }

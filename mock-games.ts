@@ -9,7 +9,7 @@ export const GAMES:Game[] = [
         players:25,
         maxplayers:25,
         timeout:100,
-        password:"abc",
+        password:true,
         current:true,
     },
     {
@@ -20,7 +20,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:true,
         current:false,
     },
     {
@@ -31,7 +31,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:true,
         current:false,
     },
     {
@@ -42,7 +42,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:true,
         current:true,
     },
     {
@@ -53,7 +53,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:false,
         current:true,
     },
     {
@@ -64,7 +64,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:false,
         current:true,
     },
     {
@@ -75,7 +75,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:false,
         current:true,
     },
     {
@@ -86,7 +86,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:false,
         current:true,
     },
     {
@@ -97,7 +97,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:true,
         current:true,
     },
     {
@@ -108,7 +108,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:false,
         current:true,
     },
     {
@@ -119,7 +119,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:false,
         current:true,
     },
     {
@@ -130,7 +130,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:false,
         current:true,
     },
     {
@@ -141,7 +141,7 @@ export const GAMES:Game[] = [
         players:20,
         maxplayers:25,
         timeout:200,
-        password:"abcd",
+        password:false,
         current:true,
     },
 ]
