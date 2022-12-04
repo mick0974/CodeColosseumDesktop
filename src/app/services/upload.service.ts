@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../Game';
 import { GAMES } from 'mock-games';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
   game! : Game | null;
-  gameId:string="";
+  gameId!:string | null;
 
-  constructor() { }
+  constructor(private router:Router) { }
 
   setGame(token:string|null):string|null{
       // TODO: This check has to be substituted with getting the game from the API
@@ -41,13 +42,25 @@ export class UploadService {
   }
 
   getGameId(){
-    return this.gameId
+    if (this.gameId){
+      return this.gameId
+    }
+    else return ""
   }
 
   isGameSet(){
-    return this.game !== null
+    if (this.game){
+      return true
+    }
+    return false
   }
   
+  redirectIfGameNotSet(){
+    if(!this.isGameSet()){
+      console.log("[Upload] Game was not set; redirect to home...")
+      this.router.navigate(['home'])
+    }
+  }
   
   reset(){
     this.game=null;
