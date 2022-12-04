@@ -28,13 +28,18 @@
                             <div class="surface-card shadow-2 border-rounded p-3" style="border-radius: 6px">
                                 <div class="flex justify-content-between align-items-start">
                                     <div>
-                                        <div class="text-xl font-medium text-900 mb-2">{{game.game}}  <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified!" tooltipPosition="top"></i></div>
-                                        <p class="mt-0 mb-3 text-600">{{game.id}} <p-tag value="{{game.current ? 'Current':'Ended'}}" [severity]="game.current ? 'primary' : 'warning'"></p-tag></p>
+                                        <div class="text-xl font-medium text-900 mb-2">{{game.game}}  
+                                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified!" tooltipPosition="top"></i>
+                                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password to access" tooltipPosition="top"></i>
+                                        </div>
+                                        <p class="mt-0 mb-3 text-600">
+                                            {{game.id}} <br>
+                                            <p-tag  value="{{game.current ? 'Running \n('+game.time+' s)':'Waiting for players (-'+game.time+' s)'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                                        </p>
                                     </div>
                                     <div class="p-buttonset">
                                             <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game/set', game.id]"></button>
                                             <button pButton class="p-button-round p-button-secondary" disabled="true"  icon="pi pi-eye" pTooltip="Coming soon!" tooltipPosition="top"></button>
-                                        <!--TODO: routerlink per spectating-->
                                     </div>
                                 </div>
                                 <ul class="list-none m-0 p-0">
@@ -43,9 +48,13 @@
                                         <span class="text-600 font-medium text-sm"><i class="pi pi-user"></i>  Players</span>
                                         <span class="text-900 font-medium text-sm">{{game.players}}/{{game.maxplayers}}</span>
                                     </li>
-                                    <li class="px-0 py-2 flex justify-content-between align-items-center">
+                                    <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         <span class="text-600 font-medium text-sm"><i class="pi pi-eye"></i>  Spectators</span>
                                         <span class="text-900 font-medium text-sm">{{game.spectators}}</span>
+                                    </li>
+                                    <li class="px-0 py-2 flex justify-content-between align-items-center">
+                                        <span class="text-600 font-medium text-sm"><i class="pi pi-clock"></i>  Time to reply</span>
+                                        <span class="text-900 font-medium text-sm">{{game.timeout}} seconds</span>
                                     </li>
                                 </ul>
                             </div>
@@ -85,9 +94,9 @@
                         <th>Spectators</th>
                         <th>Timeout</th>
 
-                        <th [pSortableColumn]="'current'">
+                        <th [pSortableColumn]="'time'">
                             Time
-                            <p-sortIcon [field]="'current'"></p-sortIcon>
+                            <p-sortIcon [field]="'time'"></p-sortIcon>
                         </th>
                         
                         <th> </th>
@@ -105,10 +114,10 @@
                         <td>{{game.game}}</td>
                         <td>{{game.players}} / {{game.maxplayers}}</td>
                         <td>{{game.spectators}}</td>
-                        <td>{{game.timeout}}</td>
-
+                        <td>{{game.timeout}} s</td>
                         <td>
-                            <p-tag value="{{game.current ? 'Current':'Ended'}}" [severity]="game.current ? 'primary' : 'warning'"></p-tag>
+                            <p-tag value="{{game.current ? 'Running \n('+game.time+' s)':'Waiting for players (-'+game.time+' s)'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                                                        
                         </td>
                         <td>
                             <div class="cc-play-buttons">

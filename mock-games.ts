@@ -11,6 +11,7 @@ export const GAMES:Game[] = [
         timeout:100,
         password:true,
         current:true,
+        time:200,
     },
     {
         id:"hHdeTTr",
@@ -22,6 +23,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:true,
         current:false,
+        time:200,
     },
     {
         id:"grwdfc",
@@ -33,6 +35,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:true,
         current:false,
+        time:200,
     },
     {
         id:"fgyjte",
@@ -44,6 +47,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:true,
         current:true,
+        time:200,
     },
     {
         id:"gThopO",
@@ -55,6 +59,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:false,
         current:true,
+        time:20,
     },
     {
         id:"cDffRd",
@@ -66,6 +71,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:false,
         current:true,
+        time:2,
     },
     {
         id:"cDffRd",
@@ -77,6 +83,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:false,
         current:true,
+        time:200,
     },
     {
         id:"cDffRd",
@@ -88,6 +95,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:false,
         current:true,
+        time:200,
     },
     {
         id:"cDffRd",
@@ -99,6 +107,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:true,
         current:true,
+        time:20,
     },
     {
         id:"cDffRd",
@@ -110,6 +119,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:false,
         current:true,
+        time:200,
     },
     {
         id:"cDffRd",
@@ -121,6 +131,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:false,
         current:true,
+        time:20,
     },
     {
         id:"cDffRd",
@@ -132,6 +143,7 @@ export const GAMES:Game[] = [
         timeout:200,
         password:false,
         current:true,
+        time:20,
     },
     {
         id:"cDffRd",
@@ -143,5 +155,6 @@ export const GAMES:Game[] = [
         timeout:200,
         password:false,
         current:true,
+        time:2060,
     },
 ]
