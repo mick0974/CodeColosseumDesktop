@@ -1,13 +1,34 @@
 <div class="cc-column-layout">
  
     <h2> Match setup</h2>
-    
-    <h3> Upload your file</h3>
-    <input type="file" class="file-upload" onchange="console.log(event.target.files)">
+        <div class="p-fluid" class="field">
 
-    <h3> Set parameters (optional)</h3>
-    <input type="text" id="parameters" class="text-base text-color surface-overlay p-2 border-solid surface-border border-round appearance-none focus:border-primary w-full" pInputText/>
-    <div style="text-align: center">
-        <button  style="margin:20px" pButton type="button" label="Next" (click)="navigateToNext()"></button>
-     </div>
-</div>
+            <h3>Upload your file</h3>
+            <input type="file" name="a" class="file-upload" onchange="console.log(event.target.files)">
+
+            <div class="cc-fields">
+                <div style="width:100%">
+                    <label for="parameters"> Insert parameters (optional) </label>
+                <input #password="ngModel" [(ngModel)]="uploadData.parameters" type="text" name="parameters" id="parameters" pInputText/>           
+                </div>
+
+                <div *ngIf="hasPassword">
+                    <label for="password"> Insert password </label>
+                    <input #password="ngModel" id="password" type="text" required pInputText [(ngModel)]="uploadData.password" [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}">
+                    <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Password is required for this game.</small>
+                </div>
+            </div>
+
+            <div style="text-align: center">
+                <p-button type="button" name="a" label="Next" (click)="navigateToNext()"></p-button>
+            </div>
+
+        </div>
+
+
+
+
+
+<!-- 
+            <input #password="ngModel" [(ngModel)]="uploadData.password" required type="text" id="password" pInputText/>
+            <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Age is required.</small>-->

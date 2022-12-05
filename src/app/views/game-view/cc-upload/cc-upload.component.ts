@@ -11,26 +11,34 @@ export class CcUploadComponent implements OnInit {
   gameId : string = "";
   hasPassword:boolean = true;
   uploadedFiles:any[]=[];
+  submitted:boolean = false;
+
+  uploadData:any={};
 
   constructor(private router: Router,private uploadService:UploadService ) { }
 
   ngOnInit(): void {
-    this.uploadService.redirectIfGameNotSet()    
-    /*this.gameId = this.uploadService.getGameId;
-    if(this.uploadService.getGame())
-      this.hasPassword = this.uploadService.getGame().*/
-      }
-
-  uploadFile(event:Event){
-    console.log(event)
+    this.uploadService.redirectIfGameNotSet()   
+    this.hasPassword = this.uploadService.getGame()?.password ?? false
   }
-
-
 
   navigateToNext() {
-    this.router.navigate(['game/results'])
+    if (this.hasPassword&&this.uploadData.password || !this.hasPassword){
+      //todo add check that file was uploaded
+      //todo check file is an executable
+      this.router.navigate(['game/results']);
+      return
+    }
+
+
+
+
+    if (this.uploadData.password) {
+      this.router.navigate(['game/results'])
+      return;
   }
-
-
+  this.submitted = true;
+  
+  }
 
 }
