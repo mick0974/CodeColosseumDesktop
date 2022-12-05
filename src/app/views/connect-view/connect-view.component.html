@@ -4,13 +4,13 @@
     <div class="fromgrid grid" className="cc-grid">
         <div class="field col-12" id="server-div">
           <span class="p-float-label" id="server-span">
-            <input type="text" name="server" id="server" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
+            <input type="text" name="server" [(ngModel)]="server" id="server" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
             <label for="server">Server URL</label>
           </span>
         </div>
         <div class="field col-12" id="username-div">
           <span class="p-float-label" id="username-span">
-            <input type="text" name="username" id="username" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
+            <input type="text" name="username" [(ngModel)]="username" id="username" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
             <label for="username">Username</label>
           </span>
         </div>

@@ -8,7 +8,7 @@ import { RippleModule } from 'primeng/ripple';
   styleUrls: ['./connect-view.component.scss']
 })
 export class ConnectViewComponent implements OnInit {
-  @Output() newConnection = new EventEmitter()
+  //@Output() newConnection = new EventEmitter()
   public server: string = "";
   public username: string = "";
   
@@ -31,14 +31,8 @@ export class ConnectViewComponent implements OnInit {
     }
   }
   onClick(){
-    console.log('click of connect button')
-    console.log(this.server)
-    console.log(this.username)
     if(!this.server){
       alert('Please insert a server url!')
-      console.log('Server: ',this.server)
-      console.log('Username: ', this.username)
-  
       return;
     }
     if(!this.username){
@@ -46,7 +40,7 @@ export class ConnectViewComponent implements OnInit {
       return;
     }
     this.connect();
-    this.newConnection.emit();
+    //this.newConnection.emit();
     
   }
 
