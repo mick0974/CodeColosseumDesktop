@@ -5,6 +5,8 @@
 /tmp
 /out-tsc
 /bazel-out
+/build
+/src-tauri/release
 
 # Node
 /node_modules
@@ -42,4 +44,3 @@ testem.log
 Thumbs.db
 
 CodeColosseum/*
-yarn.lock
