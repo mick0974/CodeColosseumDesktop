@@ -10,8 +10,8 @@ import { DemoViewComponent } from './views/demo-view/demo-view.component';
 
 @NgModule({
   declarations: [
-    AppComponent
-    DemoViewComponent,
+    AppComponent,
+    DemoViewComponent
   ],
   imports: [
     BrowserModule,
