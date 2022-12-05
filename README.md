@@ -83,7 +83,7 @@ To create new components (ex: views )
 ng generate component component-name
 ```
 
-To build a "production" version, the build artifacts will be stored in the `dist/` directory.
+To build a "production" version, the build artifacts will be stored in the `dist/` directory and the tauri builded version will be located in `src-tauri/target` folder.
 ```bash
 yarn tauri build
 ```
