@@ -1,0 +1,13 @@
+<div class="cc-column-layout">
+ 
+    <h2> Match setup</h2>
+    
+    <h3> Upload your file</h3>
+    <input type="file" class="file-upload" onchange="console.log(event.target.files)">
+
+    <h3> Set parameters (optional)</h3>
+    <input type="text" id="parameters" class="text-base text-color surface-overlay p-2 border-solid surface-border border-round appearance-none focus:border-primary w-full" pInputText/>
+    <div style="text-align: center">
+        <button  style="margin:20px" pButton type="button" label="Next" (click)="navigateToNext()"></button>
+     </div>
+</div>

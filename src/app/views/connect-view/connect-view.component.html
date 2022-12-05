@@ -1,28 +1,35 @@
-<div class="cc-center-layout">
+<div class="cc-connect">
   <div class="card" className="cc-card">
     <h1>Welcome to <br>Code Colosseum.</h1> 
     <div class="fromgrid grid" className="cc-grid">
         <div class="field col-12" id="server-div">
           <span class="p-float-label" id="server-span">
-            <input type="text" id="server-url" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
-            <label for="server-url">Server URL</label>
+            <input type="text" name="server" id="server" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
+            <label for="server">Server URL</label>
           </span>
         </div>
-        <div class="field col-12 md:col-6" id="username-div">
+        <div class="field col-12" id="username-div">
+          <span class="p-float-label" id="username-span">
+            <input type="text" name="username" id="username" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
+            <label for="username">Username</label>
+          </span>
+        </div>
+        <div class="field col-12" id="button-div">
+          <button pButton pRipple type="button" id="button" (click)="onClick()" label="CONNECT" class="border-round"></button>
+        </div>
+    </div> 
+  </div>
+</div>
+<!--
+         <div class="field col-12" id="username-div">
           <span class="p-float-label" id="username-span">
             <input type="text" id="username" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
             <label for="username">Username</label>
           </span>
-        </div>
-        <div class="field col-12 md:col-6" className="cc-div-password" id="password-div">
           <span class="p-float-label" className="cc-div-span-password" id="password-span">
             <input type="password" id="password" className="cc_password" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pPassword/>
             <label for="password">Password</label>
           </span>
         </div>
-        <div class="field col-12" id="button-div">
-          <button pButton pRipple type="button" id="button" label="CONNECT" class="border-round" routerLink="/home"></button>
-        </div>
-    </div> 
-  </div>
-</div>
+       
+-->

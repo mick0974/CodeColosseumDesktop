@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
+import { ConnectionManagerService } from '../../services/connection-manager.service';
 import { RippleModule } from 'primeng/ripple';
 @Component({
   selector: 'app-connect-view',
@@ -8,10 +8,10 @@ import { RippleModule } from 'primeng/ripple';
   styleUrls: ['./connect-view.component.scss']
 })
 export class ConnectViewComponent implements OnInit {
-
+  @Output() newConnection = new EventEmitter()
   public server: string = "";
   public username: string = "";
-  public password: string = "";
+  
 
   constructor(
     private readonly connectionManager: ConnectionManagerService,
@@ -22,13 +22,32 @@ export class ConnectViewComponent implements OnInit {
   }
 
   public async connect(): Promise<void> {
-    await this.connectionManager.connect(this.server, this.username, this.password);
+    await this.connectionManager.connect(this.server, this.username);
 
     if (this.connectionManager.isConnected) {
       this.router.navigateByUrl('/home');
     } else {
       // TODO: Show error message
     }
+  }
+  onClick(){
+    console.log('click of connect button')
+    console.log(this.server)
+    console.log(this.username)
+    if(!this.server){
+      alert('Please insert a server url!')
+      console.log('Server: ',this.server)
+      console.log('Username: ', this.username)
+  
+      return;
+    }
+    if(!this.username){
+      alert('Please insert a username!')
+      return;
+    }
+    this.connect();
+    this.newConnection.emit();
+    
   }
 
 }
