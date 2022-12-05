@@ -16,13 +16,21 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TooltipModule } from 'primeng/tooltip';
 import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import {RippleModule} from 'primeng/ripple';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
+import {SelectButtonModule} from 'primeng/selectbutton';
+import { DemoViewComponent } from './views/demo-view/demo-view.component';
+import { RouterViewComponent } from './views/router-view/router-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeViewComponent,
     ConnectViewComponent,
-    GameViewComponent
+    GameViewComponent,
+    DemoViewComponent,
+    RouterViewComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +43,11 @@ import { TableModule } from 'primeng/table';
     FileUploadModule,
     ConfirmPopupModule,
     TooltipModule,
-    TableModule
+    TableModule,
+    TagModule,
+    RippleModule,
+    ScrollPanelModule,
+    SelectButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

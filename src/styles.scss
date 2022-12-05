@@ -1,38 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeflex/primeflex.css";
+
 $layout-padding: 2rem;
 
 * {
   font-family: 'Open Sans', sans-serif;
-  color: white;
-}
-
-pre{
-    font-family: monospace;
-}
-
-button{
-    border: 1px #fff solid;
-    border-radius: 3px;
-    background-color: #333;
-}
-
-button:hover{
-    background-color: #444;
-}
-
-button:active{
-    border: 1px #aaa  solid;
-    color: #aaa;
-}
-
-
-body, html, app-root{
-    width: 100%;
-    height: 100%;
-    margin:0;
-    padding:0;
-    color: white;
-    background-color: #333;
 }
 
 
@@ -54,5 +26,15 @@ div.cc-center-layout {
     display:flex;
     align-items: center;
     justify-content: center;
+}
+.p-scrollpanel:hover .p-scrollpanel-bar, .p-scrollpanel:active .p-scrollpanel-bar{
+    background-color: var(--primary-color);
+}
+
+.p-scrollpanel-wrapper{
+    border-radius: 10px;
+}
+.surface-ground{
+    border-radius: 10px;
 }
 */

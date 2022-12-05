@@ -1,37 +1,21 @@
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell'
 import { open as DialogOpen } from '@tauri-apps/api/dialog';
-import { Component, OnInit, NgZone } from '@angular/core';
-import { GAMES } from 'mock-games';
-import { Game } from 'src/app/Game';
-import { TagModule } from 'primeng/tag';
-
 @Component({
-  selector: 'app-home-view',
-  templateUrl: './home-view.component.html',
-  styleUrls: ['./home-view.component.scss']
+  selector: 'app-demo-view',
+  templateUrl: './demo-view.component.html',
+  styleUrls: ['./demo-view.component.scss']
 })
-export class HomeViewComponent implements OnInit {
-  gamelist: Game[] = GAMES;
-  isLoading: boolean = false;
-  loading: boolean = true;
-  stateOptions: any[] = [{ icon: 'pi pi-bars', value: 'table' }, { icon: 'pi pi-th-large', value: 'card' }];
-  view_mode: string = "table";
-  filename = "";
-
-  //Tauri dev
-  output = "";
-  child: Child | undefined;
+export class DemoViewComponent implements OnInit {
+  public child: Child | undefined;
+  public filename: String = "";
+  public output = "";
 
   constructor(
     public zone: NgZone
-  ) {
-  }
+    ) { }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.gamelist = GAMES;
-      this.loading = false;
-    }, 1000);
   }
 
 
@@ -80,7 +64,7 @@ export class HomeViewComponent implements OnInit {
   async actionCompile() {
     console.log("COMPILE!")
     this.output = "";
-    const command = new Command("sh", ["-c", `${this.filename}.sh`])
+    const command = new Command("sh", ["-c", `${this.filename} 3 1`])
     command.stdout.on("data", (line: any) => {
       this.output += `OUT: ${line}\n`;
       console.log(`OUT: ${line}`);
@@ -101,9 +85,4 @@ export class HomeViewComponent implements OnInit {
     });
     console.log(this.filename);
   }
-
-
-
 }
-
-
