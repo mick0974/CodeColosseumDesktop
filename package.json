@@ -1,6 +1,26 @@
 {
   "name": "code-colosseum-desktop",
   "version": "0.0.0",
+  "main": "main.js",
+  "build": {
+    "appId": "com.talcoteam.CoCo",
+    "productName": "CodeColosseum",
+    "files": [
+      "**/*",
+      "dist/**/*"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "dist"
+    },
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "src/favicon.ico"
+    }
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,6 +39,7 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "@tauri-apps/api": "^1.2.0",
     "primeflex": "^3.3.0",
     "primeicons": "^3.0.0",
     "primeng": "^13.3.3",
@@ -30,6 +51,7 @@
     "@angular-devkit/build-angular": "~13.3.5",
     "@angular/cli": "~13.3.5",
     "@angular/compiler-cli": "~13.3.0",
+    "@tauri-apps/cli": "^1.2.1",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~4.0.0",
