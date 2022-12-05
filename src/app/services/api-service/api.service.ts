@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Packets } from './components/packets';
-import { Commands } from './components/commands';
-import { CoCoSockets } from './components/socket';
+import { Packets } from './api.packets';
+import { Commands } from './api.commands';
+import { CoCoSockets } from './api.socket';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 import { WebSocketSubject } from 'rxjs/webSocket';
-import { Packets } from './packets';
+import { Packets } from './api.packets';
 
 export namespace CoCoSockets{
   /*

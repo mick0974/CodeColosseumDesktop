@@ -1,5 +1,5 @@
-import { CoCoSockets } from "./socket";
-import { Packets } from "./packets";
+import { CoCoSockets } from "./api.socket";
+import { Packets } from "./api.packets";
 
 export namespace Commands{
     /*
