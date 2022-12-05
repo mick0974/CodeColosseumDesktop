@@ -1,0 +1,47 @@
+
+
+div.cc-page{
+    div.cc-topbar{
+        display:flex;
+        align-items: center;
+        justify-content: space-between;
+        padding:1rem 2rem;
+        div.cc-topbar-logo{
+            display:flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        div.cc-topbar-info-list{
+            display:flex;
+            align-items: stretch;
+
+            div.cc-topbar-info {
+                display: flex;
+                align-items: center;
+                border-left:solid 1px #ddd;
+                padding: 0 1rem;
+
+                &:first-child{
+                    border-left:none;
+                }
+
+                &:last-child{
+                    padding-right:0;
+                }
+
+                &.cc-topbar-info-username{
+                    p{
+                        font-weight:600;
+                    }
+                }
+
+                &.cc-topbar-info-server{
+                    p{
+                        color: rgb(114, 120, 127);
+                    }
+                }
+            }
+        }
+    }
+}
