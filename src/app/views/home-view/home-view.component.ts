@@ -1,6 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { ElectronBridgeService, ElectronProcess, ElectronProcessDescriptor } from 'src/app/services/electron-bridge.service';
-
+// import { ElectronBridgeService, ElectronProcess, ElectronProcessDescriptor } from 'src/app/services/electron-bridge.service';
+import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell'
+import { open as DialogOpen } from '@tauri-apps/api/dialog';
 
 @Component({
   selector: 'app-home-view',
@@ -8,28 +9,37 @@ import { ElectronBridgeService, ElectronProcess, ElectronProcessDescriptor } fro
   styleUrls: ['./home-view.component.scss']
 })
 export class HomeViewComponent implements OnInit {
-  process?:ElectronProcess;
+  child: Child | undefined;
+  filename: String="";
   output = "";
-  
+
   constructor(
-    private electronBridgeSrv: ElectronBridgeService,
-    public zone:NgZone  
-  ) { 
-    
+    public zone: NgZone
+  ) {
+
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
   }
 
 
-  actionRock(){
-    this.process?.write("ROCK\n") ;
+  async actionRock() {
+    await this.child?.write("ROCK\n");
+    this.output += `IN: ROCK\n`;
+    console.log(`IN: ROCK\n`);
+    this.refreshOutput();
   }
-  actionPaper(){
-    this.process?.write("PAPER\n") ;
+  async actionPaper() {
+    await this.child?.write("PAPER\n");
+    this.output += `IN: PAPER\n`;
+    console.log(`IN: PAPER\n`);
+    this.refreshOutput();
   }
-  actionScissor(){
-    this.process?.write("SCISSOR\n");
+  async actionScissor() {
+    await this.child?.write("SCISSOR\n");
+    this.output += `IN: SCISSOR\n`;
+    console.log(`IN: SCISSOR\n`);
+    this.refreshOutput();
   }
 
   public refreshOutput() {
@@ -38,46 +48,46 @@ export class HomeViewComponent implements OnInit {
 
 
 
-  actionExec(){
-    let descriptor = {
-      path: "./data/rock-paper-scissor",
-      args: ["3","1"],
-      onStart: (proc_uid:string)=>{
-        this.output = "";
-        this.refreshOutput();
-      },
-      onStdout: (data:string)=>{
-        this.output += " OUT: "+ data
-        console.log("OUT: "+data);
-        this.refreshOutput();
-      },
-      onStdin: (data:string)=>{
-        this.output += " IN: "+ data;
-        console.log("IN: "+data);
-        this.refreshOutput();
-      },
-    };
-
-    this.process = this.electronBridgeSrv.exec(descriptor);
+  async actionExec() {
+    console.log("EXEC!")
+    this.output = "";
+    const command = new Command("sh", ["-c", `${this.filename} 3 1`]);
+    command.stdout.on("data", (line: any) => {
+      this.output += `OUT: ${line}\n`;
+      console.log(`OUT: ${line}`);
+      this.refreshOutput();
+    });
+    command.stderr.on("data", (line: any) => {
+      this.output += `ERR: ${line}\n`;
+      console.log(`ERR: ${line}`);
+      this.refreshOutput();
+    });
+    this.child = await command.spawn();
   }
 
-  actionCompile(){
-    
-    let descriptor = {
-      path: "./data/rock-paper-scissor.sh",
-      onStart: (proc_uid:string)=>{
-        this.output = "actionCompile:\n";
-        console.log("actionCompile:\n");
-        this.refreshOutput();
-      },
-      onStdout: (data:string)=>{
-        this.output += " OUT: "+ data
-        console.log("OUT: "+data);
-        this.refreshOutput();
-      }
-    };
+  async actionCompile() {
+    console.log("COMPILE!")
+    this.output = "";
+    const command = new Command("sh", ["-c", `${this.filename} 3 1`])
+    command.stdout.on("data", (line: any) => {
+      this.output += `OUT: ${line}\n`;
+      console.log(`OUT: ${line}`);
+      this.refreshOutput();
+    });
+    command.stderr.on("data", (line: any) => {
+      this.output += `ERR: ${line}\n`;
+      console.log(`ERR: ${line}`);
+      this.refreshOutput();
+    });
+    this.child = await command.spawn();
+  }
 
-    this.process = this.electronBridgeSrv.exec(descriptor);
+  async actionSearch() {
+    console.log("SEARCH!")
+    this.filename = <string>await DialogOpen({
+      multiple: false,
+    });
+    console.log(this.filename);
   }
 }
 
