@@ -2,6 +2,9 @@ import { Component, OnInit, NgZone } from '@angular/core';
 // import { ElectronBridgeService, ElectronProcess, ElectronProcessDescriptor } from 'src/app/services/electron-bridge.service';
 import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell'
 import { open as DialogOpen } from '@tauri-apps/api/dialog';
+import { GAMES } from 'mock-games';
+import { Game } from 'src/app/Game';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-home-view',
@@ -10,16 +13,24 @@ import { open as DialogOpen } from '@tauri-apps/api/dialog';
 })
 export class HomeViewComponent implements OnInit {
   child: Child | undefined;
-  filename: String="";
+  filename: String = "";
   output = "";
+  gamelist: Game[] = GAMES;
+  isLoading: boolean = false;
+  loading: boolean = true;
+  stateOptions: any[] = [{ icon: 'pi pi-bars', value: 'table' }, { icon: 'pi pi-th-large', value: 'card' }];
+  view_mode: string = "table";
 
   constructor(
     public zone: NgZone
   ) {
-
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.gamelist = GAMES;
+      this.loading = false;
+    }, 1000);
   }
 
 
@@ -89,5 +100,9 @@ export class HomeViewComponent implements OnInit {
     });
     console.log(this.filename);
   }
+}
+
+function ngOnInit() {
+  throw new Error('Function not implemented.');
 }
 
