@@ -1,61 +1,7 @@
 
 export namespace Packets{
-    /*
-    export class Message{
-      public messageName():string{
-        return this.constructor.name;
-      }
-  
-      public toPacket(): any{
-        const packetName = this.messageName();
-        const packet = { [packetName]:this };
-        return packet;
-      }
-  
-      public fromPacket(packet:any): boolean{
-        const msgClass = this.messageName();
-        
-        if (! (msgClass in packet) ){ 
-          return false; 
-        }
-        
-        const msgData = packet[msgClass];
-        
-        for (var msgField in this) {
-          if (! (msgField in msgData)){ continue; }
-          const varType = typeof msgData[msgField];
-          if (varType in ["function","undefined","symbol"] ){ continue; }
-  
-          if (varType === "object") {
-            this[msgField] = Object.assign(msgData[msgField]);
-          } else {
-            this[msgField] = msgData[msgField];
-          }
-        }
-        //alert("Deserialized msg "+ msg.MessageName() ) ;
-        return true;
-      }
-  
-      public static Deserialize<T extends Message>(payload:string, cls: new ()=>T):T | null{
-        const msg = new cls();
-        if (msg.fromPacket(payload) === false ) {return null;}
-        return msg;
-      }
-    }
-    */
   
     export class Message{
-      /*
-      public msgClasses: Array<string>;
-  
-      constructor(msgClasses: Array<string>){
-        this.msgClasses = [];
-  
-        msgClasses.forEach((msgClass) => {
-          this.msgClasses.push(msgClass);
-        });
-      }
-      */
 
       public messageName():string{
         return this.constructor.name;
@@ -143,7 +89,12 @@ export namespace Packets{
       }
       export class GameList extends Message  {}
       export class GameDescription extends Message  {
-        name: string = "";
+        name?: string;
+
+        constructor(name?: string){
+          super();
+          this.name = name;
+        }
       }
       export class GameNew extends Message  {
         name?:string;
@@ -190,7 +141,6 @@ export namespace Packets{
       export class SpectateLeave extends Message  {}
     }
 
-
   export namespace Reply{
     export class Message extends Packets.Message {}
     export class Handshake extends Message {
@@ -217,7 +167,8 @@ export namespace Packets{
     export class ConnectReply extends Message {}
 
     export class LobbyJoinedMatch extends ConnectReply { 
-      public info = new Result<MatchInfo,string>() 
+      //public info = new Result<MatchInfo,string>() 
+      public info = {"Ok": new MatchInfo(), "Err": ""};
     }
     export class LobbyNew extends Message { 
       public info = new MatchInfo() 
@@ -233,7 +184,8 @@ export namespace Packets{
     export class LobbyLeavedMatch extends Message {}
     export class MatchEnded extends Message {}
     export class SpectateJoined extends Message { 
-      public info=new Result<MatchInfo,string>()
+      //public info=new Result<MatchInfo,string>();
+      public info = {"Ok": new MatchInfo(), "Err": ""};
     }
     export class SpectateStarted extends Message {}
     export class SpectateSynced extends Message {}

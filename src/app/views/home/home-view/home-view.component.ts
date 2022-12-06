@@ -14,24 +14,28 @@ export class HomeViewComponent implements OnInit {
     alert("API is available");
     let api = new ApiService();
     let type = "spectate";
-    
+
     api.gameList((gameList)=>{
       console.log(gameList);
+    }, (error)=>{
+      console.log(error);
     });
 
     if(type === "play") {
-      api.createNewGame((gameNew) => {
+      api.createNewLobby(
+        "Lobby", "roshambo", 2, 1, undefined, undefined, undefined, undefined,
+        (gameNew) => {
         console.log('New game created: ' + gameNew);
         api.connectToPlay(
+          gameNew, "Lollo123", undefined,
           (lobbyData) => console.log(lobbyData), 
           (lobbyUpdated) => console.log(lobbyUpdated),
-          (matchStarted) => console.log(matchStarted),
+          () => console.log(),
           (binaryInfo) => console.log(binaryInfo),
-          (matchEnded) => console.log(matchEnded),
-          gameNew, "Lollo123", undefined, 
+          () => console.log(),
+          undefined,
           (error) => alert(error));
-      }, "Lobby", "roshambo", 2, 1, undefined, undefined, undefined, undefined, (error) => {
-        alert("error 3");
+      }, undefined, (error) => {alert("error 3");
       });
   
       (new Promise(resolve => setTimeout(resolve, 5000))).then(() => api.play("ROCK\n"));
@@ -46,14 +50,22 @@ export class HomeViewComponent implements OnInit {
       (new Promise(resolve => setTimeout(resolve, 14000))).then(() => api.play("ROCK\n"));
   
     } else {
+      api.gameDescription(
+        "roshambo",
+        (gameDescription)=>{
+        console.log("gameDescription");
+        console.log(gameDescription);
+      });
+
       api.connectToSpectate(
-        (spectateJoined) => console.log(spectateJoined), 
-        (spectateStarted) => console.log(spectateStarted),
-        (spectatSynced) => console.log(spectatSynced),
+        "3m41h0rn9meb4",
+        (spectateJoined) => console.log("spectateJoined" + spectateJoined), 
+        () => console.log(),
+        () => console.log(),
         (lobbyUpdated) => console.log(lobbyUpdated),
         (binaryMessage) => console.log(binaryMessage),
-        (spectateEnded) => console.log(spectateEnded),
-        "3m41h0rn9meb4"
+        () => console.log(),
+        (apiError) => console.log("apiError: " + apiError)
       ); 
     }
 
