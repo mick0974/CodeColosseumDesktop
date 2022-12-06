@@ -58,8 +58,8 @@ export class HomeViewComponent implements OnInit {
       });
 
       api.connectToSpectate(
-        "3m41h0rn9meb4",
-        (spectateJoined) => console.log("spectateJoined" + spectateJoined), 
+        "3p8c4br4d6jha",
+        (spectateJoined) => console.log(spectateJoined), 
         () => console.log(),
         () => console.log(),
         (lobbyUpdated) => console.log(lobbyUpdated),

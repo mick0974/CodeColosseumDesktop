@@ -112,25 +112,22 @@ export class ApiService {
     
     let cmdConnect = new Commands.Connect(this.ws!, lobby_id, lobby_name, password);
     cmdConnect.lobbyJoined = (message) => {
-      if(message.info["Err"] != undefined) {
-        if(apiError) {apiError(message.info.Err)}
-      }
-      else {
-        console.log(message.info);
-        if(lobbyJoined) {lobbyJoined(message.info["Ok"])}
-      }
+      if(lobbyJoined) {lobbyJoined(message)}
     }
     cmdConnect.lobbyUpdated = (message) => {
-      if(lobbyUpdated) {lobbyUpdated(message.info)}
+      if(lobbyUpdated) {lobbyUpdated(message)}
     }
-    cmdConnect.matchStarted = (message) => {
+    cmdConnect.matchStarted = () => {
       if(matchStarted) {matchStarted()}
     }
     cmdConnect.binaryInfo = (message) => { 
       if(binaryMessage) {binaryMessage(message)}
     }
-    cmdConnect.matchEnded = (message) => { 
+    cmdConnect.matchEnded = () => { 
       if(matchEnded) {matchEnded()}
+    }
+    cmdConnect.apiError = (message) => { 
+      if(apiError) {apiError(message)}
     }
 
     cmdConnect.webSocketError = webSocketError;
@@ -162,27 +159,25 @@ export class ApiService {
     
     let cmdSpectate = new Commands.Spectate(this.ws!, lobby_id);
     cmdSpectate.spectateJoined = (message) => {
-      if(message.info["Err"] != undefined) {
-        if(apiError) {apiError(message.info["Err"])}
-      }
-      else {
-        if(spectateJoined) {spectateJoined(message.info["Ok"])}
-      }
+      if(spectateJoined) {spectateJoined(message)}
     }
-    cmdSpectate.spectateStarted = (message) => {
+    cmdSpectate.spectateStarted = () => {
       if(spectateStarted) {spectateStarted()}
     }
-    cmdSpectate.spectatSynced = (message) => {
+    cmdSpectate.spectatSynced = () => {
       if(spectatSynced) {spectatSynced()}
     }
     cmdSpectate.lobbyUpdated = (message) => { 
-      if(lobbyUpdated) {lobbyUpdated(message.info)}
+      if(lobbyUpdated) {lobbyUpdated(message)}
     }
     cmdSpectate.binaryMessage = (message) => { 
       if(binaryMessage) {binaryMessage(message)}
     }
-    cmdSpectate.spectateEnded = (message) => { 
+    cmdSpectate.spectateEnded = () => { 
       if(spectateEnded) {spectateEnded()}
+    }
+    cmdSpectate.apiError = (message) => { 
+      if(apiError) {apiError(message)}
     }
 
     cmdSpectate.webSocketError = webSocketError;

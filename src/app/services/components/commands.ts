@@ -150,11 +150,12 @@ export namespace Commands{
   }
 
   export class Connect extends Command{
-    public lobbyJoined?:(message:Packets.Reply.LobbyJoinedMatch )=>void;
-    public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
-    public matchStarted?:(message:Packets.Reply.MatchStarted)=>void;
+    public lobbyJoined?:(message:Packets.MatchInfo )=>void;
+    public lobbyUpdated?:(message:Packets.MatchInfo)=>void;
+    public matchStarted?:()=>void;
     public binaryInfo?: (payload:string) => void;
-    public matchEnded?:(message:Packets.Reply.MatchEnded) => void;
+    public matchEnded?:() => void;
+    apiError?:(error:string) => void;
     private msg?:Packets.Request.LobbyJoinMatch;
 
     constructor(ws:CoCoSockets.CoCoSocket, lobby_id:string, player_name:string, lobby_password?:string){
@@ -176,24 +177,32 @@ export namespace Commands{
             if(this.lobbyJoined && payload && msgName === Packets.Reply.LobbyJoinedMatch.name){
               let message = new Packets.Reply.LobbyJoinedMatch();
               message.fromMultiPacket(payload, msgName);
-              this.lobbyJoined(message);
+
+              if(message.info["Err"] != undefined) {
+                this.ws.closeConnection();
+                if(this.apiError) {this.apiError(message.info["Err"])}
+              }
+              else {
+                this.lobbyJoined(message.info["Ok"]);
+              }
+              
             }
             else if(this.lobbyUpdated && payload && msgName === Packets.Reply.LobbyUpdate.name){
               let message = new Packets.Reply.LobbyUpdate();
               message.fromMultiPacket(payload, msgName);
-              this.lobbyUpdated(message);
+              this.lobbyUpdated(message.info);
             }
             else if(this.matchStarted && payload && msgName === Packets.Reply.MatchStarted.name){
               let message = new Packets.Reply.MatchStarted();
               message.fromMultiPacket(payload, msgName);
-              this.matchStarted(message);
+              this.matchStarted();
             }
             else if(this.matchEnded && payload && msgName === Packets.Reply.MatchEnded.name){
               this.ws.closeConnection();
 
               let message = new Packets.Reply.MatchEnded();
               message.fromMultiPacket(payload, msgName);
-              this.matchEnded(message);
+              this.matchEnded();
             }
           }
         
@@ -213,27 +222,19 @@ export namespace Commands{
       this.msg = (enc.encode(inputString)).buffer;
     }
 
-    private str2ab(str:string) {
-      var buf = new ArrayBuffer(str.length); // 2 bytes for each char
-      var bufView = new Uint8Array(buf);
-      for (var i=0, strLen=str.length; i < strLen; i++) {
-      bufView[i] = str.charCodeAt(i);
-      }
-      return buf;
-    }
-
     public override run(){
       this.ws.sendBinary(this.msg!);
     }
   }
 
   export class Spectate extends Command{
-    public spectateJoined?:(message:Packets.Reply.SpectateJoined )=>void;
-    public spectateStarted?:(message:Packets.Reply.SpectateStarted)=>void;
-    public spectatSynced?:(message:Packets.Reply.SpectateSynced)=>void;
-    public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
+    public spectateJoined?:(message:Packets.MatchInfo )=>void;
+    public spectateStarted?:()=>void;
+    public spectatSynced?:()=>void;
+    public lobbyUpdated?:(message:Packets.MatchInfo)=>void;
     public binaryMessage?: (message:string) => void;
-    public spectateEnded?:(message:Packets.Reply.SpectateEnded)=>void;
+    public spectateEnded?:()=>void;
+    apiError?:(error:string) => void;
     private msg?:Packets.Request.SpectateJoin;
 
     constructor(ws:CoCoSockets.CoCoSocket, lobby_id:string){
@@ -255,29 +256,36 @@ export namespace Commands{
             if(this.spectateJoined && payload && msgName === Packets.Reply.SpectateJoined.name){
               let message = new Packets.Reply.SpectateJoined();
               message.fromMultiPacket(payload, msgName);
-              this.spectateJoined(message);
+              
+              if(message.info["Err"] != undefined) {
+                this.ws.closeConnection();
+                if(this.apiError) {this.apiError(message.info["Err"])}
+              }
+              else {
+                this.spectateJoined(message.info["Ok"]);
+              }
             }
             else if(this.spectateStarted && payload && msgName === Packets.Reply.SpectateStarted.name){
               let message = new Packets.Reply.SpectateStarted();
               message.fromMultiPacket(payload, msgName);
-              this.spectateStarted(message);
+              this.spectateStarted();
             }
             else if(this.spectatSynced && payload && msgName === Packets.Reply.SpectateSynced.name){
               let message = new Packets.Reply.SpectateSynced();
               message.fromMultiPacket(payload, msgName);
-              this.spectatSynced(message);
+              this.spectatSynced();
             }
             else if(this.lobbyUpdated && payload && msgName === Packets.Reply.LobbyUpdate.name){
               let message = new Packets.Reply.LobbyUpdate();
               message.fromMultiPacket(payload, msgName);
-              this.lobbyUpdated(message);
+              this.lobbyUpdated(message.info);
             }
             else if(this.spectateEnded && payload && msgName === Packets.Reply.SpectateEnded.name){
               this.ws.closeConnection();
 
               let message = new Packets.Reply.SpectateEnded();
               message.fromMultiPacket(payload, msgName);
-              this.spectateEnded(message);
+              this.spectateEnded();
             }
           }
       }, 
