@@ -2,6 +2,8 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell'
 import { open as DialogOpen } from '@tauri-apps/api/dialog';
 import { ApiService } from 'src/app/services/api-service/api.service';
+import { Packets } from 'src/app/services/api-service/api.packets';
+import { ReplaySubject } from 'rxjs';
 @Component({
   selector: 'app-demo-view',
   templateUrl: './demo-view.component.html',
@@ -11,15 +13,17 @@ export class DemoViewComponent implements OnInit {
   public child: Child | undefined;
   public filename: String = "";
   public output = "";
+  public lobbyID?:string;
 
   constructor(
-    public zone: NgZone,
+    private zone: NgZone,
     private api: ApiService
     ) { }
 
   ngOnInit(): void {
   }
 
+  //API Test
 
   async actionSpectate(){
     alert("API is available");
@@ -74,6 +78,62 @@ export class DemoViewComponent implements OnInit {
 
 
 
+  async onApiError(message: string){
+    alert("Error: "+message)
+  }
+
+
+  async apiGameList() {
+    this.api.gameList( (gameList)=>{
+      let text = JSON.stringify(gameList)
+      this.output = text
+      console.log("gameList: "+text);
+      this.refreshOutput();
+    });
+  }
+
+  async apiNewGame() {
+    let onSuccess = (newGame:string)=>{
+      let text = newGame
+      this.output = text
+      console.log("newGame: "+text);
+      this.lobbyID = newGame;
+      this.refreshOutput();
+    }
+    this.api.createNewLobby(onSuccess, "new_lobby","roshambo", 0, 2 );
+  }
+
+  async apiLobbyList() {
+    this.api.lobbyList( (lobbyList)=>{
+      let text = JSON.stringify(lobbyList)
+      this.output = text
+      console.log("lobbyList: "+text);
+      this.refreshOutput();
+    });
+  }
+
+  
+
+  async apiConnect() {
+    let onLobbyJoin = (data: Packets.Reply.LobbyJoinedMatch)=>{};
+    let onLobbyUpdate = (data: Packets.Reply.LobbyUpdate)=>{};
+    let onMatchStarted = (data: Packets.Reply.MatchStarted)=>{};
+    let onMessage = (data: string)=>{};
+    let onMatchEnded = (data: Packets.Reply.MatchEnded)=>{};
+    
+    let lobbyID = this.lobbyID ?? "1234"
+    let display_name = "Mario Rossi";
+    this.api.connectToPlay( onLobbyJoin, onLobbyUpdate, onMatchStarted, onMessage, onMatchEnded, lobbyID, display_name );
+  }
+
+  async apiPlay() {
+    await this.child?.write("ROCK\n");
+    this.output += `IN: ROCK\n`;
+    console.log(`IN: ROCK\n`);
+    this.refreshOutput();
+  }
+
+  // exec test
   async actionRock() {
     await this.child?.write("ROCK\n");
     this.output += `IN: ROCK\n`;

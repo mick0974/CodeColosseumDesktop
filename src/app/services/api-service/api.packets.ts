@@ -153,14 +153,14 @@ export namespace Packets{
         password?:string;
         verification?:string;
   
-        constructor(name="", game="", players?:number, bots?:number, timeout?:number, args={}, password?:string, verification?:string) {
+        constructor(name="", game="", players?:number, bots?:number, timeout?:number, args={}, password?:string) {
           super();
           this.name = name;
           this.game = game;
           this.params = new GameParams(players, bots, timeout);
           this.args = args;
           this.password = password;
-          this.verification = verification;
+          this.verification = password;
         }
       }
       export class LobbyList extends Message  {}
