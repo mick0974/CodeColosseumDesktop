@@ -26,9 +26,6 @@ export namespace CoCoSockets{
                 return JSON.stringify(msg);
             }
           });
-
-          console.log("Created new socket");
-          console.log(this.ws);
       }
     }
 
@@ -43,7 +40,6 @@ export namespace CoCoSockets{
           if (this.resultError) {this.resultError(errorMsg );}
         },
         complete: () => {
-          console.log("COMPLETE");
           if (this.resultClosed) {this.resultClosed();}
         }
       });

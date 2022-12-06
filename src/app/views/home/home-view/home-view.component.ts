@@ -13,7 +13,7 @@ export class HomeViewComponent implements OnInit {
   ngOnInit(): void {
     alert("API is available");
     let api = new ApiService();
-    let type = "spectate";
+    let type = "play";
 
     api.gameList((gameList)=>{
       console.log(gameList);
@@ -49,11 +49,10 @@ export class HomeViewComponent implements OnInit {
       (new Promise(resolve => setTimeout(resolve, 13000))).then(() => api.play("ROCK\n"));
       (new Promise(resolve => setTimeout(resolve, 14000))).then(() => api.play("ROCK\n"));
   
-    } else {
+    } else if(type === "spectate") {
       api.gameDescription(
         "roshambo",
         (gameDescription)=>{
-        console.log("gameDescription");
         console.log(gameDescription);
       });
 
