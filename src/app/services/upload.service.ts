@@ -41,11 +41,18 @@ export class UploadService {
     }
   }
 
-  getGameId(){
+  getGameId():string{
     if (this.gameId){
       return this.gameId
     }
     else return ""
+  }
+
+  getGame():Game | null{
+    if (this.game){
+      return this.game;
+    }
+    else return null
   }
 
   isGameSet(){

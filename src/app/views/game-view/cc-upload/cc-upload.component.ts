@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FileUpload } from 'primeng/fileupload';
 import { UploadService } from 'src/app/services/upload.service';
-
 @Component({
   selector: 'cc-upload',
   templateUrl: './cc-upload.component.html',
@@ -10,24 +10,41 @@ import { UploadService } from 'src/app/services/upload.service';
 export class CcUploadComponent implements OnInit {
 
   gameId : string = "";
-  uploadedFiles:any[]=[];
+  hasPassword:boolean = true;
+  myfile:any[] = [];
+  submitted:boolean = false;
+
+  uploadData:any={};
 
   constructor(private router: Router,private uploadService:UploadService ) { }
 
   ngOnInit(): void {
-    this.uploadService.redirectIfGameNotSet()    
+    this.uploadService.redirectIfGameNotSet()   
+    this.hasPassword = this.uploadService.getGame()?.password ?? false
   }
 
-  uploadFile(event:Event){
-    console.log(event)
-  }
 
+  fileUpload(event:any){console.log(event)
+    console.log(this.uploadData)
+    this.uploadData.program = event.target.files[0]
+    console.log(this.uploadData)
+  }
 
 
   navigateToNext() {
-    this.router.navigate(['game/results'])
+    if (((this.hasPassword&&this.uploadData.password) || !this.hasPassword) && this.uploadData.program){
+      //todo add check that file was uploaded
+      //todo check file is an executable
+      this.router.navigate(['game/results']);
+      return
+    }
+
+    if (this.uploadData.password) {
+      this.router.navigate(['game/results'])
+      return;
   }
-
-
+  this.submitted = true;
+  
+  }
 
 }
