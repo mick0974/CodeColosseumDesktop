@@ -4,7 +4,8 @@
         <div class="p-fluid" class="field">
 
             <h3>Upload your file</h3>
-            <input type="file" name="a" class="file-upload" onchange="console.log(event.target.files)">
+            <input  type="file" class="file-upload" (change)="fileUpload($event)">
+            <small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small>
 
             <div class="cc-fields">
                 <div style="width:100%">
