@@ -74,7 +74,7 @@ export class ApiService {
     players?:number, 
     bots?:number, 
     timeout?:number, 
-    args?:{}, 
+    args?:any, 
     password?:string, 
     verification?:string,
     lobbyCreated?:(newGame:string) =>void,  

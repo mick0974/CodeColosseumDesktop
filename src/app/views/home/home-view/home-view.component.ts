@@ -13,7 +13,7 @@ export class HomeViewComponent implements OnInit {
   ngOnInit(): void {
     alert("API is available");
     let api = new ApiService();
-    let type = "spectate";
+    let type = "play";
 
     api.gameList((gameList)=>{
       console.log(gameList);
@@ -23,7 +23,7 @@ export class HomeViewComponent implements OnInit {
 
     if(type === "play") {
       api.createNewLobby(
-        "Lobby", "roshambo", 2, 1, undefined, undefined, undefined, undefined,
+        "Lobby", "roshambo", 2, 1, undefined, {"rounds": "23", "pace": "5"}, undefined, undefined,
         (gameNew) => {
         console.log('New game created: ' + gameNew);
         api.connectToPlay(
@@ -38,16 +38,16 @@ export class HomeViewComponent implements OnInit {
       }, undefined, (error) => {alert("error 3");
       });
   
-      (new Promise(resolve => setTimeout(resolve, 5000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 6000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 7000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 8000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 9000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 10000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 11000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 12000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 13000))).then(() => api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 14000))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 5100))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 6200))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 7300))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 8400))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 9500))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 10600))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 11700))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 12800))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 13900))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 15000))).then(() => api.play("ROCK\n"));
   
     } else {
       api.gameDescription(

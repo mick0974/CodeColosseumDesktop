@@ -123,7 +123,7 @@ export namespace Commands{
     public newLobbyCreated?:(message:Packets.Reply.GameNew)=>void;
     private msg?:Packets.Request.GameNew;
 
-    constructor(ws:CoCoSockets.CoCoSocket, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
+    constructor(ws:CoCoSockets.CoCoSocket, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:any, password?:string, verification?:string){
       super(ws);
 
       this.msg = new Packets.Request.GameNew(lobby_name, game_name, num_palyer, num_bots, timeout, args, password, verification);
@@ -169,7 +169,7 @@ export namespace Commands{
       this.ws!.send(this.msg!,
         (payload, msgClasses)=>{ 
           if(msgClasses[0] === "binary") {
-            if(this.binaryInfo) {this.binaryInfo(payload);}
+            if(this.binaryInfo) { this.binaryInfo(payload); }
           } else {
             let msgName = Packets.Message.findPacketName(msgClasses, payload);
             
@@ -213,15 +213,6 @@ export namespace Commands{
       this.msg = (enc.encode(inputString)).buffer;
     }
 
-    private str2ab(str:string) {
-      var buf = new ArrayBuffer(str.length); // 2 bytes for each char
-      var bufView = new Uint8Array(buf);
-      for (var i=0, strLen=str.length; i < strLen; i++) {
-      bufView[i] = str.charCodeAt(i);
-      }
-      return buf;
-    }
-
     public override run(){
       this.ws.sendBinary(this.msg!);
     }
@@ -234,6 +225,7 @@ export namespace Commands{
     public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
     public binaryMessage?: (message:string) => void;
     public spectateEnded?:(message:Packets.Reply.SpectateEnded)=>void;
+
     private msg?:Packets.Request.SpectateJoin;
 
     constructor(ws:CoCoSockets.CoCoSocket, lobby_id:string){

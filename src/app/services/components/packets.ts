@@ -1,15 +1,9 @@
-
 export namespace Packets{
   
     export class Message{
 
       public messageName():string{
         return this.constructor.name;
-      }
-  
-      public toPacketWithName(messageName: string){
-        const packet = { [messageName]:this };
-        return packet;
       }
 
       public toPacket(): any{
@@ -51,17 +45,12 @@ export namespace Packets{
       public players?:number;
       public bots?:number;
       public timeout?:number;
-  
+      
       constructor(players=0, bots=0, timeout=30.0){
         this.players = players;
         this.bots = bots;
         this.timeout = timeout;
       }
-    }
-  
-    export class Result<T1,T2>{
-      public Ok?: T1;
-      public Err?: T2;
     }
   
     export class MatchInfo {
@@ -100,7 +89,7 @@ export namespace Packets{
         name?:string;
         game?:string;
         params?:GameParams;
-        args?:{};   
+        args?:any;   
         password?:string;
         verification?:string;
   
@@ -150,7 +139,7 @@ export namespace Packets{
       public games= new Array<string>() 
     }
     export class GameDescription extends Message { 
-      public  description: string = "" 
+      public  description: string = "";
     }
     export class GameNew extends Message {
       public id = {"Ok": "", "Err": ""}
@@ -164,19 +153,16 @@ export namespace Packets{
       public seed = Array<MatchInfo>() 
     }
 
-    export class ConnectReply extends Message {}
-
-    export class LobbyJoinedMatch extends ConnectReply { 
-      //public info = new Result<MatchInfo,string>() 
+    export class LobbyJoinedMatch extends Message { 
       public info = {"Ok": new MatchInfo(), "Err": ""};
     }
     export class LobbyNew extends Message { 
       public info = new MatchInfo() 
     }
-    export class LobbyUpdate extends ConnectReply {
+    export class LobbyUpdate extends Message {
       public info = new MatchInfo()
     }
-    export class MatchStarted extends ConnectReply{}
+    export class MatchStarted extends Message{}
     export class LobbyDelete extends Message { 
       public id: string = ""
     }
@@ -184,7 +170,6 @@ export namespace Packets{
     export class LobbyLeavedMatch extends Message {}
     export class MatchEnded extends Message {}
     export class SpectateJoined extends Message { 
-      //public info=new Result<MatchInfo,string>();
       public info = {"Ok": new MatchInfo(), "Err": ""};
     }
     export class SpectateStarted extends Message {}
