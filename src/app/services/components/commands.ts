@@ -123,7 +123,7 @@ export namespace Commands{
     public newLobbyCreated?:(message:Packets.Reply.GameNew)=>void;
     private msg?:Packets.Request.GameNew;
 
-    constructor(ws:CoCoSockets.CoCoSocket, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
+    constructor(ws:CoCoSockets.CoCoSocket, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:any, password?:string, verification?:string){
       super(ws);
 
       this.msg = new Packets.Request.GameNew(lobby_name, game_name, num_palyer, num_bots, timeout, args, password, verification);
@@ -170,7 +170,7 @@ export namespace Commands{
       this.ws!.send(this.msg!,
         (payload, msgClasses)=>{ 
           if(msgClasses[0] === "binary") {
-            if(this.binaryInfo) {this.binaryInfo(payload);}
+            if(this.binaryInfo) { this.binaryInfo(payload); }
           } else {
             let msgName = Packets.Message.findPacketName(msgClasses, payload);
             
