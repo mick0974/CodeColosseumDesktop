@@ -29,4 +29,8 @@ export class HomeViewComponent implements OnInit {
         }, 1000);
   }
 
+  getFormatTime(value:number):string{
+    return ""+(value/60).toFixed(0)+":"+value%60;
+  }
+
 }
