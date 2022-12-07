@@ -16,6 +16,7 @@ import { CcReviewComponent } from './views/game-view/cc-review/cc-review.compone
 
 
 import { InputTextModule } from 'primeng/inputtext';
+import {PasswordModule} from 'primeng/password';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DropdownModule } from 'primeng/dropdown';
 import { StepsModule } from 'primeng/steps';
@@ -27,8 +28,10 @@ import { TableModule } from 'primeng/table';
 import { RippleModule } from 'primeng/ripple';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { MenuModule } from 'primeng/menu';
+import { MenuItemContent, MenuModule } from 'primeng/menu';
+import {MenuItem} from 'primeng/api';
 
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,6 +47,7 @@ import { MenuModule } from 'primeng/menu';
     FormsModule,
     RouterModule.forRoot(routes),
     InputTextModule,
+    PasswordModule,
     InputSwitchModule,
     DropdownModule,
     StepsModule,
@@ -56,6 +60,7 @@ import { MenuModule } from 'primeng/menu';
     RippleModule,
     SelectButtonModule,
     MenuModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
