@@ -21,6 +21,9 @@ export class CcUploadComponent implements OnInit {
   ngOnInit(): void {
     this.uploadService.redirectIfGameNotSet()   
     this.hasPassword = this.uploadService.getGame()?.password ?? false
+    this.uploadData = {
+      "password":""
+    }
   }
 
 
@@ -32,18 +35,12 @@ export class CcUploadComponent implements OnInit {
 
 
   navigateToNext() {
-    if (((this.hasPassword&&this.uploadData.password) || !this.hasPassword) && this.uploadData.program){
-      //todo add check that file was uploaded
-      //todo check file is an executable
+    if (this.hasPassword && this.uploadData.password&&this.uploadData.program){
+      this.uploadService.uploadData = this.uploadData;
       this.router.navigate(['game/results']);
-      return
     }
 
-    if (this.uploadData.password) {
-      this.router.navigate(['game/results'])
-      return;
-  }
-  this.submitted = true;
+    this.submitted = true;
   
   }
 
