@@ -41,23 +41,19 @@ export namespace Packets{
       }
     }
 
-    export class Args{}
-
-    export class RoyalurArgs extends Args{
+    export class RoyalurArgs{
       public pace?:string;
 
       constructor(pace?:string) {
-        super();
         this.pace = pace;
       }
     }
 
-    export class RoshamboArgs extends Args{
+    export class RoshamboArgs{
       public rounds?:string;
       public pace?:string;
 
       constructor(rounds?:string, pace?:string) {
-        super();
         this.rounds = rounds;
         this.pace = pace;
       }
@@ -111,7 +107,7 @@ export namespace Packets{
         name?:string;
         game?:string;
         params?:GameParams;
-        args?:any;   
+        args?:RoshamboArgs | RoyalurArgs;   
         password?:string;
         verification?:string;
   

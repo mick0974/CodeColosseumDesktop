@@ -11,7 +11,7 @@ export class HomeViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    alert("API is available");
+    console.log("API is available");
     let api = new ApiService();
     let type = "play";
 
@@ -22,8 +22,8 @@ export class HomeViewComponent implements OnInit {
     });
 
     if(type === "play") {
-      api.createNewLobby(
-        "Lobby", "roshambo", 2, 1, undefined, new RoshamboArgs("23", "5"), undefined, undefined,
+      api.createNewGame(
+        "Lobby", "roshambo", 2, 1, undefined, new RoshamboArgs("12", "5"), undefined, undefined,
         (gameNew) => {
         console.log('New game created: ' + gameNew);
         api.connectToPlay(
@@ -48,6 +48,9 @@ export class HomeViewComponent implements OnInit {
       (new Promise(resolve => setTimeout(resolve, 12800))).then(() => api.play("ROCK\n"));
       (new Promise(resolve => setTimeout(resolve, 13900))).then(() => api.play("ROCK\n"));
       (new Promise(resolve => setTimeout(resolve, 15000))).then(() => api.play("ROCK\n"));
+
+      (new Promise(resolve => setTimeout(resolve, 16100))).then(() => api.play("ROCK\n"));
+      (new Promise(resolve => setTimeout(resolve, 17200))).then(() => api.play("ROCK\n"));
   
     } else if(type === "spectate") {
       api.gameDescription(

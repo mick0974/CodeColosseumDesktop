@@ -69,7 +69,7 @@ export class ApiService {
     return cmdLobbyList;
   }
 
-  public createNewLobby( 
+  public createNewGame( 
     lobby_name:string, 
     game_name:string, 
     players?:number, 
@@ -100,7 +100,7 @@ export class ApiService {
   }
 
   public connectToPlay( 
-    lobby_id:string, lobby_name:string, password?:string,
+    lobby_id:string, player_name:string, password?:string,
     lobbyJoined?:(message:MatchInfo) => void, 
     lobbyUpdated?:(message:MatchInfo) => void,
     matchStarted?:() => void,
@@ -111,7 +111,7 @@ export class ApiService {
     
     this.createCoCosocket(this.url);
     
-    let cmdConnect = new Commands.Connect(this.ws!, lobby_id, lobby_name, password);
+    let cmdConnect = new Commands.Connect(this.ws!, lobby_id, player_name, password);
     cmdConnect.lobbyJoined = (message) => {
       if(lobbyJoined) {lobbyJoined(message)}
     }
