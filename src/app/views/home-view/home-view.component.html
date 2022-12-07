@@ -58,7 +58,8 @@
                                         </span>
                                         <span class="text-900 font-medium text-sm">
                                             {{getFormatTime(game.time)}} s
-                                            <span *ngIf="game.current"> remaining </span>
+                                            <span *ngIf="game.current"> elapsed </span>
+                                            <span *ngIf="!game.current"> remaining </span>
                                         </span>
                                     </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
@@ -130,8 +131,12 @@
                         <td>{{game.spectators}}</td>
                         <td>{{game.timeout}} s</td>
                         <td>
-                            <p-tag value="{{game.current ? 'Running \n('+game.time+' s)':'Waiting for players (-'+game.time+' s)'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
-                                                        
+                            <p-tag  value="{{game.current ? 'Running':'Waiting for players'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                                        
+                            <span class="text-900 font-medium text-sm">
+                                <span *ngIf="game.current"> - </span>
+                                {{getFormatTime(game.time)}} s
+                            </span>
                         </td>
                         <td>
                             <div class="cc-play-buttons">
