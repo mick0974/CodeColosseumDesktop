@@ -1,7 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeflex/primeflex.css";
-
+@import '~primeicons/primeicons.css';
+@import "~primeng/resources/themes/saga-blue/theme.css";
+//@import "~primeng/resources/themes/bootstrap4-dark-blue/theme.css";
 $layout-padding: 2rem;
+
+.cc-page{
+    background-color:var(--surface-a) !important;
+}
 
 * {
   font-family: 'Open Sans', sans-serif;
@@ -33,3 +39,10 @@ div.cc-center-layout {
     background-color: var(--primary-color);
 }
 
+h1,h2,h3,h4,h5,p {
+    color: var(--surface-900);
+}
+
+.background {
+    color:var(--surface-section)
+    !important}
