@@ -2,10 +2,9 @@
 
 
 <div class="cc-home-container">
+    <h1 >Join game</h1>
 
-    <h1>Join game</h1>
-
-    <div class="cc-gamelist-header" style="display:flex;"> 
+    <div class="cc-gamelist-header"> 
         <p-selectButton [style]="{'align-items': 'center',display:'inline-block','box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
             <ng-template let-item>
                 <i [class]="item.icon"></i>
@@ -19,8 +18,16 @@
 </div>
     
 
-    <p-scrollPanel *ngIf="view_mode === 'card'" [style]="{width:'100%',height:'600px'}">
-        <div class="surface-ground">
+    <p-scrollPanel [style]="{width:'100%',height:'600px'}">
+
+        <!-- No games view-->
+        <div *ngIf="!hasGames">
+            <h3> Create a new game to start! </h3>
+        </div>
+
+
+        <!-- Card view-->
+        <div  *ngIf="view_mode === 'card' && hasGames" class="surface-ground">
             <div class="grid">
                     <ng-template ngFor let-game [ngForOf]="gamelist">
                         
@@ -28,13 +35,14 @@
                             <div class="surface-card shadow-2 border-rounded p-3" style="border-radius: 6px">
                                 <div class="flex justify-content-between align-items-start">
                                     <div>
-                                        <div class="text-xl font-medium text-900 mb-2">{{game.game}}  
-                                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified!" tooltipPosition="top"></i>
-                                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password to access" tooltipPosition="top"></i>
+                                        <div class="text-xl font-medium text-900 mb-2">
+                                            {{game.name}} 
+                                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
+                                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
+                                        
                                         </div>
                                         <p class="mt-0 mb-3 text-600">
                                             {{game.id}} <br>
-                                            <p-tag  value="{{game.current ? 'Running \n('+game.time+' s)':'Waiting for players (-'+game.time+' s)'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
                                         </p>
                                     </div>
                                     <div class="p-buttonset">
@@ -43,6 +51,21 @@
                                     </div>
                                 </div>
                                 <ul class="list-none m-0 p-0">
+                                    <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
+                                        
+                                        <span class="text-600 font-medium text-sm">
+                                            <p-tag  value="{{game.current ? 'Running':'Waiting for players'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                                        </span>
+                                        <span class="text-900 font-medium text-sm">
+                                            {{getFormatTime(game.time)}} s
+                                            <span *ngIf="game.current"> remaining </span>
+                                        </span>
+                                    </li>
+                                    <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
+                                        
+                                        <span class="text-600 font-medium text-sm"><i class="pi pi-play"></i>  Game</span>
+                                        <span class="text-900 font-medium text-sm">{{game.game}}</span>
+                                    </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         
                                         <span class="text-600 font-medium text-sm"><i class="pi pi-user"></i>  Players</span>
@@ -62,22 +85,14 @@
                     </ng-template>
             </div>
         </div>
-    </p-scrollPanel>
 
-
-    <p-scrollPanel *ngIf="view_mode === 'table'" [style]="{width:'100%',height:'600px'}">
-        <div class="cc-gamelist">
+        <!-- Table view-->
+        <div  *ngIf="view_mode === 'table' && hasGames" class="cc-gamelist">
             <p-table [value]="gamelist" [loading]="loading" responsiveLayout="scroll" [breakpoint]="'960px'">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th [pSortableColumn]="'verified'">
-                            Verified
-                            <p-sortIcon [field]="'verified'"></p-sortIcon>
-                        </th>
-
-                        <th [pSortableColumn]="'password'">
-                            Psw
-                            <p-sortIcon [field]="'password'"></p-sortIcon>
+                        <th [pSortableColumn]="'name'"> Match name 
+                            <p-sortIcon [field]="'name'"></p-sortIcon>
                         </th>
 
                         <th [pSortableColumn]="'id'">
@@ -105,10 +120,9 @@
                 <ng-template pTemplate="body" let-game>
                     <tr>
                         <td>
-                            <i class="pi pi-check" *ngIf="game.verified"></i>
-                        </td>
-                        <td>
-                            <i class="pi pi-unlock" *ngIf="game.password"></i>
+                            {{game.name}} 
+                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
+                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
                         </td>
                         <td>{{game.id}}</td>
                         <td>{{game.game}}</td>
@@ -131,5 +145,3 @@
         </div>
     </p-scrollPanel>
 </div>
-
-
