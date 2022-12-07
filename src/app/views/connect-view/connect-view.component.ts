@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConnectionManagerService } from '../../services/connection-manager.service';
 import { RippleModule } from 'primeng/ripple';
+
 @Component({
   selector: 'app-connect-view',
   templateUrl: './connect-view.component.html',
@@ -43,5 +44,6 @@ export class ConnectViewComponent implements OnInit {
     //this.newConnection.emit();
     
   }
-
+  get server(){return this.connectForm.get('server')}
+  get username(){return this.connectForm.get('username')}
 }

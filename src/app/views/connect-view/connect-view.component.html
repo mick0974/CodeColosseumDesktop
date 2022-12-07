@@ -1,12 +1,15 @@
 <div class="cc-connect">
   <div class="card" className="cc-card">
     <h1>Welcome to <br>Code Colosseum.</h1> 
-    <div class="fromgrid grid" className="cc-grid">
+    <form [formGroup]="connectForm">
+      <div class="fromgrid grid" className="cc-grid">
         <div class="field col-12" id="server-div">
           <span class="p-float-label" id="server-span">
-            <input type="text" name="server" [(ngModel)]="server" id="server" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText/>
+            <input type="text" name="server" [(ngModel)]="server" id="server" formControlName="server" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
             <label for="server">Server URL</label>
+            <div *ngIf="server.invalid && (server.dirty || server.touched)" class="alert alert-danger"></div>
           </span>
+
         </div>
         <div class="field col-12" id="username-div">
           <span class="p-float-label" id="username-span">
@@ -18,6 +21,8 @@
           <button pButton pRipple type="button" id="button" (click)="onClick()" label="CONNECT" class="border-round"></button>
         </div>
     </div> 
+    </form>
+    
   </div>
 </div>
 <!--
