@@ -14,15 +14,21 @@ export class CcUploadComponent implements OnInit {
   myfile:any[] = [];
   submitted:boolean = false;
 
+  stateOptions: any[]= [{value:'python',label:'Python'}, {value: 'cpp',label:'C++'}];
+
+
+
   uploadData:any={};
 
   constructor(private router: Router,private uploadService:UploadService ) { }
 
   ngOnInit(): void {
+    this.uploadData.programType = 'python'
     this.uploadService.redirectIfGameNotSet()   
     this.hasPassword = this.uploadService.getGame()?.password ?? false
     this.uploadData = {
-      "password":""
+      "password":"",
+      "programType":"python",
     }
   }
 
@@ -37,6 +43,7 @@ export class CcUploadComponent implements OnInit {
   navigateToNext() {
     if (this.hasPassword && this.uploadData.password&&this.uploadData.program){
       this.uploadService.uploadData = this.uploadData;
+      console.log(this.uploadService.uploadData)
       this.router.navigate(['game/results']);
     }
 
