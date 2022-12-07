@@ -155,7 +155,7 @@ export namespace Commands{
     public matchStarted?:()=>void;
     public binaryInfo?: (payload:string) => void;
     public matchEnded?:() => void;
-    apiError?:(error:string) => void;
+    public apiError?:(error:string) => void;
     private msg?:Packets.Request.LobbyJoinMatch;
 
     constructor(ws:CoCoSockets.CoCoSocket, lobby_id:string, player_name:string, lobby_password?:string){
@@ -234,7 +234,7 @@ export namespace Commands{
     public lobbyUpdated?:(message:Packets.MatchInfo)=>void;
     public binaryMessage?: (message:string) => void;
     public spectateEnded?:()=>void;
-    apiError?:(error:string) => void;
+    public apiError?:(error:string) => void;
     private msg?:Packets.Request.SpectateJoin;
 
     constructor(ws:CoCoSockets.CoCoSocket, lobby_id:string){

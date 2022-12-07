@@ -36,7 +36,7 @@ export namespace CoCoSockets{
       this.ws.subscribe({
         error: (err:string) => { // Called whenever there is a message from the server.
           let errorMsg = JSON.stringify(err);
-          if (this.resultError) {this.resultError(errorMsg );}
+          if (this.resultError) {this.resultError(errorMsg);}
         },
         complete: () => {
           if (this.resultClosed) {this.resultClosed();}

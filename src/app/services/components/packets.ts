@@ -40,6 +40,28 @@ export namespace Packets{
         }
       }
     }
+
+    export class Args{}
+
+    export class RoyalurArgs extends Args{
+      public pace?:string;
+
+      constructor(pace?:string) {
+        super();
+        this.pace = pace;
+      }
+    }
+
+    export class RoshamboArgs extends Args{
+      public rounds?:string;
+      public pace?:string;
+
+      constructor(rounds?:string, pace?:string) {
+        super();
+        this.rounds = rounds;
+        this.pace = pace;
+      }
+    }
   
     export class GameParams {
       public players?:number;
@@ -57,7 +79,7 @@ export namespace Packets{
         public players: number=0;
         public bots: number=0;
         public timeout: number=0.0;
-        public args = {};
+        public args: RoshamboArgs | RoyalurArgs={};
         public id: string="";
         public name: string="";
         public game: string="";

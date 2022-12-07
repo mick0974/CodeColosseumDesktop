@@ -7,9 +7,10 @@ import { CoCoSockets } from './components/socket';
   providedIn: 'root'
 })
 
-export class MatchInfo extends Packets.MatchInfo{
+export class MatchInfo extends Packets.MatchInfo{}
+export class RoshamboArgs extends Packets.RoshamboArgs {}
+export class RoyalurArgs extends Packets.RoyalurArgs {}
 
-}
 
 export class ApiService {
   public url = 'ws://localhost:8088';

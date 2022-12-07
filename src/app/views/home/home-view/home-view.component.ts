@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/services/api.service';
+import { ApiService, RoshamboArgs } from 'src/app/services/api.service';
 
 @Component({
   selector: 'tal-home-view',
@@ -23,7 +23,7 @@ export class HomeViewComponent implements OnInit {
 
     if(type === "play") {
       api.createNewLobby(
-        "Lobby", "roshambo", 2, 1, undefined, {"rounds": "23", "pace": "5"}, undefined, undefined,
+        "Lobby", "roshambo", 2, 1, undefined, new RoshamboArgs("23", "5"), undefined, undefined,
         (gameNew) => {
         console.log('New game created: ' + gameNew);
         api.connectToPlay(
@@ -32,7 +32,7 @@ export class HomeViewComponent implements OnInit {
           (lobbyUpdated) => console.log(lobbyUpdated),
           () => console.log(),
           (binaryInfo) => console.log(binaryInfo),
-          () => console.log(),
+          () => console.log("Match Ended"),
           undefined,
           (error) => alert(error));
       }, undefined, (error) => {alert("error 3");
@@ -57,7 +57,7 @@ export class HomeViewComponent implements OnInit {
       });
 
       api.connectToSpectate(
-        "3p8c4br4d6jha",
+        "d67upmfpcg0a6",
         (spectateJoined) => console.log(spectateJoined), 
         () => console.log(),
         () => console.log(),
