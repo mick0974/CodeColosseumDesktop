@@ -1,5 +1,6 @@
 export interface Game{
     id?:string;
+    name:string
     verified:boolean;
     game:string;
     players:number;
