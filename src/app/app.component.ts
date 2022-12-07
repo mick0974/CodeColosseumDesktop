@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectionManagerService } from './services/connection-manager.service';
 import {RippleModule} from 'primeng/ripple';
-
 import { PrimeNGConfig } from 'primeng/api';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

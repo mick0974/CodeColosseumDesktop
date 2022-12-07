@@ -8,8 +8,7 @@ export class ConnectionManagerService {
 
   private _url: string = "";
   private _username: string = "";
-  private _psw: string = "";
-
+  
   private _isConnected: boolean = false;
 
   constructor(
@@ -28,15 +27,14 @@ export class ConnectionManagerService {
     return this._url;
   }
 
-  public async connect(url: string, username: string, psw: string): Promise<boolean> {
+  public async connect(url: string, username: string): Promise<boolean> {
     this._url = url;
     this._username = username;
-    this._psw = psw;
-
+    
     // TODO: connect to server
     // Add the below lines to the connect method
-    // this.isConnected = true;
-    // this.router.navigate(['/home']);
+     this._isConnected = true;
+     this.router.navigate(['/home']);
 
     // TO REMOVE: Temporary return true
     return new Promise((resolve, reject) => {
