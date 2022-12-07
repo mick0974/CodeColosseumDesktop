@@ -28,7 +28,8 @@ import { TableModule } from 'primeng/table';
 import { RippleModule } from 'primeng/ripple';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { MenuModule } from 'primeng/menu';
+import { MenuItemContent, MenuModule } from 'primeng/menu';
+import {MenuItem} from 'primeng/api';
 
 import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
@@ -59,7 +60,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     RippleModule,
     SelectButtonModule,
     MenuModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
