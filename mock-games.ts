@@ -3,6 +3,7 @@ import { Game } from "src/app/Game";
 export const GAMES:Game[] = [
     {
         id:"ftgHyo0",
+        name:"Lobby 1",
         verified:true,
         game:"royalur",
         spectators:10,
@@ -15,6 +16,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"hHdeTTr",
+        name:"Lobby 2",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -27,6 +29,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"grwdfc",
+        name:"Santa's lobby",
         verified:true,
         game:"royalur",
         spectators:20,
@@ -39,6 +42,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"fgyjte",
+        name:"Hello match",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -51,6 +55,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"gThopO",
+        name:"Match lobby",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -63,6 +68,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"cDffRd",
+        name:"Match lobby",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -75,6 +81,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"cDffRd",
+        name:"Match lobby",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -87,6 +94,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"cDffRd",
+        name:"Match lobby",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -99,6 +107,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"cDffRd",
+        name:"Match lobby",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -111,6 +120,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"cDffRd",
+        name:"Match lobby",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -123,6 +133,7 @@ export const GAMES:Game[] = [
     },
     {
         id:"cDffRd",
+        name:"Match lobby",
         verified:false,
         game:"royalur",
         spectators:20,
@@ -132,29 +143,5 @@ export const GAMES:Game[] = [
         password:false,
         current:true,
         time:20,
-    },
-    {
-        id:"cDffRd",
-        verified:false,
-        game:"royalur",
-        spectators:20,
-        players:20,
-        maxplayers:25,
-        timeout:200,
-        password:false,
-        current:true,
-        time:20,
-    },
-    {
-        id:"cDffRd",
-        verified:false,
-        game:"royalur",
-        spectators:20,
-        players:20,
-        maxplayers:25,
-        timeout:200,
-        password:false,
-        current:true,
-        time:2060,
     },
 ]
