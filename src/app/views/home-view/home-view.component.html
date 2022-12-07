@@ -2,10 +2,9 @@
 
 
 <div class="cc-home-container">
+    <h1 >Join game</h1>
 
-    <h1>Join game</h1>
-
-    <div class="cc-gamelist-header" style="display:flex;"> 
+    <div class="cc-gamelist-header"> 
         <p-selectButton [style]="{'align-items': 'center',display:'inline-block','box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
             <ng-template let-item>
                 <i [class]="item.icon"></i>
@@ -92,7 +91,7 @@
             <p-table [value]="gamelist" [loading]="loading" responsiveLayout="scroll" [breakpoint]="'960px'">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th> Match name 
+                        <th [pSortableColumn]="'name'"> Match name 
                             <p-sortIcon [field]="'name'"></p-sortIcon>
                         </th>
 
