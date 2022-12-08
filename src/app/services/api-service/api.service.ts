@@ -61,22 +61,21 @@ export class ApiService {
       args?:{}, 
       password?:string
     ){
-      
-    let cmdNewGame = new Commands.NewLobby(this.url, lobby_name, game_name, players, bots, timeout, args, password);
-    cmdNewGame.onReciveNewLobby = (message)=>{
-      if(onData){
-        if(message.id["Err"] != undefined){
-          if(cmdNewGame.onError){
-            cmdNewGame.onError(message.id["Err"]);
+      let cmdNewGame = new Commands.NewLobby(this.url, lobby_name, game_name, players, bots, timeout, args, password);
+      cmdNewGame.onReciveNewLobby = (message)=>{
+        if(onData){
+          if(message.id["Err"] != undefined){
+            if(cmdNewGame.onError){
+              cmdNewGame.onError(message.id["Err"]);
+            }
+          }
+          else{
+            onData(message.id["Ok"])
           }
         }
-        else{
-          onData(message.id["Ok"])
-        }
       }
-    }
-    cmdNewGame.run();
-    return cmdNewGame;
+      cmdNewGame.run();
+      return cmdNewGame;
   }
 
   public connectToPlay( 

@@ -73,13 +73,6 @@ export class CoCoSocket{
   }
   
   public didRecieve(payload:MessageEvent){ // Called whenever there is a message from the server.
-    /*
-    if(!this.isOpen()){
-      this.didError("CoCoSocket:didRecieve: closing connection")
-      this.closeConnection();
-    }
-    */
-
     let data = payload.data;
     console.log("CoCoSocket:didRecieve:type: "+payload.constructor.name+"<"+payload.data.constructor.name+">" )
     if(typeof data === "object" && data instanceof ArrayBuffer) {
