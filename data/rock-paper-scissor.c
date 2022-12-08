@@ -76,4 +76,5 @@ int main(int argc, char *argv[])
     }
     printf("TOTAL: %d / %d (invalid: %d)\n",points, round, invalids);
     fflush(stdout);
+    exit(0);
 }

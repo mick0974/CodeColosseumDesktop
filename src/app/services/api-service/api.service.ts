@@ -51,7 +51,17 @@ export class ApiService {
     return cmdLobbyList;
   }
 
-  public createNewLobby( onData:(newGame:string) =>void, lobby_name:string, game_name:string, players?:number, bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
+  public createNewLobby( 
+      onData:(newGame:string)=>void, 
+      lobby_name:string, 
+      game_name:string, 
+      players?:number,
+      bots?:number,
+      timeout?:number,
+      args?:{}, 
+      password?:string
+    ){
+      
     let cmdNewGame = new Commands.NewLobby(this.url, lobby_name, game_name, players, bots, timeout, args, password);
     cmdNewGame.onReciveNewLobby = (message)=>{
       if(onData){

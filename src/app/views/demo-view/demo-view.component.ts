@@ -129,7 +129,7 @@ export class DemoViewComponent implements OnInit {
     let sendMove = (action:string,connect:Commands.Connect, timeout:number, count:number)=>{
       //(new Promise(resolve => setTimeout(resolve, timeout))).then(() => connect?.sendBinary("ROCK\n"));
       for(var i=0; i < count; i++){
-        (new Promise(resolve => setTimeout(resolve, timeout*(i+1)))).then(() => connect?.sendBinary(action+"\n"));
+        (new Promise(resolve => setTimeout(resolve, timeout*(i+1)))).then(() => connect.sendBinary(action+"\n"));
       }
       
     }
@@ -148,11 +148,10 @@ export class DemoViewComponent implements OnInit {
         (onMatchUpdate) => console.log('A: onMatchUpdate:\n'+JSON.stringify(onMatchUpdate)),
         (onData) => { 
           console.log('A: onData:\n'+onData);
-          //player1?.sendBinary("\n");
         },
       );
       player1.onError = (error) => console.log('A: error: '+error);
-
+      
       player2 = this.api.connectToPlay(
         newGame, 
         "B", 
@@ -163,11 +162,11 @@ export class DemoViewComponent implements OnInit {
         (onMatchUpdate) => console.log('B: onMatchUpdate:\n'+JSON.stringify(onMatchUpdate)),
         (onData) => { 
           console.log('B: onData: \n'+onData)
-          //player2?.sendBinary("\n");
         } ,
       );
+      
       player2.onError = (error) => console.log('B: error: '+error);
-
+      
       sendMove("ROCK",player1,500,11);
       sendMove("PAPER",player2,500,11);
     }
