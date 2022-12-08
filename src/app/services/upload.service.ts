@@ -47,6 +47,12 @@ export class UploadService {
     }
     else return ""
   }
+  getGameName():string{
+    if (this.game){
+      return this.game.name
+    }
+    else return ""
+  }
 
   getGame():Game | null{
     if (this.game){
