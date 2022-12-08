@@ -13,6 +13,7 @@ export class CcUploadComponent implements OnInit {
   hasPassword:boolean = true;
   myfile:any[] = [];
   submitted:boolean = false;
+  currProgramName:string = "No uploaded file yet."
 
   stateOptions: any[]= [{value:'python',label:'Python'}, {value: 'cpp',label:'C++'}];
 
@@ -34,8 +35,8 @@ export class CcUploadComponent implements OnInit {
 
 
   fileUpload(event:any){console.log(event)
-    console.log(this.uploadData)
     this.uploadData.program = event.target.files[0]
+    this.currProgramName = this.uploadData.program.name
     console.log(this.uploadData)
   }
 
