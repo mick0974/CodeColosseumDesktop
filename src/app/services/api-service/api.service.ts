@@ -1,7 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Packets } from './api.packets';
 import { Commands } from './api.commands';
-import { CoCoSockets } from './api.socket';
+import { CoCoSocket } from './api.socket';
+
+
+
+export interface MatchInfo extends Packets.MatchInfo{}
+export enum LobbyEventType{ 
+  Join = 'LobbyJoin', 
+  Start = 'LobbyStart', 
+  End = 'LobbyEnd', 
+  Sync = 'LobbySync'
+}
+
+export enum ErrorType{ 
+  LobbyJoinFailed = 'LobbyJoinFailed',
+  LobbyCreateFailed = 'LobbyCreateFailed'
+}
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,135 +26,101 @@ import { CoCoSockets } from './api.socket';
 
 export class ApiService {
   public url = 'ws://localhost:8088';
-  public ws?:CoCoSockets.CoCoSocket;
+  public ws?:CoCoSocket;
   
   private createCoCosocket(url:string) {
-    this.ws = new CoCoSockets.CoCoSocket(url);
+    this.ws = new CoCoSocket(url);
   }
 
-  public gameList(result:(gameList:String[])=>void, error?:(error: String)=>void){
-    this.createCoCosocket(this.url);
+  public gameList(onResult:(gameList:string[])=>void){
     
-    let cmdGameList = new Commands.GameList(this.ws!);
-    cmdGameList.gameListReceived = (message)=>{
-      if(result){result(message.games)}
+    let cmdGameList = new Commands.GameList(this.url);
+    cmdGameList.onRecieveGameList = (message)=>{
+      if(onResult){onResult(message.games)}
     }
-    cmdGameList.resultError = error;
     cmdGameList.run();
     return cmdGameList;
   }
 
-  public lobbyList( result:(lobbyList:Packets.MatchInfo[])=>void, error?:(error:String)=>void ){
-    this.createCoCosocket(this.url);
-    
-    let cmdLobbyList = new Commands.LobbyList(this.ws!);
-    cmdLobbyList.lobbyListReceived = (message)=>{
-      if(result){result(message.info)}
+  public lobbyList( onData:(lobbyList:MatchInfo[])=>void ){
+    let cmdLobbyList = new Commands.LobbyList(this.url);
+    cmdLobbyList.onReciveLobbyList = (message)=>{
+      if(onData){onData(message.info)}
     }
-    cmdLobbyList.resultError = error;
     cmdLobbyList.run();
     return cmdLobbyList;
   }
 
-  public createNewGame( result:(newGame:string) =>void, lobby_name:string, game_name:string, players?:number, bots?:number, timeout?:number, args?:{}, password?:string, verification?:string, error?:(error:string)=>void){
-    this.createCoCosocket(this.url);
-    
-    let cmdNewGame = new Commands.CreateNewLobby(this.ws!, lobby_name, game_name, players, bots, timeout, args, password, verification);
-    cmdNewGame.newLobbyCreated = (message)=>{
-      if(result){
+  public createNewLobby( onData:(newGame:string) =>void, lobby_name:string, game_name:string, players?:number, bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
+    let cmdNewGame = new Commands.NewLobby(this.url, lobby_name, game_name, players, bots, timeout, args, password);
+    cmdNewGame.onReciveNewLobby = (message)=>{
+      if(onData){
         if(message.id["Err"] != undefined){
-          if(cmdNewGame.resultError){
-            cmdNewGame.resultError(message.id["Err"]);
+          if(cmdNewGame.onError){
+            cmdNewGame.onError(message.id["Err"]);
           }
         }
         else{
-          result(message.id["Ok"])
+          onData(message.id["Ok"])
         }
       }
     }
-
-    cmdNewGame.resultError = error;
     cmdNewGame.run();
     return cmdNewGame;
   }
 
   public connectToPlay( 
-    lobbyJoined:(message:Packets.Reply.LobbyJoinedMatch) => void, 
-    lobbyUpdated:(message:Packets.Reply.LobbyUpdate) => void,
-    matchStarted:(message:Packets.Reply.MatchStarted) => void,
-    binaryMessage:(message:string) => void,
-    matchEnded:(message:Packets.Reply.MatchEnded) => void,
-    lobby_id:string, lobby_name:string, password?:string, 
-    error?:(error:string)=>void){
+      lobbyID:string, 
+      displayName:string, 
+      password?:string,
+      onEvent?: (state:LobbyEventType)=>void,
+      onMatchUpdate?: (matchInfo: MatchInfo)=>void, 
+      onData?: (data:string)=>void,
+    ){
     
-    this.createCoCosocket(this.url);
+    let cmdConnect = new Commands.Connect(this.url, lobbyID, displayName, password);
     
-    let cmdConnect = new Commands.Connect(this.ws!, lobby_id, lobby_name, password);
-    cmdConnect.lobbyJoined = (message) => {
-      if(lobbyJoined) {lobbyJoined(message)}
+    cmdConnect.onReciveJoin = (message) => { 
+      if (message.info.Err){ 
+        if (cmdConnect.onError) { cmdConnect.onError("Failed to join lobby: "+message.info.Err)  } 
+        return;
+      }
+      if(onEvent) { onEvent(LobbyEventType.Join) } 
+      if(onMatchUpdate && message.info.Ok) { onMatchUpdate(message.info.Ok) }
     }
-    cmdConnect.lobbyUpdated = (message) => {
-      if(lobbyUpdated) {lobbyUpdated(message)}
-    }
-    cmdConnect.matchStarted = (message) => {
-      if(matchStarted) {matchStarted(message)}
-    }
-    cmdConnect.binaryInfo = (message) => { 
-      if(binaryMessage) {binaryMessage(message)}
-    }
-    cmdConnect.matchEnded = (message) => { 
-      if(matchEnded) {matchEnded(message)}
-    }
-
-    cmdConnect.resultError = error;
+    cmdConnect.onReciveStart = (message) => { if(onEvent) { onEvent(LobbyEventType.Start) } }
+    cmdConnect.onReciveEnd = (message) => { if(onEvent) { onEvent(LobbyEventType.End) } }
+    cmdConnect.onReciveUpdate = (message) => { if(onMatchUpdate ) { onMatchUpdate(message.info) } }
+    cmdConnect.onReciveBinary = (message) => { if(onData) { onData(message)} }
+    
     cmdConnect.run();
-
     return cmdConnect;
   }
 
-  public play(inputString:string) {
-    let cmdPlay = new Commands.Play(this.ws!, inputString);
-    
-    cmdPlay.run();
-
-    return cmdPlay;
-  }
-
   public connectToSpectate( 
-    spectateJoined:(message:Packets.Reply.SpectateJoined )=>void,
-    spectateStarted:(message:Packets.Reply.SpectateStarted)=>void,
-    spectatSynced:(message:Packets.Reply.SpectateSynced)=>void,
-    lobbyUpdated:(message:Packets.Reply.LobbyUpdate)=>void,
-    binaryMessage: (message:string) => void,
-    spectateEnded:(message:Packets.Reply.SpectateEnded)=>void,
-    lobby_id:string, 
-    error?:(error:string)=>void){
+      lobbyID:string, 
+      onEvent?: (state:LobbyEventType)=>void,
+      onMatchUpdate?: (matchInfo: MatchInfo)=>void, 
+      onData?: (data:string)=>void,
+    ){
     
-    this.createCoCosocket(this.url);
-    
-    let cmdSpectate = new Commands.Spectate(this.ws!, lobby_id);
-    cmdSpectate.spectateJoined = (message) => {
-      if(spectateJoined) {spectateJoined(message)}
-    }
-    cmdSpectate.spectateStarted = (message) => {
-      if(spectateStarted) {spectateStarted(message)}
-    }
-    cmdSpectate.spectatSynced = (message) => {
-      if(spectatSynced) {spectatSynced(message)}
-    }
-    cmdSpectate.lobbyUpdated = (message) => { 
-      if(lobbyUpdated) {lobbyUpdated(message)}
-    }
-    cmdSpectate.binaryMessage = (message) => { 
-      if(binaryMessage) {binaryMessage(message)}
-    }
-    cmdSpectate.spectateEnded = (message) => { 
-      if(spectateEnded) {spectateEnded(message)}
-    }
+    let cmdSpectate = new Commands.Spectate(this.url, lobbyID);
 
-    cmdSpectate.resultError = error;
+    cmdSpectate.onReciveJoin = (message) => { 
+      if (message.info.Err){ 
+        if (cmdSpectate.onError) { cmdSpectate.onError("Failed to join lobby: "+message.info.Err)  } 
+        return;
+      }
+      if(onEvent) { onEvent(LobbyEventType.Join) } 
+      if(onMatchUpdate && message.info.Ok) { onMatchUpdate(message.info.Ok) }
+    }
+    cmdSpectate.onReciveStart = () => { if(onEvent) { onEvent(LobbyEventType.Start) } }
+    cmdSpectate.onReciveEnd = () => { if(onEvent) { onEvent(LobbyEventType.End) } }
+    cmdSpectate.onReciveSync = () => { if(onEvent) { onEvent(LobbyEventType.Sync) } }
+    cmdSpectate.onReciveUpdate = (message) => { if(onMatchUpdate) { onMatchUpdate(message.info) } }
+    cmdSpectate.onReciveBinary = (message) => { if(onData) { onData( message )} }
+    
     cmdSpectate.run();
-
     return cmdSpectate;
   }
 }

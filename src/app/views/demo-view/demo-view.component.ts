@@ -1,9 +1,10 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell'
 import { open as DialogOpen } from '@tauri-apps/api/dialog';
-import { ApiService } from 'src/app/services/api-service/api.service';
+import { ApiService, LobbyEventType, MatchInfo } from 'src/app/services/api-service/api.service';
 import { Packets } from 'src/app/services/api-service/api.packets';
 import { ReplaySubject } from 'rxjs';
+import { Commands } from 'src/app/services/api-service/api.commands';
 @Component({
   selector: 'app-demo-view',
   templateUrl: './demo-view.component.html',
@@ -11,9 +12,13 @@ import { ReplaySubject } from 'rxjs';
 })
 export class DemoViewComponent implements OnInit {
   public child: Child | undefined;
-  public filename: String = "";
+  public filename: string = "";
   public output = "";
   public lobbyID?:string;
+  public displayName = "AgentSmith"+Math.floor(Math.random()*1000000);
+  public password?:string;
+  public cmdConnect?:Commands.Connect;
+  public cmdSpectate?:Commands.Spectate;
 
   constructor(
     private zone: NgZone,
@@ -24,72 +29,21 @@ export class DemoViewComponent implements OnInit {
   }
 
   //API Test
-
-  async actionSpectate(){
-    alert("API is available");
-    let type = "spectate";
-
-    this.api.gameList((gameList)=>{
-      console.log(gameList);
-    });
-
-    if(type === "play") {
-      this.api.createNewGame((gameNew) => {
-        console.log('New game created: ' + gameNew);
-        this.api.connectToPlay(
-          (lobbyData) => console.log(lobbyData), 
-          (lobbyUpdated) => console.log(lobbyUpdated),
-          (matchStarted) => console.log(matchStarted),
-          (binaryInfo) => console.log(binaryInfo),
-          (matchEnded) => console.log(matchEnded),
-          gameNew, "Lollo123", undefined, 
-          (error) => alert(error));
-      }, "Lobby", "roshambo", 2, 1, undefined, undefined, undefined, undefined, (error) => {
-        alert("error 3");
-      });
   
-      (new Promise(resolve => setTimeout(resolve, 5000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 6000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 7000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 8000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 9000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 10000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 11000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 12000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 13000))).then(() => this.api.play("ROCK\n"));
-      (new Promise(resolve => setTimeout(resolve, 14000))).then(() => this.api.play("ROCK\n"));
-  
-    } else {
-      this.api.connectToSpectate(
-        (spectateJoined) => console.log(spectateJoined), 
-        (spectateStarted) => console.log(spectateStarted),
-        (spectatSynced) => console.log(spectatSynced),
-        (lobbyUpdated) => console.log(lobbyUpdated),
-        (binaryMessage) => console.log(binaryMessage),
-        (spectateEnded) => console.log(spectateEnded),
-        "3m41h0rn9meb4"
-      ); 
-    }
-
-  }
-
-
-
-
-
-
   async onApiError(message: string){
     alert("Error: "+message)
   }
 
 
   async apiGameList() {
-    this.api.gameList( (gameList)=>{
+    let onSuccess = (gameList:string[])=>{ 
       let text = JSON.stringify(gameList)
       this.output = text
       console.log("gameList: "+text);
       this.refreshOutput();
-    });
+    }
+    let req = this.api.gameList( onSuccess );
+    req.onError = this.onApiError;
   }
 
   async apiNewGame() {
@@ -100,38 +54,137 @@ export class DemoViewComponent implements OnInit {
       this.lobbyID = newGame;
       this.refreshOutput();
     }
-    this.api.createNewLobby(onSuccess, "new_lobby","roshambo", 0, 2 );
+    let req = this.api.createNewLobby(onSuccess, "new_lobby","roshambo", 2, 0 );
+    req.onError = this.onApiError;
   }
 
   async apiLobbyList() {
-    this.api.lobbyList( (lobbyList)=>{
-      let text = JSON.stringify(lobbyList)
-      this.output = text
+    let onSuccess = (lobbyList:MatchInfo[])=>{
+      if ( lobbyList.length > 0 ) { 
+        this.lobbyID = lobbyList[0].id; 
+        this.output = "SELECTED LOBBY: " + this.lobbyID + "\n"
+      }
+
+      let text = JSON.stringify(lobbyList, null, 2);
+      this.output +=  text
+      
       console.log("lobbyList: "+text);
       this.refreshOutput();
-    });
+
+    }
+    let req = this.api.lobbyList( onSuccess );
+    req.onError = this.onApiError;
   }
 
-  
-
   async apiConnect() {
-    let onLobbyJoin = (data: Packets.Reply.LobbyJoinedMatch)=>{};
-    let onLobbyUpdate = (data: Packets.Reply.LobbyUpdate)=>{};
-    let onMatchStarted = (data: Packets.Reply.MatchStarted)=>{};
-    let onMessage = (data: string)=>{};
-    let onMatchEnded = (data: Packets.Reply.MatchEnded)=>{};
-    
+    let onEvent = ( event:LobbyEventType )=>{ console.log("onEvent: "+event.toString() ) };
+    let onMatchUpdate = (gameInfo: MatchInfo )=>{ 
+      this.output = JSON.stringify(gameInfo, null, 2);
+    };
+    let onData = (data: string)=>{
+      this.output += ''+data
+      console.log("apiConnect:onMessage: "+data);
+      this.refreshOutput();
+    };
+
     let lobbyID = this.lobbyID ?? "1234"
-    let display_name = "Mario Rossi";
-    this.api.connectToPlay( onLobbyJoin, onLobbyUpdate, onMatchStarted, onMessage, onMatchEnded, lobbyID, display_name );
+    let req = this.api.connectToPlay(lobbyID, this.displayName, this.password, onEvent, onMatchUpdate, onData );
+    req.onError = this.onApiError;
+
+    this.cmdConnect = req;
   }
 
   async apiPlay() {
-    await this.child?.write("ROCK\n");
-    this.output += `IN: ROCK\n`;
-    console.log(`IN: ROCK\n`);
+    this.cmdConnect?.sendBinary("ROCK\n");
     this.refreshOutput();
   }
+
+
+  async apiSpectate() {
+    
+    let onEvent = ( event:LobbyEventType )=>{ alert("onEvent: "+event.toString() ) };
+    let onMatchUpdate = (gameInfo: MatchInfo )=>{ 
+      this.output = JSON.stringify(gameInfo, null, 2);
+    };
+    let onData = (data: string)=>{
+      this.output += ''+data
+      console.log("apiConnect:onMessage: "+data);
+      this.refreshOutput();
+    };
+
+    let lobbyID = this.lobbyID ?? "1234"
+    let req = this.api.connectToSpectate(lobbyID, onEvent, onMatchUpdate, onData );
+    req.onError = this.onApiError;
+  }
+
+
+
+  // from original API test branch
+  async actionSimulate(){
+
+    this.api.gameList((gameList)=>{
+      console.log(gameList);
+    });
+
+    let sendMove = (action:string,connect:Commands.Connect, timeout:number, count:number)=>{
+      //(new Promise(resolve => setTimeout(resolve, timeout))).then(() => connect?.sendBinary("ROCK\n"));
+      for(var i=0; i < count; i++){
+        (new Promise(resolve => setTimeout(resolve, timeout*(i+1)))).then(() => connect?.sendBinary(action+"\n"));
+      }
+      
+    }
+
+    let player1: Commands.Connect
+    let player2: Commands.Connect
+    let numRounds = 3;
+
+    let onNewLobby = (newGame:string) => {
+      console.log('New game created: ' + newGame);
+
+      player1 = this.api.connectToPlay( newGame, "A", this.password,
+        (onEvent) => {
+          console.log('A: onEvent: '+onEvent)
+        },
+        (onMatchUpdate) => console.log('A: onMatchUpdate:\n'+JSON.stringify(onMatchUpdate)),
+        (onData) => { 
+          console.log('A: onData:\n'+onData);
+          //player1?.sendBinary("\n");
+        },
+      );
+      player1.onError = (error) => console.log('A: error: '+error);
+
+      player2 = this.api.connectToPlay(
+        newGame, 
+        "B", 
+        this.password,
+        (onEvent) => {
+          console.log('B: onEvent: '+onEvent)
+        },
+        (onMatchUpdate) => console.log('B: onMatchUpdate:\n'+JSON.stringify(onMatchUpdate)),
+        (onData) => { 
+          console.log('B: onData: \n'+onData)
+          //player2?.sendBinary("\n");
+        } ,
+      );
+      player2.onError = (error) => console.log('B: error: '+error);
+
+      sendMove("ROCK",player1,500,11);
+      sendMove("PAPER",player2,500,11);
+    }
+
+    let newLobby = this.api.createNewLobby(onNewLobby, "Lobby", "roshambo", 2, 0, 15);
+    newLobby.onError = (error) => console.log('createNewLobby: error: '+error);
+  }
+
+
+
+
+
+
+
+
+
+
 
   // exec test
   async actionRock() {

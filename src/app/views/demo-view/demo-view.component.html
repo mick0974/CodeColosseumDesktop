@@ -1,38 +1,45 @@
+<div style="display:flex; flex-direction: row">
 <div>
-    API Demo
-</div>
-<div>
-    <button (click)="apiGameList()">Game List</button>
-    <button (click)="apiNewGame()">New Game</button>
-    <button (click)="apiLobbyList()">Lobby List</button>
-    <button (click)="apiConnect()">Connect</button>
-    <button (click)="apiPlay()">Play</button>
-</div>
-
-<hr>
-
-<div>
-    Exec Demo
-</div>
-<div>
-    <button (click)="actionSpectate()">Spectate</button>
-</div>
-
-
-<hr>
-<div>
-    <button (click)="actionSearch()">File search</button>
-</div>
- <div>
-    <button (click)="actionExec()">Exec</button>
-    <button (click)="actionCompile()">Compile</button>
+    <div>
+        API Demo
+    </div>
+    <div>
+        <button (click)="apiGameList()">Game List</button>
+        <button (click)="apiNewGame()">New Game</button>
+        <button (click)="apiLobbyList()">Lobby List</button>
+    </div>
+    <div>
+        <button (click)="apiConnect()">Connect</button>
+        <button (click)="apiPlay()">Play</button>
+        <button (click)="apiSpectate()">Spectate</button>
+    </div>
+    <div>
+        <button (click)="actionSimulate()">Simulate Game</button>
+    </div>
 </div>
 
+
 <div>
-    <button (click)="actionRock()">Rock</button>
-    <button (click)="actionPaper()">Paper</button>
-    <button (click)="actionScissor()">Scissor</button>
+    <div>
+        Exec Demo
+    </div>
+    <div>
+        <button (click)="actionSearch()">File search</button>
+    </div>
+    <div>
+        <button (click)="actionExec()">Exec</button>
+        <button (click)="actionCompile()">Compile</button>
+    </div>
+
+    <div>
+        <button (click)="actionRock()">Rock</button>
+        <button (click)="actionPaper()">Paper</button>
+        <button (click)="actionScissor()">Scissor</button>
+    </div>
+   
 </div>
+</div>
+
 <div>
-    <pre >{{output}}</pre>
-</div> 
+    <pre>{{output}}</pre>
+</div>

@@ -1,276 +1,8 @@
-import { CoCoSockets } from "./api.socket";
+import { CoCoSocket } from "./api.socket";
 import { Packets } from "./api.packets";
 
 export namespace Commands{
-    
-
-    export class Command{
-      public ws!: CoCoSockets.CoCoSocket;
-      //public url?:string; 
-      public resultHandshake?:(message:Packets.Reply.Handshake)=>void; 
-      public resultClosed?:()=>void;
-      public resultError?:(error:any)=>void;
-  
-      constructor(ws:CoCoSockets.CoCoSocket){
-        this.ws = ws;
-      }
-  
-      public run(){
-        this.ws.resultError = (error)=>{ this.connectionError(error); };
-        //this.ws.resultClosed = ()=>{ this.connectionClosed(); };
-        this.ws.resultClosed = ()=>{ console.log("---- Connessione chiusa ----") };
-        //this.ws.recieved = (payload, msgClasses)=> {this.handshakeRecieved(payload);}
-        this.ws.setSubscription();
-  
-        let msg = new Packets.Request.Handshake();
-        this.ws.send(msg, (payload, msgClasses)=>{
-          if(msgClasses[0] !== "binary") {
-            let msgName = Packets.Message.findPacketName(msgClasses, payload);
-
-            if(msgName === Packets.Reply.Handshake.name){
-              let message = new Packets.Reply.Handshake();
-              message.fromMultiPacket(payload, msgName);
-              this.handshakeRecieved(message);
-            }
-          }
-        }, Packets.Reply.Handshake.name);
-      }
-  
-      public connectionClosed(){
-        //alert("Command:connectionClosed");
-        if (this.resultClosed){ this.resultClosed();}
-      }
-  
-      public connectionError(error:any){
-        //alert("Command:connectionError "+error);
-        if (this.resultError){ this.resultError(error);}
-      }
-  
-      public handshakeRecieved(message:Packets.Reply.Handshake){
-        //alert("Command:handshakeRecieved");
-        if (this.resultHandshake && message) { this.resultHandshake(message); }
-      }
-    }
-  
-    export class GameList extends Command{
-      public gameListReceived?:(message:Packets.Reply.GameList)=>void
-      
-      public override handshakeRecieved( handshake: Packets.Reply.Handshake){
-        super.handshakeRecieved(handshake);
-  
-        let msg = new Packets.Request.GameList();
-        this.ws!.send(msg, (payload, msgClass) => {
-          let msgName = Packets.Message.findPacketName(msgClass, payload);
-          
-          if(this.gameListReceived) {
-            let message = new Packets.Reply.GameList();
-            message.fromMultiPacket(payload, msgName);
-            
-            if(message){
-              this.ws.closeConnection();
-              this.gameListReceived(message as Packets.Reply.GameList);
-            }
-          }
-        }, Packets.Reply.GameList.name);
-      }
-    }
-  
-    export class LobbyList extends Command{
-      public lobbyListReceived?:(message:Packets.Reply.LobbyList)=>void;
-      
-      public override handshakeRecieved( handshake: Packets.Reply.Handshake){
-        super.handshakeRecieved(handshake);
-        
-        let msg = new Packets.Request.LobbyList();
-        this.ws!.send(msg, (payload, msgClass)=>{ 
-          let msgName = Packets.Message.findPacketName(msgClass, payload);
-
-          if(this.lobbyListReceived){
-            let message = new Packets.Reply.LobbyList();
-            message.fromMultiPacket(payload, msgName);
-            
-            if(message){
-              this.ws.closeConnection();
-              this.lobbyListReceived(message);
-            }
-          }
-        }, Packets.Reply.LobbyList.name);
-      }
-    }
-  
-    export class CreateNewLobby extends Command {
-      public newLobbyCreated?:(message:Packets.Reply.GameNew)=>void;
-      private msg?:Packets.Request.GameNew;
-  
-      constructor(ws:CoCoSockets.CoCoSocket, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string, verification?:string){
-        super(ws);
-  
-        this.msg = new Packets.Request.GameNew(lobby_name, game_name, num_palyer, num_bots, timeout, args, password, verification);
-      }
-  
-      public override handshakeRecieved( handshake: Packets.Reply.Handshake){
-        super.handshakeRecieved(handshake);
-  
-        this.ws!.send(this.msg!, 
-          (payload, msgClass)=>{ 
-            let msgName = Packets.Message.findPacketName(msgClass, payload);
-            
-            if(this.newLobbyCreated){
-              let message = new Packets.Reply.GameNew();
-              message.fromMultiPacket(payload, msgName);
-
-              if(message){
-                this.ws.closeConnection();
-                this.newLobbyCreated(message);
-              }
-          }
-        }, Packets.Reply.GameNew.name);
-      }
-    }
-  
-    export class Connect extends Command{
-      public lobbyJoined?:(message:Packets.Reply.LobbyJoinedMatch )=>void;
-      public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
-      public matchStarted?:(message:Packets.Reply.MatchStarted)=>void;
-      public binaryInfo?: (payload:string) => void;
-      public matchEnded?:(message:Packets.Reply.MatchEnded) => void;
-      private msg?:Packets.Request.LobbyJoinMatch;
-  
-      constructor(ws:CoCoSockets.CoCoSocket, lobby_id:string, player_name:string, lobby_password?:string){
-        super(ws);
-  
-        this.msg = new Packets.Request.LobbyJoinMatch(lobby_id, player_name, lobby_password);
-      }
-  
-      public override handshakeRecieved(handshake: Packets.Reply.Handshake){
-        super.handshakeRecieved(handshake);
-  
-        this.ws!.send(this.msg!,
-          (payload, msgClasses)=>{ 
-            if(msgClasses[0] === "binary") {
-              if(this.binaryInfo) {this.binaryInfo(payload);}
-            } else {
-              let msgName = Packets.Message.findPacketName(msgClasses, payload);
-
-              if(this.lobbyJoined && payload && msgName === Packets.Reply.LobbyJoinedMatch.name){
-                let message = new Packets.Reply.LobbyJoinedMatch();
-                message.fromMultiPacket(payload, msgName);
-                this.lobbyJoined(message);
-              }
-              else if(this.lobbyUpdated && payload && msgName === Packets.Reply.LobbyUpdate.name){
-                let message = new Packets.Reply.LobbyUpdate();
-                message.fromMultiPacket(payload, msgName);
-                this.lobbyUpdated(message);
-              }
-              else if(this.matchStarted && payload && msgName === Packets.Reply.MatchStarted.name){
-                let message = new Packets.Reply.MatchStarted();
-                message.fromMultiPacket(payload, msgName);
-                this.matchStarted(message);
-              }
-              else if(this.matchEnded && payload && msgName === Packets.Reply.MatchEnded.name){
-                this.ws.closeConnection();
-
-                let message = new Packets.Reply.MatchEnded();
-                message.fromMultiPacket(payload, msgName);
-                this.matchEnded(message);
-              }
-            }
-          
-        }, 
-        Packets.Reply.LobbyJoinedMatch.name, Packets.Reply.LobbyUpdate.name,
-          Packets.Reply.MatchStarted.name, Packets.Reply.MatchEnded.name);
-      }
-    }
-
-    export class Play extends Command{
-      public msg?: ArrayBuffer;
-      
-      constructor(ws:CoCoSockets.CoCoSocket, inputString:string){
-        super(ws);
-
-        var enc = new TextEncoder(); // always utf-8
-        this.msg = (enc.encode(inputString)).buffer;
-      }
-
-      private str2ab(str:string) {
-        var buf = new ArrayBuffer(str.length); // 2 bytes for each char
-        var bufView = new Uint8Array(buf);
-        for (var i=0, strLen=str.length; i < strLen; i++) {
-        bufView[i] = str.charCodeAt(i);
-        }
-        return buf;
-      }
-
-      public override run(){
-        this.ws.sendBinary(this.msg!);
-      }
-    }
-
-    export class Spectate extends Command{
-      public spectateJoined?:(message:Packets.Reply.SpectateJoined )=>void;
-      public spectateStarted?:(message:Packets.Reply.SpectateStarted)=>void;
-      public spectatSynced?:(message:Packets.Reply.SpectateSynced)=>void;
-      public lobbyUpdated?:(message:Packets.Reply.LobbyUpdate)=>void;
-      public binaryMessage?: (message:string) => void;
-      public spectateEnded?:(message:Packets.Reply.SpectateEnded)=>void;
-      private msg?:Packets.Request.SpectateJoin;
-  
-      constructor(ws:CoCoSockets.CoCoSocket, lobby_id:string){
-        super(ws);
-  
-        this.msg = new Packets.Request.SpectateJoin(lobby_id);
-      }
-  
-      public override handshakeRecieved(handshake: Packets.Reply.Handshake){
-        super.handshakeRecieved(handshake);
-  
-        this.ws!.send(this.msg!,
-          (payload, msgClasses)=>{ 
-            if(msgClasses[0] === "binary") {
-              if(this.binaryMessage) {this.binaryMessage(payload);}
-            } else {
-              let msgName = Packets.Message.findPacketName(msgClasses, payload);
-
-              if(this.spectateJoined && payload && msgName === Packets.Reply.SpectateJoined.name){
-                let message = new Packets.Reply.SpectateJoined();
-                message.fromMultiPacket(payload, msgName);
-                this.spectateJoined(message);
-              }
-              else if(this.spectateStarted && payload && msgName === Packets.Reply.SpectateStarted.name){
-                let message = new Packets.Reply.SpectateStarted();
-                message.fromMultiPacket(payload, msgName);
-                this.spectateStarted(message);
-              }
-              else if(this.spectatSynced && payload && msgName === Packets.Reply.SpectateSynced.name){
-                let message = new Packets.Reply.SpectateSynced();
-                message.fromMultiPacket(payload, msgName);
-                this.spectatSynced(message);
-              }
-              else if(this.lobbyUpdated && payload && msgName === Packets.Reply.LobbyUpdate.name){
-                let message = new Packets.Reply.LobbyUpdate();
-                message.fromMultiPacket(payload, msgName);
-                this.lobbyUpdated(message);
-              }
-              else if(this.spectateEnded && payload && msgName === Packets.Reply.SpectateEnded.name){
-                this.ws.closeConnection();
-
-                let message = new Packets.Reply.SpectateEnded();
-                message.fromMultiPacket(payload, msgName);
-                this.spectateEnded(message);
-              }
-            }
-        }, 
-        Packets.Reply.SpectateJoined.name, Packets.Reply.SpectateStarted.name,
-          Packets.Reply.SpectateSynced.name, Packets.Reply.LobbyUpdate.name, 
-          Packets.Reply.SpectateEnded.name);
-      }
-    }
-  }
-
-
-
-
-  /*
+    /*
     export class Command{
       public ws?: CoCoSockets.CoCoSocket;
       public url?:string;
@@ -315,3 +47,264 @@ export namespace Commands{
       }
     }
     */
+
+    export class Command{
+      public ws!: CoCoSocket;
+      public url?:string;
+      public debug=false; 
+      public onReciveHandshake?:(message:Packets.Reply.Handshake)=>void;
+      public onReciveBinary?:(message:string)=>void;
+      public onRecive?:(message:Packets.PacketsPayload)=>void; 
+      public onClose?:()=>void;
+      public onError?:(error:any)=>void;
+  
+      constructor(url:string){
+        this.url = url;
+        this.ws = new CoCoSocket(this.url);
+
+        this.ws.onError = (error)=>{ this.didError(error); };
+        this.ws.onClose = ()=>{ this.didClose(); };
+        this.ws.onRecive = (payload)=> { this.didRecive(payload) }
+        this.ws.onReciveBinary = (payload)=> { this.didReciveBinary(payload) }
+      }
+      
+      public run(){
+        let msg = new Packets.Request.Handshake();
+        this.ws.send(msg);
+      }
+
+      public sendBinary(data:string){
+        this.log("didSendBinary: "+data);
+        this.ws.sendBinary(data);
+      }
+
+      public log(...args:string[]){
+        let message = this.constructor.name+": " + (args).join(" ")
+        console.log(message);
+
+        if (this.debug) alert(message);
+      }
+      
+      public didClose(){
+        this.log("didClose");
+        if (this.onClose){ this.onClose();}
+      }
+  
+      public didError(error:any){
+        this.log("didError "+error);
+        if (this.onError){ this.onError(error);}
+      }
+
+      public didReciveBinary(payload:string){
+        this.log("didReciveBinary:\n"+payload);
+        if(this.onReciveBinary){this.onReciveBinary(payload)}
+      }
+
+      public didRecive(payload:Packets.PacketsPayload){
+        this.log("didRecive");
+        if(this.onRecive){ this.onRecive(payload) }
+        
+        let message = payload.getMessage(Packets.Reply.Handshake)
+        if (message){ this.didReciveHandshake(message); }
+      }
+
+      
+      public didReciveHandshake(message:Packets.Reply.Handshake){
+        this.log("didRecieveHandshake");
+        if (this.onReciveHandshake) { this.onReciveHandshake(message); }
+      }
+    }
+  
+    export class GameList extends Command{
+      public onRecieveGameList?:(message:Packets.Reply.GameList)=>void
+      
+      public override didReciveHandshake( handshake: Packets.Reply.Handshake){
+        super.didReciveHandshake(handshake);
+
+        let msg = new Packets.Request.GameList();
+        this.ws!.send(msg);
+      }
+
+      public override didRecive(payload:Packets.PacketsPayload){
+        super.didRecive(payload);
+        let message = payload.getMessage(Packets.Reply.GameList)
+        if (message){ this.didReciveGameList(message); }
+      }
+        
+      public didReciveGameList(message:Packets.Reply.GameList){
+        this.log("didRecieveGameList");
+        if (this.onRecieveGameList) { this.onRecieveGameList(message); }
+      }
+    }
+  
+    export class LobbyList extends Command{
+      public onReciveLobbyList?:(message:Packets.Reply.LobbyList)=>void;
+      
+      public override didReciveHandshake( handshake: Packets.Reply.Handshake){
+        super.didReciveHandshake(handshake);
+        
+        let msg = new Packets.Request.LobbyList();
+        this.ws!.send(msg);
+      }
+
+      public override didRecive(payload:Packets.PacketsPayload){
+        super.didRecive(payload);
+        let message = payload.getMessage(Packets.Reply.LobbyList)
+        if (message){ this.didRecieveLobbyList(message);}
+      }
+        
+      public didRecieveLobbyList(message:Packets.Reply.LobbyList){
+        this.log("didRecieveLobbyList");
+        if (this.onReciveLobbyList) { this.onReciveLobbyList(message); }
+      }
+    }
+  
+    export class NewLobby extends Command {
+      public onReciveNewLobby?:(message:Packets.Reply.GameNew)=>void;
+
+      private msg:Packets.Request.GameNew;
+  
+      constructor(url:string, lobby_name?:string, game_name?:string, num_palyer?:number, num_bots?:number, timeout?:number, args?:{}, password?:string){
+        super(url);
+        this.msg = new Packets.Request.GameNew(lobby_name, game_name, num_palyer, num_bots, timeout, args, password);
+      }
+      
+      public override didRecive(payload:Packets.PacketsPayload){
+        super.didRecive(payload);
+        let message = payload.getMessage(Packets.Reply.GameNew)
+        if (message){
+          this.didRecieveNewLobby(message);
+        }
+      }
+        
+      public didRecieveNewLobby(message:Packets.Reply.GameNew){
+        this.log("didRecieveNewLobby");
+        if (this.onReciveNewLobby && message) { this.onReciveNewLobby(message); }
+      }
+            
+      public override didReciveHandshake( handshake: Packets.Reply.Handshake){
+        super.didReciveHandshake(handshake);
+        this.ws!.send(this.msg);
+      }
+    }
+  
+    export class Connect extends Command{
+      public onReciveJoin?:(message:Packets.Reply.LobbyJoinedMatch )=>void;
+      public onReciveUpdate?:(message:Packets.Reply.LobbyUpdate)=>void;
+      public onReciveStart?:(message:Packets.Reply.MatchStarted)=>void;
+      public onReciveEnd?:(message:Packets.Reply.MatchEnded) => void;
+      
+      private msg:Packets.Request.LobbyJoinMatch;
+  
+      constructor(url:string, lobby_id:string, player_name:string, lobby_password?:string){
+        super(url);
+        this.msg = new Packets.Request.LobbyJoinMatch(lobby_id, player_name, lobby_password);
+      }
+
+      public override didReciveHandshake(handshake: Packets.Reply.Handshake){
+        super.didReciveHandshake(handshake);
+        this.ws!.send(this.msg);
+      }
+      
+      public override didRecive(payload: Packets.PacketsPayload): void {
+        super.didRecive(payload);
+        let message;
+        message = payload.getMessage(Packets.Reply.LobbyJoinedMatch);
+        if (message){ this.didRecieveJoin(message); }
+
+        message = payload.getMessage(Packets.Reply.LobbyUpdate)
+        if (message){ this.didRecieveUpdate(message); }
+
+        message = payload.getMessage(Packets.Reply.MatchStarted)
+        if (message){ this.didRecieveStart(message); }
+        
+        message = payload.getMessage(Packets.Reply.MatchEnded)
+        if (message){ this.didRecieveEnd(message); }
+      }
+
+      public didRecieveJoin(message: Packets.Reply.LobbyJoinedMatch){
+        this.log("didRecieveJoin");
+        if (this.onReciveJoin ) { this.onReciveJoin(message); }
+      }
+
+      public didRecieveUpdate(message: Packets.Reply.LobbyUpdate){
+        this.log("didRecieveUpdate");
+        if (this.onReciveUpdate ) { this.onReciveUpdate(message); }
+      }
+      
+      public didRecieveStart(message: Packets.Reply.MatchStarted){
+        this.log("didRecieveStart");
+        if (this.onReciveStart ) { this.onReciveStart(message); }
+      }
+      
+      public didRecieveEnd(message: Packets.Reply.MatchEnded){
+        this.log("didRecieveEnd");
+        this.ws.closeConnection();
+        if (this.onReciveEnd ) { this.onReciveEnd(message); }
+      }
+    }
+
+    export class Spectate extends Command{
+      public onReciveJoin?:(message:Packets.Reply.SpectateJoined )=>void;
+      public onReciveUpdate?:(message:Packets.Reply.LobbyUpdate)=>void;
+      public onReciveStart?:(message:Packets.Reply.SpectateStarted)=>void;
+      public onReciveSync?:(message:Packets.Reply.SpectateSynced) => void;
+      public onReciveEnd?:(message:Packets.Reply.SpectateEnded) => void;
+
+      private msg:Packets.Request.SpectateJoin;
+  
+      constructor(url:string, lobby_id:string){
+        super(url);
+  
+        this.msg = new Packets.Request.SpectateJoin(lobby_id);
+      }
+  
+      public override didReciveHandshake(handshake: Packets.Reply.Handshake){
+        super.didReciveHandshake(handshake);
+  
+        this.ws!.send(this.msg)
+      }
+
+      public override didRecive(payload: Packets.PacketsPayload): void {
+        super.didRecive(payload);
+        let message;
+
+        message = payload.getMessage(Packets.Reply.SpectateJoined)
+        if (message){ this.didRecieveJoin(message); }
+
+        message = payload.getMessage(Packets.Reply.LobbyUpdate)
+        if (message){ this.didRecieveUpdate(message);}
+
+        message = payload.getMessage(Packets.Reply.SpectateStarted)
+        if (message){ this.didRecieveStart(message);}
+
+        message = payload.getMessage(Packets.Reply.SpectateSynced)
+        if (message){ this.didRecieveStart(message);}
+
+        message = payload.getMessage(Packets.Reply.SpectateEnded)
+        if (message){ this.didRecieveEnd(message);}
+
+      }
+
+      public didRecieveJoin(message: Packets.Reply.LobbyJoinedMatch){
+        this.log("LobbyJoinedMatch");
+        if (this.onReciveJoin ) { this.onReciveJoin(message); }
+      }
+
+      public didRecieveUpdate(message: Packets.Reply.LobbyUpdate){
+        this.log("LobbyUpdate");
+        if (this.onReciveUpdate ) { this.onReciveUpdate(message); }
+      }
+      
+      public didRecieveStart(message: Packets.Reply.MatchStarted){
+        this.log("MatchStarted");
+        if (this.onReciveStart ) { this.onReciveStart(message); }
+      }
+      
+      public didRecieveEnd(message: Packets.Reply.MatchEnded){
+        this.log("MatchEnded");
+        this.ws.closeConnection();
+        if (this.onReciveEnd ) { this.onReciveEnd(message); }
+      }
+    }
+  }

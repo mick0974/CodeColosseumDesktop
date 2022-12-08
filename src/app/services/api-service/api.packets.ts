@@ -1,48 +1,35 @@
 
 export namespace Packets{
-    /*
-    export class Message{
-      public messageName():string{
-        return this.constructor.name;
-      }
-  
-      public toPacket(): any{
-        const packetName = this.messageName();
-        const packet = { [packetName]:this };
-        return packet;
-      }
-  
-      public fromPacket(packet:any): boolean{
-        const msgClass = this.messageName();
-        
-        if (! (msgClass in packet) ){ 
-          return false; 
+
+    export class PacketsPayload{
+      public data;
+      public packets;
+      public packetTypes:string[] = []
+
+      constructor(data:string){
+        this.data = data;
+        this.packets = JSON.parse(this.data);
+        for (var pkttype in this.packets) {
+          this.packetTypes.push(pkttype)
         }
-        
-        const msgData = packet[msgClass];
-        
-        for (var msgField in this) {
-          if (! (msgField in msgData)){ continue; }
-          const varType = typeof msgData[msgField];
-          if (varType in ["function","undefined","symbol"] ){ continue; }
-  
-          if (varType === "object") {
-            this[msgField] = Object.assign(msgData[msgField]);
-          } else {
-            this[msgField] = msgData[msgField];
-          }
-        }
-        //alert("Deserialized msg "+ msg.MessageName() ) ;
-        return true;
       }
-  
-      public static Deserialize<T extends Message>(payload:string, cls: new ()=>T):T | null{
-        const msg = new cls();
-        if (msg.fromPacket(payload) === false ) {return null;}
-        return msg;
+
+      public getMessage<T extends Message>( packetClass: new ()=>T ):T | null{
+        let packetType = packetClass.name;
+        for (var pkttype in this.packets) {
+          if (pkttype != packetType){ continue; }
+          let packet = this.packets[packetType] 
+          let message = new packetClass();
+          message.fromPacket(packet);
+          return message;
+        }        
+        return null;
       }
+
     }
-    */
+
+
+
   
     export class Message{
       /*
@@ -56,6 +43,30 @@ export namespace Packets{
         });
       }
       */
+
+      constructor(packet?: any){
+        if(packet){this.fromPacket(packet);}
+      }
+
+      public static dataToPayload(data: string): PacketsPayload{
+        let raw = JSON.parse(data);
+        return raw;
+      }
+
+      
+
+      public static findPacketName(msgClasses: Array<string>, packet: any): string{
+        var msgClass = "";
+        msgClasses.forEach((msgName) => {
+          if(msgName in JSON.parse(packet)){
+            msgClass = msgName;
+          }
+        });
+  
+        return msgClass;
+      }
+
+
 
       public messageName():string{
         return this.constructor.name;
@@ -71,34 +82,32 @@ export namespace Packets{
         const packet = { [packetName]:this };
         return packet;
       }
-
-      public static findPacketName(msgClasses: Array<string>, packet: any): string{
-        var msgClass = "";
-        msgClasses.forEach((msgName) => {
-          if(msgName in JSON.parse(packet)){
-            msgClass = msgName;
-          }
-        });
-  
-        return msgClass;
-      }
-  
-      public fromMultiPacket(packet:any, msgClass: string){
-  
-        const msgData = JSON.parse(packet)[msgClass];
-        
+      
+      public fromPacket(packet:any){
         for (var msgField in this) {
-          if (! (msgField in msgData)){ continue; }
-          const varType = typeof msgData[msgField];
+          if (! (msgField in packet)){ continue; }
+          let value = packet[msgField];
+          const varType = typeof value;
+          
           if (varType in ["function","undefined","symbol"] ){ continue; }
   
           if (varType === "object") {
-            this[msgField] = Object.assign(msgData[msgField]);
+            this[msgField] = Object.assign(value);
           } else {
-            this[msgField] = msgData[msgField];
+            this[msgField] = value;
           }
         }
+        //alert("Deserialized msg "+ msg.MessageName() ) ;
+        return true;
       }
+
+      /*
+      public fromMultiPacket(payload:string){
+        let packets = Message.dataToPayload(payload)
+        let packet = Packets.Message.findPacket(packets, this.messageName() );
+        if (packet != null) {this.fromPacket(payload);} 
+      }
+      */
     }
   
     export class GameParams {
