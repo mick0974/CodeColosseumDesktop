@@ -30,6 +30,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MenuItemContent, MenuModule } from 'primeng/menu';
 import {MenuItem} from 'primeng/api';
+import { NbChatModule } from '@nebular/theme';
 
 import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
@@ -62,6 +63,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MenuModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NbChatModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
