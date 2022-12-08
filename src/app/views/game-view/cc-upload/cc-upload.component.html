@@ -1,32 +1,35 @@
 <div class="cc-column-layout">
-         <div class="surface-card p-4 shadow-2 border-round w-full">
-            <div class="text-center mb-5">
-                <div class="text-900 text-3xl font-medium mb-3">1. Match setup</div>
+ 
+    <h2> Match setup</h2>
+        <div class="p-fluid" class="field">
+
+            <h3>Upload your file</h3>
+            <input  type="file" class="file-upload" (change)="fileUpload($event)">
+            <small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small>
+
+            <div class="cc-fields">
+                <div style="width:100%">
+                    <label for="parameters"> Insert parameters (optional) </label>
+                <input #password="ngModel" [(ngModel)]="uploadData.parameters" type="text" name="parameters" id="parameters" pInputText/>           
+                </div>
+
+                <div *ngIf="hasPassword">
+                    <label for="password"> Insert password </label>
+                    <input #password="ngModel" id="password" type="text" required pInputText [(ngModel)]="uploadData.password" [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}">
+                    <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Password is required for this game.</small>
+                </div>
             </div>
 
-        <div class="surface-section px-4 md:px-6 lg:px-8" googl="true">
-
-                    <div class="grid formgrid p-fluid">
-                        
-                        <div class="field mb-4 col-12 ">
-                            <label for="fileuploader" class="font-medium text-900">Upload bot</label>
-                            <div><input  id="fileuploader" type="file" class="file-upload" (change)="fileUpload($event)"></div>
-                            <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
-                        </div>
-                        <div class="field mb-4 col-12" *ngIf="hasPassword">
-                            <label for="password" class="font-medium text-900">Match password</label>
-                            <input #password="ngModel" id="password" type="text" required pInputText [(ngModel)]="uploadData.password" [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}">
-                            <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Password is required for this game.</small>
-                        </div>
-                        <div class="field mb-4 col-12">
-                            <label for="parameters" class="font-medium text-900">Parameters</label>
-                            <textarea id="parameters" type="text" pinputtextarea="" rows="5" class="p-inputtextarea p-inputtext p-component p-element p-inputtextarea-resizable" style="height: 132px; overflow: hidden;"></textarea>
-                        </div>
-                        <div class="col-12">
-                            <button (click)="navigateToNext()" pbutton="" pripple="" label="Start match!" class="p-element p-ripple w-auto mt-3 p-button p-component"><span class="p-button-label">Start match!</span><span class="p-ink"></span></button>
-                        </div>
-                    </div>
-                
+            <div style="text-align: center">
+                <p-button type="button" name="a" label="Next" (click)="navigateToNext()"></p-button>
             </div>
+
         </div>
-    </div>
+
+
+
+
+
+<!-- 
+            <input #password="ngModel" [(ngModel)]="uploadData.password" required type="text" id="password" pInputText/>
+            <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Age is required.</small>-->
