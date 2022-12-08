@@ -61,6 +61,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     SelectButtonModule,
     MenuModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

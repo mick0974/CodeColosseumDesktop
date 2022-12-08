@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class GameViewComponent implements OnInit {
   gameExists : boolean = false;
   gameId : string= this.uploadService.getGameId() ;
+  gameName : string = this.uploadService.getGameName();
   game! : Game | null;
   currStep : number = 0;
   

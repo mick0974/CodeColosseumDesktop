@@ -10,21 +10,39 @@
                         
                         <div class="field mb-4 col-12 ">
                             <label for="fileuploader" class="font-medium text-900">Upload bot</label>
-                            <div><input  id="fileuploader" type="file" class="file-upload" (change)="fileUpload($event)"></div>
+                            <div class="true-input-button">
+                                <input  id="fileuploader" type="file" class="file-upload" (change)="fileUpload($event)" #fileUploader></div>
+                            <div>
+                                <button pRipple class="p-element p-ripple w-auto mt-3 p-button p-component" pbutton="" (click)="fileUploader.click()">Upload</button>
+                                {{currProgramName}}
+                            </div>
                             <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
+                        </div>                        
+
+                        <div class="field mb-4 col-12">
+                            <p-selectButton [options]="stateOptions" [(ngModel)]="uploadData.programType" optionLabel="label" optionValue="value"></p-selectButton>
                         </div>
+
+
                         <div class="field mb-4 col-12" *ngIf="hasPassword">
                             <label for="password" class="font-medium text-900">Match password</label>
                             <input #password="ngModel" id="password" type="text" required pInputText [(ngModel)]="uploadData.password" [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}">
                             <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Password is required for this game.</small>
                         </div>
+
+
                         <div class="field mb-4 col-12">
                             <label for="parameters" class="font-medium text-900">Parameters</label>
                             <textarea id="parameters" type="text" pinputtextarea="" rows="5" class="p-inputtextarea p-inputtext p-component p-element p-inputtextarea-resizable" style="height: 132px; overflow: hidden;"></textarea>
                         </div>
+
+
                         <div class="col-12">
-                            <button (click)="navigateToNext()" pbutton="" pripple="" label="Start match!" class="p-element p-ripple w-auto mt-3 p-button p-component"><span class="p-button-label">Start match!</span><span class="p-ink"></span></button>
+                            <button pRipple (click)="navigateToNext()" pbutton="" pripple="" label="Start match!" class="p-element p-ripple w-auto mt-3 p-button p-component"><span class="p-button-label">Start match!</span><span class="p-ink"></span></button>
                         </div>
+
+
+
                     </div>
                 
             </div>
