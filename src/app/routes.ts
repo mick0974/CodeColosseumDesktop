@@ -22,7 +22,13 @@ export const routes: Routes = [
         component: HomeViewComponent
     },
     {
-        path: 'game/:id',
+        path: 'game/set/:id',
+        canActivate: [AuthGuard],
+        component: GameViewComponent,
+        
+    },
+    {
+        path: 'game',
         canActivate: [AuthGuard],
         component: GameViewComponent,
         children: [
@@ -30,7 +36,7 @@ export const routes: Routes = [
             { path: 'results', component: CcResultsComponent, pathMatch: 'full'  },
             { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
         ]
-    },
+    }
 /*
     { path: "**", redirectTo: "/connect" },*/
 ];
