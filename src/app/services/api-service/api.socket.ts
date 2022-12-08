@@ -68,7 +68,7 @@ export class CoCoSocket{
       return false
     } 
     console.log("CoCoSocket:sendBinary: sending payload \n"+payload);
-    this.ws!.next(payload);
+    this.ws!.next(payload.buffer);
     return true;
   }
   

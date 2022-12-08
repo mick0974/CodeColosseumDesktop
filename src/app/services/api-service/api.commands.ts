@@ -49,7 +49,7 @@ export namespace Commands{
     */
 
     export class Command{
-      public ws!: CoCoSocket;
+      public coco: CoCoSocket;
       public url?:string;
       public debug=false; 
       public onReciveHandshake?:(message:Packets.Reply.Handshake)=>void;
@@ -60,22 +60,22 @@ export namespace Commands{
   
       constructor(url:string){
         this.url = url;
-        this.ws = new CoCoSocket(this.url);
+        this.coco = new CoCoSocket(this.url);
 
-        this.ws.onError = (error)=>{ this.didError(error); };
-        this.ws.onClose = ()=>{ this.didClose(); };
-        this.ws.onRecive = (payload)=> { this.didRecive(payload) }
-        this.ws.onReciveBinary = (payload)=> { this.didReciveBinary(payload) }
+        this.coco.onError = (error)=>{ this.didError(error); };
+        this.coco.onClose = ()=>{ this.didClose(); };
+        this.coco.onRecive = (payload)=> { this.didRecive(payload) }
+        this.coco.onReciveBinary = (payload)=> { this.didReciveBinary(payload) }
       }
       
       public run(){
         let msg = new Packets.Request.Handshake();
-        this.ws.send(msg);
+        this.coco.send(msg);
       }
 
       public sendBinary(data:string){
         this.log("didSendBinary: "+data);
-        this.ws.sendBinary(data);
+        this.coco.sendBinary(data);
       }
 
       public log(...args:string[]){
@@ -122,7 +122,7 @@ export namespace Commands{
         super.didReciveHandshake(handshake);
 
         let msg = new Packets.Request.GameList();
-        this.ws!.send(msg);
+        this.coco.send(msg);
       }
 
       public override didRecive(payload:Packets.PacketsPayload){
@@ -144,7 +144,7 @@ export namespace Commands{
         super.didReciveHandshake(handshake);
         
         let msg = new Packets.Request.LobbyList();
-        this.ws!.send(msg);
+        this.coco!.send(msg);
       }
 
       public override didRecive(payload:Packets.PacketsPayload){
@@ -179,12 +179,12 @@ export namespace Commands{
         
       public didRecieveNewLobby(message:Packets.Reply.GameNew){
         this.log("didRecieveNewLobby");
-        if (this.onReciveNewLobby && message) { this.onReciveNewLobby(message); }
+        if (this.onReciveNewLobby) { this.onReciveNewLobby(message); }
       }
             
       public override didReciveHandshake( handshake: Packets.Reply.Handshake){
         super.didReciveHandshake(handshake);
-        this.ws!.send(this.msg);
+        this.coco!.send(this.msg);
       }
     }
   
@@ -203,7 +203,7 @@ export namespace Commands{
 
       public override didReciveHandshake(handshake: Packets.Reply.Handshake){
         super.didReciveHandshake(handshake);
-        this.ws!.send(this.msg);
+        this.coco.send(this.msg);
       }
       
       public override didRecive(payload: Packets.PacketsPayload): void {
@@ -239,7 +239,7 @@ export namespace Commands{
       
       public didRecieveEnd(message: Packets.Reply.MatchEnded){
         this.log("didRecieveEnd");
-        this.ws.closeConnection();
+        this.coco.closeConnection();
         if (this.onReciveEnd ) { this.onReciveEnd(message); }
       }
     }
@@ -262,7 +262,7 @@ export namespace Commands{
       public override didReciveHandshake(handshake: Packets.Reply.Handshake){
         super.didReciveHandshake(handshake);
   
-        this.ws!.send(this.msg)
+        this.coco!.send(this.msg)
       }
 
       public override didRecive(payload: Packets.PacketsPayload): void {
@@ -274,7 +274,7 @@ export namespace Commands{
 
         message = payload.getMessage(Packets.Reply.LobbyUpdate)
         if (message){ this.didRecieveUpdate(message);}
-
+        
         message = payload.getMessage(Packets.Reply.SpectateStarted)
         if (message){ this.didRecieveStart(message);}
 
@@ -303,7 +303,7 @@ export namespace Commands{
       
       public didRecieveEnd(message: Packets.Reply.MatchEnded){
         this.log("MatchEnded");
-        this.ws.closeConnection();
+        this.coco.closeConnection();
         if (this.onReciveEnd ) { this.onReciveEnd(message); }
       }
     }
