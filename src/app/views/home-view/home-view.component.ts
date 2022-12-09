@@ -35,5 +35,7 @@ export class HomeViewComponent implements OnInit {
   getFormatTime(value:number):string{
     return ""+(value/60).toFixed(0)+":"+value%60;
   }
-
+  onClick(){
+    console.log("Click of new game button");
+  }
 }

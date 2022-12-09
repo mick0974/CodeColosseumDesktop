@@ -15,7 +15,7 @@ export class ConnectViewComponent implements OnInit {
   
   submitted: boolean = false;
   
-  public connectData:any={};
+ public connectData:any={};
   
   constructor(
     private readonly connectionManager: ConnectionManagerService,

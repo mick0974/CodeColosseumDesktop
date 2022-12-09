@@ -6,6 +6,8 @@ import { HomeViewComponent } from './views/home-view/home-view.component';
 import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.component';
 import { CcResultsComponent } from './views/game-view/cc-results/cc-results.component';
 import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
+import {CreateGameViewComponent} from './views/create-game-view/create-game-view.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -36,7 +38,12 @@ export const routes: Routes = [
             { path: 'results', component: CcResultsComponent, pathMatch: 'full'  },
             { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
         ]
+    },{
+        path: 'newgame',
+        canActivate: [AuthGuard],
+        component: CreateGameViewComponent,
     }
+
 /*
     { path: "**", redirectTo: "/connect" },*/
 ];
