@@ -1,22 +1,23 @@
-export const MOCKMESSAGES:any[] = [
+import { ChatMessage } from "src/app/ChatMessage"
+export const MOCKMESSAGES:ChatMessage[] = [
     {
-        sender:"server",
+        sender:"Server",
         content:"Text message."
     },
     {
-        sender:"me",
+        sender:"Me",
         content:"This is my first text message."
     },
     {
-        sender:"other",
+        sender:"Other",
         content:"Text message."
     },
     {
-        sender:"me",
+        sender:"Server",
         content:"This is my text message."
     },
     {
-        sender:"me",
+        sender:"Me",
         content:"This is my text message."
     }
 ]
