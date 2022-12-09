@@ -32,6 +32,7 @@ import { MenuItemContent, MenuModule } from 'primeng/menu';
 import {CardModule} from 'primeng/card';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { CcChatComponent } from './components/cc-chat/cc-chat.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +42,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CcResultsComponent,
     CcReviewComponent,
     GameViewComponent,
+    CcChatComponent,
   ],
   imports: [
     BrowserModule,
