@@ -29,10 +29,10 @@ import { RippleModule } from 'primeng/ripple';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MenuItemContent, MenuModule } from 'primeng/menu';
-import {MenuItem} from 'primeng/api';
-import { NbChatModule } from '@nebular/theme';
+import {CardModule} from 'primeng/card';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { CcChatComponent } from './components/cc-chat/cc-chat.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +42,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CcResultsComponent,
     CcReviewComponent,
     GameViewComponent,
+    CcChatComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,7 +64,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     MenuModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NbChatModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
