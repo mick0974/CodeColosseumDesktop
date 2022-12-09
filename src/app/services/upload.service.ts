@@ -73,7 +73,7 @@ export class UploadService {
   redirectIfGameNotSet(){
     if(!this.isGameSet()){
       console.log("[Upload] Game was not set; redirect to home...")
-      this.router.navigate(['home'])
+      //this.router.navigate(['home'])
     }
   }
   

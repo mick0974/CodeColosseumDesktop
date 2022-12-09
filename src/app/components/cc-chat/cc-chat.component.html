@@ -1,0 +1,79 @@
+<div class="cc-chat flex justify-content-center">
+<p-scrollPanel class="w-8 flex justify-content-center border-round"[style]="{height:'500px'} ">
+    <div class="p-3 flex flex-column justify-content-center surface-ground border-round">  
+        
+        <div *ngFor="let msg of messages" class="message">
+            <div [ngClass]="(msg.sender === 'Me') ? 'flex justify-content-end' : 'flex justify-content-start'">
+                <div class="w-8 m-1 max-w-max min-w-min justify-content-end">
+                    <div [ngClass]="msg.sender === 'Me' ? 'text-right' : 'text-left'">
+                        <p>
+                            {{msg.sender}}
+                        </p>
+                    </div>
+                    <div [ngClass]="msg.sender === 'Me' ? 'p-2 shadow-2 bg-cyan-500 text-white font-bold border-round m-2 flex align-items-center justify-content-center': 
+                    msg.sender !== 'Server' ? 'p-2 shadow-2 bg-yellow-500 text-white font-bold border-round m-2 flex align-items-center justify-content-center'
+                    :'p-2 shadow-2 surface-700 text-white font-bold border-round m-2 flex align-items-center justify-content-center'">
+                     {{msg.content}}
+                    </div>
+                    
+                </div>
+            </div> 
+            <div [ngClass]="(msg.sender === 'Me') ? 'flex justify-content-end' : 'flex justify-content-start'">
+            <div class="-m-2" id="{{msg.sender==='Me' ? 'tri-me': msg.sender !=='Server' ? 'tri-other' : 'tri-server'}}"></div>
+            </div>
+        </div>
+     
+        <!--
+        <div class="message">
+            <div class="flex justify-content-start">
+                <div class="w-8 m-1 min-w-min max-w-max justify-content-end">
+                    <div><p>
+                        OtherPlayer
+                    </p></div>
+                    <div class="p-2 shadow-2 bg-yellow-500 text-white font-bold border-round m-2 flex align-items-center justify-content-center" >
+                        this is not a lorem ipsum i need it longer tho
+                    </div>
+                </div>
+            </div> 
+            <div class="flex justify-content-start">
+            <div class="-m-2" id="tri-other"></div>
+            </div>
+        </div>
+        
+        <div class="message">
+            <div class="flex justify-content-start">
+                <div class="w-8 m-1 min-w-min max-w-max justify-content-end">
+                    <div><p>
+                        Server
+                    </p></div>
+                    <div class="p-2 shadow-2 surface-700 text-white font-bold border-round m-2 flex align-items-center justify-content-center" >
+                        this is not a lorem ipsum i need it longer tho
+                    </div>
+                </div>
+            </div> 
+            <div class="flex justify-content-start">
+            <div class="-m-2" id="tri-server"></div>
+            </div>
+        </div>
+        
+        <div class="message">
+            <div class="flex justify-content-end">
+                <div class="w-8 m-1 max-w-max min-w-min justify-content-end">
+                    <div class="text-right"><p>
+                        My bot
+                    </p></div>
+                    <div class="p-2 shadow-2 bg-cyan-500 text-white font-bold border-round m-2 flex align-items-center justify-content-center" >
+                        This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1This is a text message1
+                    </div>
+                </div>
+            </div> 
+            <div class="flex justify-content-end">
+            <div class="-m-2" id="tri-me"></div>
+            </div>
+        </div>
+        -->
+        
+    </div>
+</p-scrollPanel>
+</div>
+
