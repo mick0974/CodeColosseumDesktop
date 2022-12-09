@@ -19,5 +19,17 @@ export const MOCKMESSAGES:ChatMessage[] = [
     {
         sender:"Me",
         content:"This is my text message."
+    },
+    {
+        sender:"Me",
+        content:"This is my text message."
+    },
+    {
+        sender:"Me",
+        content:"This is my text message."
+    },
+    {
+        sender:"Me",
+        content:"This is my text message."
     }
 ]

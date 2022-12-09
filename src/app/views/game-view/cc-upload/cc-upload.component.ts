@@ -42,11 +42,11 @@ export class CcUploadComponent implements OnInit {
 
 
   navigateToNext() {
-   // if (this.hasPassword && this.uploadData.password&&this.uploadData.program){
-     // this.uploadService.uploadData = this.uploadData;
-     // console.log(this.uploadService.uploadData)
+    if (this.hasPassword && this.uploadData.password&&this.uploadData.program){
+      this.uploadService.uploadData = this.uploadData;
+      console.log(this.uploadService.uploadData)
       this.router.navigate(['game/results']);
-    //}
+    }
 
     this.submitted = true;
   
