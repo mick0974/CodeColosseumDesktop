@@ -14,7 +14,7 @@ export class CcResultsComponent implements OnInit {
   constructor(private router:Router,private uploadService:UploadService) { }
 
   ngOnInit(): void {
-    this.uploadService.redirectIfGameNotSet()    
+    //this.uploadService.redirectIfGameNotSet()    
   }
 
   navigateToNext() {   
