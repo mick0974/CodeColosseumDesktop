@@ -1,10 +1,30 @@
-<div class="cc-create-game-container">
+<div class="cc-create-match-container">
     <div class="cc-column-layout">
-        <h1>Create new match</h1> 
-        <h3>General settings</h3>
-         
         <div class="p-fluid" class="field">
-            
+            <h1>Create match</h1> 
+            <h3>General settings</h3>
+            <div class="fromgrid grid" className="cc-grid">
+                <div class="field col-12" id="lobby-div" >
+                    <span class="p-float-label" id="lobby-span">
+                        <input #lobby= "ngModel" [(ngModel)]="createMatchData.lobby" type="text" name="lobby" (change)="lobbyChange($event)"  id="lobby" required [ngClass]="{'ng-dirty': (lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
+                        <label for="lobby">Lobby name</label>
+                    </span>
+                </div>
+                <div class="field col-12 md:col-6" id="password-div">
+                    <p-inplace [closable]="true">
+                        <ng-template pTemplate="display">
+                            <button pButton pRipple type="button" id="button" label="SET PASSWORD PROTECTION" class="border-round"></button>
+                            
+                        </ng-template>
+                        <ng-template pTemplate="content">
+                            <p-password [(ngModel)] = "password" id="password" [feedback]="false" placeholder="Game password"></p-password>
+                        
+                        </ng-template>
+                    </p-inplace>
+                    
+                </div>
+                
+            </div>        
         </div>
     </div>
 </div>

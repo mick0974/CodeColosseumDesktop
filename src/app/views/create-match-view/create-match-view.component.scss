@@ -1,4 +1,4 @@
-.div.cc-create-game-container{
+.div.cc-create-match-container{
     text-align: center;
     margin-top: 0px;
     padding-top: 0px;
@@ -8,4 +8,23 @@ h1{
     text-align: center;
     /*width: 378px;
     height: 112px;*/
+}
+h3{
+    text-align: center;
+    
+}
+#lobby-div{
+    text-align: center;
+ 
+}
+#lobby-span{
+    display: inline-block;
+    position: relative;
+    align-items: center; /*è necessario per centrare il campo*/
+
+}
+
+#lobby{
+    height: 56px;
+    width: 623px;
 }
