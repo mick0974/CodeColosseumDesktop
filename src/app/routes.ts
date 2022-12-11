@@ -6,7 +6,7 @@ import { HomeViewComponent } from './views/home-view/home-view.component';
 import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.component';
 import { CcResultsComponent } from './views/game-view/cc-results/cc-results.component';
 import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
-import {CreateGameViewComponent} from './views/create-game-view/create-game-view.component';
+import {CreateMatchViewComponent} from './views/create-match-view/create-match-view.component';
 
 export const routes: Routes = [
     {
@@ -39,9 +39,9 @@ export const routes: Routes = [
             { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
         ]
     },{
-        path: 'newgame',
+        path: 'newmatch',
         canActivate: [AuthGuard],
-        component: CreateGameViewComponent,
+        component: CreateMatchViewComponent,
     }
 
 /*

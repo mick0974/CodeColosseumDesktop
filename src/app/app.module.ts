@@ -32,7 +32,7 @@ import { MenuItemContent, MenuModule } from 'primeng/menu';
 import {MenuItem} from 'primeng/api';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { CreateGameViewComponent } from './views/create-game-view/create-game-view.component';
+import { CreateMatchViewComponent } from './views/create-match-view/create-match-view.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +42,7 @@ import { CreateGameViewComponent } from './views/create-game-view/create-game-vi
     CcResultsComponent,
     CcReviewComponent,
     GameViewComponent,
-    CreateGameViewComponent,
+    CreateMatchViewComponent,
   ],
   imports: [
     BrowserModule,

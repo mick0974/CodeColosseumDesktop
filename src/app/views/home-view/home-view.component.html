@@ -12,11 +12,10 @@
         </p-selectButton> 
 
         <div>
-            <button pButton type="button" class="p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClick()"></button>
-            <button pButton class="p-button-raised" label="Create new game" icon="pi pi-plus" ></button>
+            <button pButton type="button" class="p-button-rounded p-button-outlined" icon="pi pi-refresh"></button>
+            <button pButton class="p-button-raised" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch'"></button>
         </div>
 </div>
-    
 
     <p-scrollPanel [style]="{width:'100%',height:'600px'}">
 
