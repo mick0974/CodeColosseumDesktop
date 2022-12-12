@@ -11,7 +11,7 @@ import { HomeViewComponent } from './views/home-view/home-view.component';
 import { ConnectViewComponent } from './views/connect-view/connect-view.component';
 import { GameViewComponent } from './views/game-view/game-view.component';
 import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.component';
-import { CcResultsComponent } from './views/game-view/cc-results/cc-results.component';
+import { CcPlayComponent } from './views/game-view/cc-play/cc-play.component';
 import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
 
 
@@ -33,16 +33,18 @@ import {CardModule} from 'primeng/card';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CcChatComponent } from './components/cc-chat/cc-chat.component';
+import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeViewComponent,
     ConnectViewComponent,
     CcUploadComponent,
-    CcResultsComponent,
+    CcPlayComponent,
     CcReviewComponent,
     GameViewComponent,
     CcChatComponent,
+    SpectateViewComponent,
   ],
   imports: [
     BrowserModule,
