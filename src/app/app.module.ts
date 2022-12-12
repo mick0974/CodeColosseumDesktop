@@ -33,6 +33,7 @@ import {CardModule} from 'primeng/card';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CcChatComponent } from './components/cc-chat/cc-chat.component';
+import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,6 +44,7 @@ import { CcChatComponent } from './components/cc-chat/cc-chat.component';
     CcReviewComponent,
     GameViewComponent,
     CcChatComponent,
+    SpectateViewComponent,
   ],
   imports: [
     BrowserModule,
