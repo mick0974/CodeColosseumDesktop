@@ -1,10 +1,10 @@
-<div class="cc-chat flex justify-content-center">
-<p-scrollPanel class="w-8 flex justify-content-center border-round"[style]="{height:'500px'} ">
+<div>
+<p-scrollPanel a="flex justify-content-center border-round"[style]="{height:'500px'} ">
     <div class="p-3 flex flex-column justify-content-center surface-ground border-round">  
         
         <div *ngFor="let msg of messages" class="message">
             <div [ngClass]="(msg.sender === 'Me') ? 'flex justify-content-end' : 'flex justify-content-start'">
-                <div class="w-8 m-1 max-w-max min-w-min justify-content-end">
+                <div class="m-1 justify-content-end">
                     <div [ngClass]="msg.sender === 'Me' ? 'text-right' : 'text-left'">
                         <p>
                             {{msg.sender}}

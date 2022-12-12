@@ -10,13 +10,11 @@
                         
                         <div class="field mb-4 col-12 ">
                             <label for="fileuploader" class="font-medium text-900">Upload bot</label>
+                            <div class="true-input-button">
+                                <input  id="fileuploader" type="file" class="file-upload" (change)="fileUpload($event)" #fileUploader></div>
                             <div>
-                                <div class="true-input-button">
-                                    <input  id="fileuploader" type="file" class="file-upload" (change)="fileUpload($event)" #fileUploader></div>
-                                <div class="flex align-items-baseline align-content-center">
-                                    <button pRipple class="p-element p-ripple w-auto mt-3 p-button p-component" pbutton="" (click)="fileUploader.click()">Upload</button>
-                                    <p class="w-auto m-2">{{currProgramName}}</p>
-                                </div>
+                                <button pRipple class="p-element p-ripple w-auto mt-3 p-button p-component" pbutton="" (click)="fileUploader.click()">Upload</button>
+                                {{currProgramName}}
                             </div>
                             <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
                         </div>                        
