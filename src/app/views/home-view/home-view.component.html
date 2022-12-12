@@ -43,8 +43,8 @@
                                         </p>
                                     </div>
                                     <div class="p-buttonset">
-                                            <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game/set', game.id]"></button>
-                                            <button pButton class="p-button-round p-button-secondary" disabled="true"  icon="pi pi-eye" pTooltip="Coming soon!" tooltipPosition="top"></button>
+                                            <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game/set', game.id]" pTooltip="Play" tooltipPosition="top"></button>
+                                            <button pButton class="p-button-round p-button-secondary" [routerLink]="['/spectate', game.id]"  icon="pi pi-eye" pTooltip="Spectate" tooltipPosition="top"></button>
                                     </div>
                                 </div>
                                 <ul class="list-none m-0 p-0">
@@ -138,7 +138,7 @@
                         <td>
                             <div class="cc-play-buttons">
                                 <button pButton class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/set', game.id]"></button>
-                                <button pButton class="p-button-sm p-button-secondary" disabled="true" label="Spectate" icon="pi pi-eye" iconPos="left" pTooltip="Coming soon!" tooltipPosition="top"></button>
+                                <button pButton class="p-button-sm  p-button-secondary" label="Spectate" icon="pi pi-eye" iconPos="left" [routerLink]="['/spectate/', game.id]"></button>
                             </div>
                         </td>
                     </tr>
