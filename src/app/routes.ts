@@ -4,7 +4,7 @@ import { ConnectViewComponent } from './views/connect-view/connect-view.componen
 import { GameViewComponent } from './views/game-view/game-view.component';
 import { HomeViewComponent } from './views/home-view/home-view.component';
 import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.component';
-import { CcResultsComponent } from './views/game-view/cc-results/cc-results.component';
+import { CcPlayComponent } from './views/game-view/cc-play/cc-play.component';
 import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
 export const routes: Routes = [
     {
@@ -33,7 +33,7 @@ export const routes: Routes = [
         component: GameViewComponent,
         children: [
             { path: 'upload', component: CcUploadComponent, pathMatch: 'full'  },
-            { path: 'results', component: CcResultsComponent, pathMatch: 'full'  },
+            { path: 'play', component: CcPlayComponent, pathMatch: 'full'  },
             { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
         ]
     }
