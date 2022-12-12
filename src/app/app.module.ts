@@ -64,7 +64,6 @@ import { CcChatComponent } from './components/cc-chat/cc-chat.component';
     MenuModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
