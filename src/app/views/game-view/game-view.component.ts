@@ -20,7 +20,7 @@ export class GameViewComponent implements OnInit {
   
   items: MenuItem[]= [
     {label: 'Match setup', routerLink: ['upload']},
-    {label: 'Match results', routerLink:['results']},
+    {label: 'Match results', routerLink:['play']},
     {label: 'Match review', routerLink:['review']}
 ];
 
