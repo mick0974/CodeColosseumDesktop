@@ -23,7 +23,7 @@ export class DemoViewComponent implements OnInit {
   constructor(
     private zone: NgZone,
     private api: ApiService
-    ) { }
+    ) {}
 
   ngOnInit(): void {
   }
@@ -43,6 +43,17 @@ export class DemoViewComponent implements OnInit {
       this.refreshOutput();
     }
     let req = this.api.gameList( onSuccess );
+    req.onError = this.onApiError;
+  }
+
+  async apiGameDescription() {
+    let onSuccess = (gameDescription:string)=>{ 
+      let text = JSON.stringify(gameDescription)
+      this.output = text
+      console.log("gameDescription: "+text);
+      this.refreshOutput();
+    }
+    let req = this.api.gameDescription( "roshambo", onSuccess );
     req.onError = this.onApiError;
   }
 

@@ -136,6 +136,34 @@ export namespace Commands{
         if (this.onRecieveGameList) { this.onRecieveGameList(message); }
       }
     }
+
+    export class GameDescription extends Command{
+      public onRecieveGameDescription?:(message:Packets.Reply.GameDescription)=>void
+      private msg:Packets.Request.GameDescription;
+  
+      constructor(url:string, game:string){
+        super(url);
+        this.msg = new Packets.Request.GameDescription(game);
+      }
+
+      public override didReciveHandshake( handshake: Packets.Reply.Handshake){
+        super.didReciveHandshake(handshake);
+
+        let msg = new Packets.Request.GameDescription();
+        this.coco.send(msg);
+      }
+
+      public override didRecive(payload:Packets.PacketsPayload){
+        super.didRecive(payload);
+        let message = payload.getMessage(Packets.Reply.GameDescription)
+        if (message){ this.didReciveGameDescription(message); }
+      }
+        
+      public didReciveGameDescription(message:Packets.Reply.GameDescription){
+        this.log("didRecieveGameList");
+        if (this.onRecieveGameDescription) { this.onRecieveGameDescription(message); }
+      }
+    }
   
     export class LobbyList extends Command{
       public onReciveLobbyList?:(message:Packets.Reply.LobbyList)=>void;
