@@ -51,12 +51,12 @@
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         
                                         <span class="text-600 font-medium text-sm">
-                                            <p-tag  value="{{game.current ? 'Running':'Waiting for players'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                                            <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
                                         </span>
                                         <span class="text-900 font-medium text-sm">
                                             {{getFormatTime(game.time)}} s
-                                            <span *ngIf="game.current"> elapsed </span>
-                                            <span *ngIf="!game.current"> remaining </span>
+                                            <span *ngIf="game.running"> elapsed </span>
+                                            <span *ngIf="!game.running"> remaining </span>
                                         </span>
                                     </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
@@ -67,7 +67,7 @@
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         
                                         <span class="text-600 font-medium text-sm"><i class="pi pi-user"></i>  Players</span>
-                                        <span class="text-900 font-medium text-sm">{{game.players}}/{{game.maxplayers}}</span>
+                                        <span class="text-900 font-medium text-sm">{{game.bots}}/{{game.players}}</span>
                                     </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         <span class="text-600 font-medium text-sm"><i class="pi pi-eye"></i>  Spectators</span>
@@ -124,14 +124,14 @@
                         </td>
                         <td>{{game.id}}</td>
                         <td>{{game.game}}</td>
-                        <td>{{game.players}} / {{game.maxplayers}}</td>
+                        <td>{{game.bots}} / {{game.players}}</td>
                         <td>{{game.spectators}}</td>
                         <td>{{game.timeout}} s</td>
                         <td>
-                            <p-tag  value="{{game.current ? 'Running':'Waiting for players'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                            <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
                                         
                             <span class="text-900 font-medium text-sm">
-                                <span *ngIf="game.current"> - </span>
+                                <span *ngIf="!game.running">   -</span>
                                 {{getFormatTime(game.time)}} s
                             </span>
                         </td>

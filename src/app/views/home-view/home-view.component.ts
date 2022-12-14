@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GAMES } from 'mock-games';
-import { Game } from 'src/app/Game';
+import { MatchInfo } from 'src/app/services/api.service';
 import { UploadService } from 'src/app/services/upload.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { UploadService } from 'src/app/services/upload.service';
   styleUrls: ['./home-view.component.scss']
 })
 export class HomeViewComponent implements OnInit {
-  gamelist:Game[] = GAMES;
+  gamelist:MatchInfo[] = GAMES;
   isLoading:boolean = false;
   loading:boolean = true;
   stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
