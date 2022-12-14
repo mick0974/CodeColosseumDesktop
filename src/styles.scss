@@ -1,1 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
+
+$layout-padding: 2rem;
+
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+
+p{
+    margin:0;
+}
+
+/*
+div.cc-column-layout {
+    width:800px;
+    max-width:100vw;
+    margin:0 auto;
+    padding:$layout-padding;
+}
+
+div.cc-center-layout {
+    padding: $layout-padding;
+    min-height:100vh;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.p-scrollpanel:hover .p-scrollpanel-bar, .p-scrollpanel:active .p-scrollpanel-bar{
+    background-color: var(--primary-color);
+}
+
+.p-scrollpanel-wrapper{
+    border-radius: 10px;
+}
+.surface-ground{
+    border-radius: 10px;
+}
+*/

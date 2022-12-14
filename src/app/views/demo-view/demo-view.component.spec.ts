@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeViewComponent } from './home-view.component';
+import { DemoViewComponent } from './demo-view.component';
 
-describe('HomeViewComponent', () => {
-  let component: HomeViewComponent;
-  let fixture: ComponentFixture<HomeViewComponent>;
+describe('DemoViewComponent', () => {
+  let component: DemoViewComponent;
+  let fixture: ComponentFixture<DemoViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeViewComponent ]
+      declarations: [ DemoViewComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomeViewComponent);
+    fixture = TestBed.createComponent(DemoViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
+import { DemoViewComponent } from './views/demo-view/demo-view.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', loadChildren: () => import('./views/home/home.module').then(m => m.HomeModule) },
+    { path: '', redirectTo: '/demo', pathMatch: 'full' },
+    { path: 'demo', component: DemoViewComponent },
 ];
