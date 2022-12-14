@@ -23,8 +23,25 @@ h3{
     align-items: center; /*è necessario per centrare il campo*/
 
 }
-
 #lobby{
     height: 56px;
     width: 623px;
+}
+#password-div{
+    text-align: center;
+
+}
+#status-div{
+    text-align: center;
+
+}
+#btnpassword{
+    width: 232px;
+    height: 36px;
+    font-size: 14px;
+}
+#btnstatus{
+    width: 232px;
+    height: 36px;
+    font-size: 14px;
 }

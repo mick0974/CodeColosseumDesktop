@@ -31,7 +31,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { MenuItemContent, MenuModule } from 'primeng/menu';
 import {MenuItem} from 'primeng/api';
 import {InplaceModule} from 'primeng/inplace';
-
+import {TabViewModule} from 'primeng/tabview';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateMatchViewComponent } from './views/create-match-view/create-match-view.component';
 @NgModule({
@@ -65,7 +65,8 @@ import { CreateMatchViewComponent } from './views/create-match-view/create-match
     MenuModule,
     ReactiveFormsModule,
     HttpClientModule,
-    InplaceModule
+    InplaceModule,
+    TabViewModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateMatchViewComponent implements OnInit {
   password: string = '';
+  serverpwd: string = '';
   submitted: boolean = false;
   
   public createMatchData:any={};
