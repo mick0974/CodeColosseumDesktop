@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CcResultsComponent } from './cc-results.component';
+import { CcPlayComponent } from './cc-play.component';
 
-describe('CcResultsComponent', () => {
-  let component: CcResultsComponent;
-  let fixture: ComponentFixture<CcResultsComponent>;
+describe('CcPlayComponent', () => {
+  let component: CcPlayComponent;
+  let fixture: ComponentFixture<CcPlayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CcResultsComponent ]
+      declarations: [ CcPlayComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CcResultsComponent);
+    fixture = TestBed.createComponent(CcPlayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

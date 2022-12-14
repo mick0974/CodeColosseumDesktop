@@ -38,6 +38,10 @@ div.cc-center-layout {
 .p-scrollpanel:hover .p-scrollpanel-bar, .p-scrollpanel:active .p-scrollpanel-bar{
     background-color: var(--primary-color);
 }
+.p-scrollpanel .p-scrollpanel-bar{
+    opacity: .5;
+    background-color: var(--primary-color);
+}
 
 h1,h2,h3,h4,h5,p {
     color: var(--surface-900);
@@ -45,4 +49,46 @@ h1,h2,h3,h4,h5,p {
 
 .background {
     color:var(--surface-section)
-    !important}
+    !important
+}
+
+@mixin chattriangle($color,$right){
+    width: 0;
+    height: 0;
+        border-bottom-width: 20px;
+        border-bottom-style: solid;
+        border-bottom-color: transparent;
+        border-right-width: 20px;
+    @if($right){
+        border-right-style: solid;
+        border-right-color: var($color);
+        transform: translate(-20px, -10px);
+        -webkit-transform: translate(-20px, -10px);
+        -moz-transform: translate(-20px, -10px);
+        -ms-transform: translate(-20px, -10px);
+        -o-transform: translate(-20px, -10px);
+    }
+    @else{      
+        border-left-width: 20px;
+        border-left-style: solid;
+        border-left-color: var($color);
+        transform: translate(20px, -10px);
+        -webkit-transform: translate(20px, -10px);
+        -moz-transform: translate(20px, -10px);
+        -ms-transform: translate(20px, -10px);
+        -o-transform: translate(20px, -10px);
+
+    }
+    
+}
+
+#tri-me{
+    @include chattriangle(--cyan-500,true)
+}
+#tri-other{
+    @include chattriangle(--yellow-500,false)
+}
+#tri-server{
+    @include chattriangle(--surface-700,false)
+}
+

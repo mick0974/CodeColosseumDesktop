@@ -1,6 +1,3 @@
-
-
-
 <div class="cc-home-container">
     <h1 >Join game</h1>
 
@@ -45,20 +42,20 @@
                                         </p>
                                     </div>
                                     <div class="p-buttonset">
-                                            <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game/set', game.id]"></button>
-                                            <button pButton class="p-button-round p-button-secondary" disabled="true"  icon="pi pi-eye" pTooltip="Coming soon!" tooltipPosition="top"></button>
+                                            <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game/set', game.id]" pTooltip="Play" tooltipPosition="top"></button>
+                                            <button pButton class="p-button-round p-button-secondary" [routerLink]="['/spectate', game.id]"  icon="pi pi-eye" pTooltip="Spectate" tooltipPosition="top"></button>
                                     </div>
                                 </div>
                                 <ul class="list-none m-0 p-0">
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         
                                         <span class="text-600 font-medium text-sm">
-                                            <p-tag  value="{{game.current ? 'Running':'Waiting for players'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                                            <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
                                         </span>
                                         <span class="text-900 font-medium text-sm">
                                             {{getFormatTime(game.time)}} s
-                                            <span *ngIf="game.current"> elapsed </span>
-                                            <span *ngIf="!game.current"> remaining </span>
+                                            <span *ngIf="game.running"> elapsed </span>
+                                            <span *ngIf="!game.running"> remaining </span>
                                         </span>
                                     </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
@@ -69,7 +66,7 @@
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         
                                         <span class="text-600 font-medium text-sm"><i class="pi pi-user"></i>  Players</span>
-                                        <span class="text-900 font-medium text-sm">{{game.players}}/{{game.maxplayers}}</span>
+                                        <span class="text-900 font-medium text-sm">{{game.bots}}/{{game.players}}</span>
                                     </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         <span class="text-600 font-medium text-sm"><i class="pi pi-eye"></i>  Spectators</span>
@@ -126,21 +123,21 @@
                         </td>
                         <td>{{game.id}}</td>
                         <td>{{game.game}}</td>
-                        <td>{{game.players}} / {{game.maxplayers}}</td>
+                        <td>{{game.bots}} / {{game.players}}</td>
                         <td>{{game.spectators}}</td>
                         <td>{{game.timeout}} s</td>
                         <td>
-                            <p-tag  value="{{game.current ? 'Running':'Waiting for players'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                            <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
                                         
                             <span class="text-900 font-medium text-sm">
-                                <span *ngIf="game.current"> - </span>
+                                <span *ngIf="!game.running">   -</span>
                                 {{getFormatTime(game.time)}} s
                             </span>
                         </td>
                         <td>
                             <div class="cc-play-buttons">
                                 <button pButton class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/set', game.id]"></button>
-                                <button pButton class="p-button-sm p-button-secondary" disabled="true" label="Spectate" icon="pi pi-eye" iconPos="left" pTooltip="Coming soon!" tooltipPosition="top"></button>
+                                <button pButton class="p-button-sm  p-button-secondary" label="Spectate" icon="pi pi-eye" iconPos="left" [routerLink]="['/spectate/', game.id]"></button>
                             </div>
                         </td>
                     </tr>

@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadService } from 'src/app/services/upload.service';
+import { MOCKMESSAGES } from 'mock-messages';
 @Component({
-  selector: 'app-cc-results',
-  templateUrl: './cc-results.component.html',
-  styleUrls: ['./cc-results.component.scss']
+  selector: 'app-cc-play',
+  templateUrl: './cc-play.component.html',
+  styleUrls: ['./cc-play.component.scss']
 })
-export class CcResultsComponent implements OnInit {
+export class CcPlayComponent implements OnInit {
 
   gameId:string = "";
+  messages:any[]=MOCKMESSAGES;
 
 
   constructor(private router:Router,private uploadService:UploadService) { }
 
   ngOnInit(): void {
-    this.uploadService.redirectIfGameNotSet()    
+    //this.uploadService.redirectIfGameNotSet()    
   }
 
   navigateToNext() {   

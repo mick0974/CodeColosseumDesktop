@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Game } from 'src/app/Game';
-import { GAMES } from 'mock-games';
+import { MatchInfo } from 'src/app/services/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { UploadService } from 'src/app/services/upload.service';
@@ -15,12 +14,12 @@ export class GameViewComponent implements OnInit {
   gameExists : boolean = false;
   gameId : string= this.uploadService.getGameId() ;
   gameName : string = this.uploadService.getGameName();
-  game! : Game | null;
+  game! : MatchInfo | null;
   currStep : number = 0;
   
   items: MenuItem[]= [
     {label: 'Match setup', routerLink: ['upload']},
-    {label: 'Match results', routerLink:['results']},
+    {label: 'Match results', routerLink:['play']},
     {label: 'Match review', routerLink:['review']}
 ];
 
