@@ -33,6 +33,7 @@ import {MenuItem} from 'primeng/api';
 import {InplaceModule} from 'primeng/inplace';
 import {TabViewModule} from 'primeng/tabview';
 import {CardModule} from 'primeng/card';
+import {InputNumberModule} from 'primeng/inputnumber';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateMatchViewComponent } from './views/create-match-view/create-match-view.component';
@@ -72,7 +73,8 @@ import { SpectateViewComponent } from './views/spectate-view/spectate-view/spect
     ReactiveFormsModule,
     HttpClientModule,
     InplaceModule,
-    TabViewModule
+    TabViewModule,
+    InputNumberModule
   ],
   providers: [],
   bootstrap: [AppComponent]
