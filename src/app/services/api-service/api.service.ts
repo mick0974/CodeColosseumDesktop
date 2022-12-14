@@ -6,6 +6,9 @@ import { CoCoSocket } from './api.socket';
 
 
 export interface MatchInfo extends Packets.MatchInfo{}
+export class RoshamboArgs extends Packets.RoshamboArgs {}
+export class RoyalurArgs extends Packets.RoyalurArgs {}
+
 export enum LobbyEventType{ 
   Join = 'LobbyJoin', 
   Start = 'LobbyStart', 
@@ -27,6 +30,12 @@ export enum ErrorType{
 export class ApiService {
   public url = 'ws://localhost:8088';
   public ws?:CoCoSocket;
+
+  /*
+  constructor(url:string) {
+    this.url = url;
+  }
+  */
   
   private createCoCosocket(url:string) {
     this.ws = new CoCoSocket(url);
@@ -49,6 +58,17 @@ export class ApiService {
     }
     cmdLobbyList.run();
     return cmdLobbyList;
+  }
+
+  public gameDescription(game:string,
+    onData:(gameDescription:string)=>void) {
+    
+    let cmdGameList = new Commands.GameDescription(this.url, game);
+    cmdGameList.onRecieveGameDescription = (message)=>{
+      if(onData){onData(message.description)}
+    }    
+    cmdGameList.run();
+    return cmdGameList;
   }
 
   public createNewLobby( 
