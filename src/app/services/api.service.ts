@@ -1,297 +1,189 @@
 import { Injectable } from '@angular/core';
-import { WebSocketSubject } from 'rxjs/webSocket';
+import { Packets } from './components/packets';
+import { Commands } from './components/commands';
+import { CoCoSockets } from './components/socket';
 
 @Injectable({
   providedIn: 'root'
 })
 
+export class MatchInfo extends Packets.MatchInfo{}
+export class RoshamboArgs extends Packets.RoshamboArgs {}
+export class RoyalurArgs extends Packets.RoyalurArgs {}
+
+
 export class ApiService {
   public url = 'ws://localhost:8088';
+  public ws?:CoCoSockets.CoCoSocket;
 
+  private createCoCosocket(url:string) {
+    this.ws = new CoCoSockets.CoCoSocket(url);
+  }
 
-  public gameList(result: (gameList: String[]) => void) {
-    let cmdGameList = new Commands.GameList(this.url);
-    cmdGameList.resultGameList = (message) => {
-      if (result) { result(message.games) }
-      console.log(message.games);
+  public gameList(
+    gameListed?:(gameList:String[])=>void, 
+    webSocketError?:(error: String)=>void){
+    
+    this.createCoCosocket(this.url);
+    
+    let cmdGameList = new Commands.GameList(this.ws!);
+    cmdGameList.gameListed = (message)=>{
+      if(gameListed) {gameListed(message.games);}
     }
+
+    cmdGameList.webSocketError = webSocketError;
     cmdGameList.run();
     return cmdGameList;
   }
-}
 
-export class CoCoSocket {
-  public url = 'ws://localhost:8088';
-  public ws?: WebSocketSubject<string>;
-  public resultError?: (error: string) => void;
-  public resultClosed?: () => void;
+  public gameDescription(
+    game:string,
+    gameDescripted?:(gameDescription?:string)=>void, 
+    webSocketError?:(error: String)=>void){
+    
+    this.createCoCosocket(this.url);
 
-
-  constructor(url: string) {
-    this.url = url;
+    let cmdGameList = new Commands.GameDescription(this.ws!, game);
+    cmdGameList.gameDescripted = (message)=>{
+      if(gameDescripted){gameDescripted(message.description)}
+    }
+    
+    cmdGameList.webSocketError = webSocketError;
+    cmdGameList.run();
+    
+    return cmdGameList;
   }
 
-  public connect(): boolean {
-
-    if (!this.ws || this.ws.closed) {
-      this.ws = new WebSocketSubject(this.url);
+  public lobbyList( 
+    lobbyListed?:(lobbyList:MatchInfo[])=>void, 
+    webSocketError?:(error:String)=>void ){
+    
+    this.createCoCosocket(this.url);
+    
+    let cmdLobbyList = new Commands.LobbyList(this.ws!);
+    cmdLobbyList.lobbyListReceived = (message)=>{
+      if(lobbyListed){lobbyListed(message.info)}
     }
+    cmdLobbyList.webSocketError = webSocketError;
+    cmdLobbyList.run();
+    return cmdLobbyList;
+  }
 
-    this.ws.subscribe({
-      error: (err) => { // Called whenever there is a message from the server.
-        let errorMsg = JSON.stringify(err);
-        console.log(errorMsg);
-        if (this.resultError) { this.resultError(errorMsg); }
+  public createNewGame( 
+    lobby_name:string, 
+    game_name:string, 
+    players?:number, 
+    bots?:number, 
+    timeout?:number, 
+    args?:any, 
+    password?:string, 
+    verification?:string,
+    lobbyCreated?:(newGame:string) =>void,  
+    apiError?:(error:string)=>void,
+    webSocketError?:(error:string)=>void ){
+
+    this.createCoCosocket(this.url);
+    
+    let cmdNewGame = new Commands.CreateNewLobby(this.ws!, lobby_name, game_name, players, bots, timeout, args, password, verification);
+    cmdNewGame.newLobbyCreated = (message)=>{
+      if(message.id["Err"] != undefined){
+        if(apiError){apiError(message.id["Err"]);}
       }
-    });
-
-
-    this.ws.subscribe({
-      complete: () => {
-        if (this.resultClosed) { this.resultClosed(); }
+      else{
+          if(lobbyCreated){lobbyCreated(message.id["Ok"])}
       }
-    });
+    }
 
-    return !this.ws.closed;
+    cmdNewGame.webSocketError = webSocketError;
+    cmdNewGame.run();
+    return cmdNewGame;
   }
 
-  public send<T extends Packets.Reply.Message>(
-    request: Packets.Request.Message,
-    reply: new () => T,
-    recieved?: (message: T) => void) {
-    if (this.ws == null) { return false }
-
-    /*
-    let messageType = request.messageName()
-    let messageObserver = this.ws.multiplex(
-      ()=>({subscribe: messageType}),
-      ()=>({unsubscribe: messageType}),
-      (message:any) => message.type === messageType
-    )
-    */
-
-    this.ws.subscribe({
-      next: (payload) => { // Called whenever there is a message from the server.
-        let msg = new reply();
-        let success = msg.fromPacket(payload);
-        if (success && recieved) { recieved(msg); }
-      }
-    });
-
-
-    let packet = request.toPacket();
-    this.ws.next(packet);
-
-    return this.ws;
-  }
-}
-
-export namespace Commands {
-
-  export class Command {
-    public ws?: CoCoSocket;
-    public url?: string;
-    public resultHandshake?: (message: Packets.Reply.Handshake) => void;
-    public resultClosed?: () => void;
-    public resultError?: (error: any) => void;
-
-    constructor(url: string) {
-      this.url = url;
+  public connectToPlay( 
+    lobby_id:string, player_name:string, password?:string,
+    lobbyJoined?:(message:MatchInfo) => void, 
+    lobbyUpdated?:(message:MatchInfo) => void,
+    matchStarted?:() => void,
+    binaryMessage?:(message:string) => void,
+    matchEnded?:() => void,
+    apiError?:(error:string) => void, 
+    webSocketError?:(error:string)=>void){
+    
+    this.createCoCosocket(this.url);
+    
+    let cmdConnect = new Commands.Connect(this.ws!, lobby_id, player_name, password);
+    cmdConnect.lobbyJoined = (message) => {
+      if(lobbyJoined) {lobbyJoined(message)}
+    }
+    cmdConnect.lobbyUpdated = (message) => {
+      if(lobbyUpdated) {lobbyUpdated(message)}
+    }
+    cmdConnect.matchStarted = () => {
+      if(matchStarted) {matchStarted()}
+    }
+    cmdConnect.binaryInfo = (message) => { 
+      if(binaryMessage) {binaryMessage(message)}
+    }
+    cmdConnect.matchEnded = () => { 
+      if(matchEnded) {matchEnded()}
+    }
+    cmdConnect.apiError = (message) => { 
+      if(apiError) {apiError(message)}
     }
 
-    public run() {
-      this.ws = new CoCoSocket(this.url!);
-      this.ws.resultError = (error) => { this.connectionError(error); };
-      this.ws.resultClosed = () => { this.connectionClosed(); };
-      this.ws.connect();
+    cmdConnect.webSocketError = webSocketError;
+    cmdConnect.run();
 
-      let msg = new Packets.Request.Handshake();
-      this.ws.send(msg, Packets.Reply.Handshake, (message) => { this.handshakeRecieved(message) });
-    }
-
-    public connectionClosed() {
-      //console.log("Command:connectionClosed");
-      if (this.resultClosed) { this.resultClosed(); }
-    }
-
-    public connectionError(error: any) {
-      //console.log("Command:connectionError "+error);
-      if (this.resultError) { this.resultError(error); }
-    }
-
-    public handshakeRecieved(message: Packets.Reply.Handshake) {
-      //console.log("Command:handshakeRecieved");
-      if (this.resultHandshake && message) { this.resultHandshake(message); }
-    }
+    return cmdConnect;
   }
 
-  export class GameList extends Command {
-    public resultGameList?: (message: Packets.Reply.GameList) => void
+  public play(inputString:string) {
+    let cmdPlay = new Commands.Play(this.ws!, inputString);
+    
+    cmdPlay.run();
 
-    public override handshakeRecieved(message: Packets.Reply.Handshake) {
-      //console.log("GameList:handshakeRecieved");
-      super.handshakeRecieved(message);
-
-      let msg = new Packets.Request.GameList();
-      this.ws!.send(msg, Packets.Reply.GameList, (message) => { this.gameListRecieved(message) });
-    }
-
-    public gameListRecieved(message: Packets.Reply.GameList) {
-      //console.log("GameList:gameListRecieved");
-      if (this.resultGameList && message) { this.resultGameList(message) };
-    }
-  }
-}
-
-
-export namespace Packets {
-
-  export class Message {
-    public messageName(): string {
-      return this.constructor.name;
-    }
-
-    public toPacket(): any {
-      const packetName = this.messageName();
-      const packet = { [packetName]: this };
-      return packet;
-    }
-
-    public fromPacket(packet: any): boolean {
-      const msgClass = this.messageName();
-
-      if (!(msgClass in packet)) {
-        return false;
-      }
-
-      const msgData = packet[msgClass];
-
-      for (var msgField in this) {
-        if (!(msgField in msgData)) { continue; }
-        const varType = typeof msgData[msgField];
-        if (varType in ["function", "undefined", "symbol"]) { continue; }
-
-        if (varType === "object") {
-          this[msgField] = Object.assign(msgData[msgField]);
-        } else {
-          this[msgField] = msgData[msgField];
-        }
-      }
-      //console.log("Deserialized msg "+ msg.MessageName() ) ;
-      return true;
-    }
-
-    public static Deserialize<T extends Message>(payload: string, cls: new () => T): T | null {
-      const msg = new cls();
-      if (msg.fromPacket(payload) === false) { return null; }
-      return msg;
-    }
+    return cmdPlay;
   }
 
-  export class GameParams {
-    public players: number = 0;
-    public bots: number = 0;
-    public timeout: number = 30.0;
-  }
+  public connectToSpectate( 
+    lobby_id:string,
+    spectateJoined?:(message:MatchInfo )=>void,
+    spectateStarted?:()=>void,
+    spectatSynced?:()=>void,
+    lobbyUpdated?:(message:MatchInfo)=>void,
+    binaryMessage?: (message:string) => void,
+    spectateEnded?:()=>void,
+    apiError?:(error:string) => void,
+    webSocketError?:(error:string)=>void){
+    
+    this.createCoCosocket(this.url);
+    
+    let cmdSpectate = new Commands.Spectate(this.ws!, lobby_id);
+    cmdSpectate.spectateJoined = (message) => {
+      if(spectateJoined) {spectateJoined(message)}
+    }
+    cmdSpectate.spectateStarted = () => {
+      if(spectateStarted) {spectateStarted()}
+    }
+    cmdSpectate.spectatSynced = () => {
+      if(spectatSynced) {spectatSynced()}
+    }
+    cmdSpectate.lobbyUpdated = (message) => { 
+      if(lobbyUpdated) {lobbyUpdated(message)}
+    }
+    cmdSpectate.binaryMessage = (message) => { 
+      if(binaryMessage) {binaryMessage(message)}
+    }
+    cmdSpectate.spectateEnded = () => { 
+      if(spectateEnded) {spectateEnded()}
+    }
+    cmdSpectate.apiError = (message) => { 
+      if(apiError) {apiError(message)}
+    }
 
-  export class Result<T1, T2>{ }
+    cmdSpectate.webSocketError = webSocketError;
+    cmdSpectate.run();
 
-  export class MatchInfo {
-    public players: number = 0;
-    public bots: number = 0;
-    public timeout: number = 0.0;
-    public args = {};
-    public id: string = "";
-    public name: string = "";
-    public game: string = "";
-    public running: boolean = false;
-    public time: number = 0;
-    public connected = {};
-    public spectators: number = 0;
-    public password: boolean = false;
-    public verified: boolean = false;
-  }
-
-  // Requests ---------------------------------
-  export namespace Request {
-    export class Message extends Packets.Message { }
-    export class Handshake extends Message {
-      public version: number = 1;
-      public magic: string = "coco";
-    }
-    export class GameList extends Message { }
-    export class GameDescription extends Message {
-      name: string = "";
-    }
-    export class GameNew extends Message {
-      name: string = "";
-      game: string = "";
-      params = new GameParams();
-      args = {};
-      password: string = "";
-      verification: string = "";
-    }
-    export class LobbyList extends Message { }
-    export class LobbySubscribe extends Message { }
-    export class LobbyUnsubscribe extends Message { }
-    export class LobbyJoinMatch extends Message {
-      id: string = "";
-      name: string = "";
-      password: string = "";
-    }
-    export class LobbyLeaveMatch extends Message { }
-    export class SpectateJoin extends Message {
-      id: string = ""
-    }
-    export class SpectateLeave extends Message { }
-  }
-
-
-
-  // Replay ---------------------------------
-
-  export namespace Reply {
-    export class Message extends Packets.Message { }
-    export class Handshake extends Message {
-      public magic: string = "";
-    }
-    export class GameList extends Message {
-      public games = new Array<string>()
-    }
-    export class GameDescription extends Message {
-      public description: string = ""
-    }
-    export class GameNew extends Message {
-      public id: string = ""
-    }
-    export class LobbyList extends Message {
-      public info = new Array<MatchInfo>()
-    }
-    export class LobbySubscribed extends Message {
-      public seed = Array<MatchInfo>()
-    }
-    export class LobbyJoinedMatch extends Message {
-      public info = new Result<MatchInfo, string>()
-    }
-    export class LobbyNew extends Message {
-      public info = new MatchInfo()
-    }
-    export class LobbyUpdate extends Message {
-      public info = new MatchInfo()
-    }
-    export class LobbyDelete extends Message {
-      public id: string = ""
-    }
-    export class LobbyUnsubscribed extends Message { }
-    export class LobbyLeavedMatch extends Message { }
-    export class MatchStartedReply extends Message { }
-    export class MatchEnded extends Message { }
-    export class SpectateJoined extends Message {
-      public info = new Result<MatchInfo, string>()
-    }
-    export class SpectateStarted extends Message { }
-    export class SpectateSynced extends Message { }
-    export class SpectateEnded extends Message { }
-    export class SpectateLeaved extends Message { }
+    return cmdSpectate;
   }
 }
