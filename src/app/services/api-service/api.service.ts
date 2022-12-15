@@ -32,11 +32,10 @@ export class ApiService {
   public url = 'ws://localhost:8088';
   public ws?:CoCoSocket;
 
-  /*
   constructor(url:string) {
     this.url = url;
   }
-  */
+  
   
   private createCoCosocket(url:string) {
     this.ws = new CoCoSocket(url);

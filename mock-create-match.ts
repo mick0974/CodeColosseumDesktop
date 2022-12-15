@@ -1,5 +1,6 @@
 import { GameParams } from "src/app/services/api-service/api.service";
-export const CREATE_GAMES:GameParams[] = [
+import { RoshamboArgs, RoyalurArgs } from "src/app/services/api.service";
+export const CREATE_GAMES:any[] = [
     {
         players:2,
         bots:1,
