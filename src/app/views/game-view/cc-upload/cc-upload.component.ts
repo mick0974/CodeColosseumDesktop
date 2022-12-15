@@ -19,7 +19,7 @@ export class CcUploadComponent implements OnInit {
 
 
 
-  uploadData:any={};
+ uploadData:any={};
 
   constructor(private router: Router,private uploadService:UploadService ) { }
 
@@ -43,12 +43,16 @@ export class CcUploadComponent implements OnInit {
 
   navigateToNext() {
     if ((this.hasPassword && this.uploadData.password&&this.uploadData.program)||(!this.hasPassword &&this.uploadData.program)){
-      this.uploadService.uploadData = this.uploadData;
-      console.log(this.uploadService.uploadData)
+     // this.uploadService.uploadData = this.uploadData;
+     // console.log(this.uploadService.uploadData)
       this.router.navigate(['game/play']);
     }
 
-    this.submitted = true;
+    if (this.uploadData.password) {
+      this.router.navigate(['game/results'])
+      return;
+  }
+  this.submitted = true;
   
   }
 

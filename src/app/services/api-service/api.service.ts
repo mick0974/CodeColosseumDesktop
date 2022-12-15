@@ -4,7 +4,8 @@ import { Commands } from './api.commands';
 import { CoCoSocket } from './api.socket';
 
 
-
+export interface GameParams extends Packets.GameParams{}
+//export class GameDescription extends Packets.Message.GameDescription{}
 export interface MatchInfo extends Packets.MatchInfo{}
 export interface RoshamboArgs extends Packets.RoshamboArgs {}
 export interface RoyalurArgs extends Packets.RoyalurArgs {}

@@ -7,6 +7,8 @@ import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.compone
 import { CcPlayComponent } from './views/game-view/cc-play/cc-play.component';
 import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
 import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
+import {CreateMatchViewComponent} from './views/create-match-view/create-match-view.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -37,12 +39,17 @@ export const routes: Routes = [
             { path: 'play', component: CcPlayComponent, pathMatch: 'full'  },
             { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
         ]
+    },{
+        path: 'newmatch',
+        canActivate: [AuthGuard],
+        component: CreateMatchViewComponent,
     },
     {
         path: 'spectate/:id',
         canActivate: [AuthGuard],
         component: SpectateViewComponent,
     }
+
 /*
     { path: "**", redirectTo: "/connect" },*/
 ];

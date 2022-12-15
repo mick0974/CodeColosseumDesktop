@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Game } from '../Game';
+import { MatchInfo } from './api.service';
 import { GAMES } from 'mock-games';
 import { Router } from '@angular/router';
 
@@ -7,10 +7,8 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class UploadService {
-  game! : Game | null;
+  game! : MatchInfo | null;
   gameId!:string | null;
-
-  uploadData:any = {};
 
   constructor(private router:Router) { }
 
@@ -56,7 +54,7 @@ export class UploadService {
     else return ""
   }
 
-  getGame():Game | null{
+  getGame():MatchInfo | null{
     if (this.game){
       return this.game;
     }
@@ -82,5 +80,4 @@ export class UploadService {
     this.gameId=""
     console.log("[Service] Gameplay was reset.")
   }
-
 }

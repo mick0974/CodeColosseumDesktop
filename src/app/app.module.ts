@@ -29,9 +29,14 @@ import { RippleModule } from 'primeng/ripple';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MenuItemContent, MenuModule } from 'primeng/menu';
+import {MenuItem} from 'primeng/api';
+import {InplaceModule} from 'primeng/inplace';
+import {TabViewModule} from 'primeng/tabview';
 import {CardModule} from 'primeng/card';
+import {InputNumberModule} from 'primeng/inputnumber';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreateMatchViewComponent } from './views/create-match-view/create-match-view.component';
 import { CcChatComponent } from './components/cc-chat/cc-chat.component';
 import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
 @NgModule({
@@ -43,6 +48,7 @@ import { SpectateViewComponent } from './views/spectate-view/spectate-view/spect
     CcPlayComponent,
     CcReviewComponent,
     GameViewComponent,
+    CreateMatchViewComponent,
     CcChatComponent,
     SpectateViewComponent,
   ],
@@ -66,6 +72,9 @@ import { SpectateViewComponent } from './views/spectate-view/spectate-view/spect
     MenuModule,
     ReactiveFormsModule,
     HttpClientModule,
+    InplaceModule,
+    TabViewModule,
+    InputNumberModule
   ],
   providers: [],
   bootstrap: [AppComponent]
