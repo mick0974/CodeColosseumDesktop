@@ -6,8 +6,8 @@ import { CoCoSocket } from './api.socket';
 
 
 export interface MatchInfo extends Packets.MatchInfo{}
-export class RoshamboArgs extends Packets.RoshamboArgs {}
-export class RoyalurArgs extends Packets.RoyalurArgs {}
+export interface RoshamboArgs extends Packets.RoshamboArgs {}
+export interface RoyalurArgs extends Packets.RoyalurArgs {}
 
 export enum LobbyEventType{ 
   Join = 'LobbyJoin', 
@@ -31,11 +31,11 @@ export class ApiService {
   public url = 'ws://localhost:8088';
   public ws?:CoCoSocket;
 
-  /*
+  
   constructor(url:string) {
     this.url = url;
   }
-  */
+  
   
   private createCoCosocket(url:string) {
     this.ws = new CoCoSocket(url);
@@ -60,7 +60,8 @@ export class ApiService {
     return cmdLobbyList;
   }
 
-  public gameDescription(game:string,
+  public gameDescription(
+    game:string,
     onData:(gameDescription:string)=>void) {
     
     let cmdGameList = new Commands.GameDescription(this.url, game);
@@ -78,7 +79,7 @@ export class ApiService {
       players?:number,
       bots?:number,
       timeout?:number,
-      args?:{}, 
+      args?:{}, //new RoshamboArgs || new RoyalurArgs
       password?:string
     ){
       let cmdNewGame = new Commands.NewLobby(this.url, lobby_name, game_name, players, bots, timeout, args, password);
