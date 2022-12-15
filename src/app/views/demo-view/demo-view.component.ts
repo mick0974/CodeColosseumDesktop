@@ -7,8 +7,7 @@ import { ReplaySubject } from 'rxjs';
 import { Commands } from 'src/app/services/api-service/api.commands';
 @Component({
   selector: 'app-demo-view',
-  templateUrl: './demo-view.component.html',
-  styleUrls: ['./demo-view.component.scss']
+  templateUrl: './demo-view.component.html'
 })
 export class DemoViewComponent implements OnInit {
   public child: Child | undefined;
