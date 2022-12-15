@@ -8,8 +8,11 @@ import { ApiService, MatchInfo } from './api-service/api.service';
 export class ConnectionManagerService {
   private _url: string = "";
   private _username: string = "";
+
   private api:ApiService= new ApiService();
+  
   private _isConnected: boolean = false;
+  //deve prenderlo dalla home
   public lobbylistvar?: MatchInfo[];
 
   constructor(
@@ -18,7 +21,7 @@ export class ConnectionManagerService {
   ) { }
 
   async onApiError(message: string){
-    alert("Error: "+message)
+    alert("Error: " + message)
   }
 
   async lobbyList() {
