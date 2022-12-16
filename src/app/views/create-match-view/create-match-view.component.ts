@@ -14,7 +14,7 @@ export class CreateMatchViewComponent implements OnInit {
   submitted: boolean = false;
   
   public createMatchData:any={};
-  gameparams:GameParams[] = CREATE_GAMES;
+  gamedetails:any[] = CREATE_GAMES;
   isLoading:boolean = false;
   loading:boolean = true;
   stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
@@ -29,11 +29,11 @@ export class CreateMatchViewComponent implements OnInit {
 
     //todo Loading table will probably have to be disabled if we refresh often 
     setTimeout(() => {
-        this.gameparams = CREATE_GAMES;
+        this.gamedetails = CREATE_GAMES;
         this.loading = false;
     }, 1000);
 
-    this.hasGames = this.gameparams.length !== 0;
+    this.hasGames = this.gamedetails.length !== 0;
   
   }
   
