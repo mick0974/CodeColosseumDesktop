@@ -19,12 +19,12 @@ export class HomeViewComponent implements OnInit {
   refreshSub:Subscription=new Subscription();
 
   stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
-  view_mode: string = "table";
+  view_mode: string = "card";
   
 
   constructor(private uploadService:UploadService, private connectionManager:ConnectionManagerService) {
-    this.refreshSub = interval(1000)
-    .subscribe(func => {this.onClickRefresh();})
+    //TODO: turning off to test, turn back on+
+    //this.refreshSub = interval(1000).subscribe(func => {this.onClickRefresh();})
   }
 
   ngOnInit(): void {
@@ -35,7 +35,6 @@ export class HomeViewComponent implements OnInit {
     let onSuccess = (gameList:MatchInfo[])=>{ 
       this.loading=true;
       this.gamelist = gameList;
-      console.log(this.gamelist)
       this.loading=false;
       this.hasGames = this.gamelist.length !== 0;
       for(let i=0;i<this.gamelist.length;i++){
@@ -45,16 +44,13 @@ export class HomeViewComponent implements OnInit {
 
     this.connectionManager.lobbyList1(onSuccess)
     
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    console.log(this.gamelist)
-
 
   }
 
 
 
 
-
+/* 
   async lobbyList() {
    
     //Starting the refresh
@@ -77,15 +73,14 @@ export class HomeViewComponent implements OnInit {
 
     this.loading=false;
   }
-
+*/
   // Clicking on refresh button will refresh results. Would be
   // optimal to have this as "autorefresh every X seconds" instead.
-  async onClickRefresh(){
+  onClickRefresh(){
 
     let onSuccess = (gameList:MatchInfo[])=>{ 
       this.loading=true;
       this.gamelist = gameList;
-      console.log(this.gamelist)
       this.hasGames = this.gamelist.length !== 0;
       for(let i=0;i<this.gamelist.length;i++){
         this.gamelist[i].time=(this.gamelist[i].time-Date.now()/1000);
@@ -93,7 +88,6 @@ export class HomeViewComponent implements OnInit {
       this.loading=false;
     }
     this.connectionManager.lobbyList1(onSuccess)
-    console.log(this.gamelist)
 
   }
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { UploadService } from 'src/app/services/upload.service';
 import { Router } from '@angular/router';
+import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 
 @Component({
   selector: 'app-game-view',
@@ -11,10 +12,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./game-view.component.scss']
 })
 export class GameViewComponent implements OnInit {
-  gameExists : boolean = false;
-  gameId : string= this.uploadService.getGameId() ;
-  gameName : string = this.uploadService.getGameName();
+
   game! : MatchInfo | null;
+
+  gameId : string= "" ;
+  gameName : string = "";
+  
   currStep : number = 0;
   
   items: MenuItem[]= [
@@ -28,7 +31,7 @@ export class GameViewComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //TODO: redirect to a 404 page rather than displaying the message in the same page
+    //TODO: redirect to a 404 page rather than immediate redirect
 
 
     /*The flow here is:
@@ -52,14 +55,27 @@ export class GameViewComponent implements OnInit {
     let token = this.activatedroute.snapshot.paramMap.get('id');
 
     if (token){
-      this.uploadService.setGame(token);
-      console.log("[Gameview] Gameplay set to "+this.uploadService.getGameId()+"! Reloading...")
-      this.router.navigate(['game'])
-  }
+      console.log("1.SET")
+      this.uploadService.setGame1(token).then(
+        ()=>{ // Asks APIs for list and saves game if exists
+          console.log(this.uploadService.isGameSet());
+          console.log(this.uploadService.game);
+          this.game = this.uploadService.game;
+          this.gameId = this.uploadService.game?.id ?? "";
+          this.gameName = this.game?.name ?? "";
+          this.router.navigate(['game'])
+        }
+      )
+
+    } 
     else{
+      console.log("2.check")
       if (this.uploadService.isGameSet()){
-        console.log("[Gameview] Gameplay was already set to "+this.uploadService.getGameId()+". Loading upload view...")
+        console.log("[Gameview] Gameplay was already set to "+this.uploadService.game!.id +". Loading upload view...")
         this.router.navigate(['game/upload'])
+        this.game = this.uploadService.game;
+        this.gameId = this.uploadService.game?.id ?? "";
+        this.gameName = this.game?.name ?? "";
       }
       else{
         console.log("[Gameview] Game was not set! Redirecting to Homeview. ")
@@ -67,8 +83,10 @@ export class GameViewComponent implements OnInit {
       }
     }
 
-    
+
+
   }
+
 
 
   
