@@ -139,7 +139,7 @@ export class DemoViewComponent implements OnInit {
     let sendMove = (action:string,connect:Commands.Connect, timeout:number, count:number)=>{
       //(new Promise(resolve => setTimeout(resolve, timeout))).then(() => connect?.sendBinary("ROCK\n"));
       for(var i=0; i < count; i++){
-        (new Promise(resolve => setTimeout(resolve, timeout*(i+1)))).then(() => connect.sendBinary(action+"\n"));
+        (new Promise(resolve => setTimeout(resolve, 500 + timeout*(i+1)))).then(() => connect?.sendBinary(action+"\n"));
       }
       
     }
@@ -176,9 +176,9 @@ export class DemoViewComponent implements OnInit {
       );
       
       player2.onError = (error) => console.log('B: error: '+error);
-      
-      sendMove("ROCK",player1,500,11);
-      sendMove("PAPER",player2,500,11);
+
+      sendMove("ROCK",player1,1000,11);
+      sendMove("PAPER",player2,1000,11);
     }
 
     let newLobby = this.api.createNewLobby(onNewLobby, "Lobby", "roshambo", 2, 0, 15);
