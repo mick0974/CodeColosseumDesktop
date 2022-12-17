@@ -18,13 +18,7 @@ export class HomeViewComponent implements OnInit {
   stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
   view_mode: string = "table";
   hasGames:boolean=true;
-/*
-  onSuccess(gameList:MatchInfo[]){ 
-    this.gamelist = gameList;
-    console.log(this.gamelist)
-  }
 
- */
   constructor(private uploadService:UploadService, private connectionManager:ConnectionManagerService) { }
 
   ngOnInit(): void {
@@ -33,6 +27,7 @@ export class HomeViewComponent implements OnInit {
     this.uploadService.reset()
 
     let onSuccess = (gameList:MatchInfo[])=>{ 
+      this.loading=true;
       this.gamelist = gameList;
       console.log(this.gamelist)
       this.loading=false;
@@ -82,13 +77,14 @@ export class HomeViewComponent implements OnInit {
   async onClickRefresh(){
 
     let onSuccess = (gameList:MatchInfo[])=>{ 
+      this.loading=true;
       this.gamelist = gameList;
-      this.hasGames = this.gamelist.length !== 0;
       console.log(this.gamelist)
+      this.hasGames = this.gamelist.length !== 0;
       for(let i=0;i<this.gamelist.length;i++){
         this.gamelist[i].time=(this.gamelist[i].time-Date.now()/1000);
       }
-
+      this.loading=false;
     }
     this.connectionManager.lobbyList1(onSuccess)
     console.log(this.gamelist)

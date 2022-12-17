@@ -130,16 +130,16 @@
                         <td>{{game.bots}} / {{game.players}}</td>
                         <td>{{game.spectators}}</td>
                         <td>{{game.timeout}} s</td>
-                        <td>
-                            <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
-                                        
+                        <td>     
                             <span class="text-900 font-medium text-sm">
                                 {{(game.time/60).toFixed(0)}}m {{(game.time%60).toFixed(0)}}s left
                             </span>
+                            <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
                         </td>
                         <td>
-                            <div class="cc-play-buttons">
-                                <button pButton class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/set', game.id]"></button>
+                            <div class="cc-play-buttons">   
+                                <button *ngIf="game.running" pButton disabled class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/set', game.id]"></button>
+                                <button *ngIf="!game.running" pButton class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/set', game.id]"></button>
                                 <button pButton class="p-button-sm  p-button-secondary" label="Spectate" icon="pi pi-eye" iconPos="left" [routerLink]="['/spectate/', game.id]"></button>
                             </div>
                         </td>
