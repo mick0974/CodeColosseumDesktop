@@ -9,8 +9,8 @@
         </p-selectButton> 
 
         <div>
-            <button pButton type="button" class="p-button-rounded p-button-outlined" icon="pi pi-refresh"></button>
-            <button pButton class="p-button-raised" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch'"></button>
+            <button pButton pRipple type="button" class="p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClickRefresh()"></button>
+            <button pButton pRipple class="p-button-raised" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch' "></button>
         </div>
 </div>
 
@@ -53,7 +53,7 @@
                                             <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
                                         </span>
                                         <span class="text-900 font-medium text-sm">
-                                            {{getFormatTime(game.time)}} s
+                                            {{(game.time/60).toFixed(0)}}m{{(game.time%60).toFixed(0)}}s
                                             <span *ngIf="game.running"> elapsed </span>
                                             <span *ngIf="!game.running"> remaining </span>
                                         </span>
@@ -85,7 +85,7 @@
 
         <!-- Table view-->
         <div  *ngIf="view_mode === 'table' && hasGames" class="cc-gamelist">
-            <p-table [value]="gamelist" [loading]="loading" responsiveLayout="scroll" [breakpoint]="'960px'">
+            <p-table [value]="gamelist" responsiveLayout="scroll" [breakpoint]="'960px'">
                 <ng-template pTemplate="header">
                     <tr>
                         <th [pSortableColumn]="'name'"> Match name 
@@ -131,7 +131,7 @@
                                         
                             <span class="text-900 font-medium text-sm">
                                 <span *ngIf="!game.running">   -</span>
-                                {{getFormatTime(game.time)}} s
+                                {{(game.time/60).toFixed(0)}}m{{(game.time%60).toFixed(0)}}s
                             </span>
                         </td>
                         <td>
