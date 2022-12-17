@@ -1,6 +1,7 @@
 import { ASTWithSource } from '@angular/compiler';
 import { ThisReceiver } from '@angular/compiler/public_api';
 import { Component, OnInit } from '@angular/core';
+import { Subscription, interval } from 'rxjs';
 import { MatchInfo } from 'src/app/services/api.service';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 import { UploadService } from 'src/app/services/upload.service';
@@ -12,14 +13,19 @@ import { UploadService } from 'src/app/services/upload.service';
 })
 export class HomeViewComponent implements OnInit {
   gamelist:MatchInfo[]=[];
-
+  hasGames:boolean=true;
   loading:boolean = true;
+
+  refreshSub:Subscription=new Subscription();
 
   stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
   view_mode: string = "table";
-  hasGames:boolean=true;
+  
 
-  constructor(private uploadService:UploadService, private connectionManager:ConnectionManagerService) { }
+  constructor(private uploadService:UploadService, private connectionManager:ConnectionManagerService) {
+    this.refreshSub = interval(1000)
+    .subscribe(func => {this.onClickRefresh();})
+  }
 
   ngOnInit(): void {
 
