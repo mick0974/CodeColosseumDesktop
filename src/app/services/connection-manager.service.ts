@@ -25,6 +25,7 @@ export class ConnectionManagerService {
   }
 
   async lobbyList() {
+    
     let onSuccess = (gameList:MatchInfo[])=>{ 
       this.lobbylistvar = gameList;
       //let text = JSON.stringify(gameList)
@@ -35,7 +36,12 @@ export class ConnectionManagerService {
     let req = this.api.lobbyList( onSuccess );
     req.onError = this.onApiError;
     console.log(req)
-    
+  }
+
+  async lobbyList1(onSuccess:(gameList:MatchInfo[])=>void ) {
+    let req = this.api.lobbyList( onSuccess );
+    req.onError = this.onApiError;
+    console.log(req)
   }
 
   public get isConnected(): boolean {
