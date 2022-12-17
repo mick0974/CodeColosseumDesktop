@@ -4,8 +4,12 @@ import { Commands } from './api.commands';
 import { CoCoSocket } from './api.socket';
 
 
-
+export interface GameParams extends Packets.GameParams{}
+//export class GameDescription extends Packets.Message.GameDescription{}
 export interface MatchInfo extends Packets.MatchInfo{}
+export interface RoshamboArgs extends Packets.RoshamboArgs {}
+export interface RoyalurArgs extends Packets.RoyalurArgs {}
+
 export enum LobbyEventType{ 
   Join = 'LobbyJoin', 
   Start = 'LobbyStart', 
@@ -27,6 +31,10 @@ export enum ErrorType{
 export class ApiService {
   public url = 'ws://localhost:8088';
   public ws?:CoCoSocket;
+
+  constructor(){
+
+  }
   
   private createCoCosocket(url:string) {
     this.ws = new CoCoSocket(url);
@@ -51,6 +59,18 @@ export class ApiService {
     return cmdLobbyList;
   }
 
+  public gameDescription(
+    game:string,
+    onData:(gameDescription:string)=>void) {
+    
+    let cmdGameList = new Commands.GameDescription(this.url, game);
+    cmdGameList.onRecieveGameDescription = (message)=>{
+      if(onData){onData(message.description)}
+    }    
+    cmdGameList.run();
+    return cmdGameList;
+  }
+
   public createNewLobby( 
       onData:(newGame:string)=>void, 
       lobby_name:string, 
@@ -58,7 +78,7 @@ export class ApiService {
       players?:number,
       bots?:number,
       timeout?:number,
-      args?:{}, 
+      args?:{}, //new RoshamboArgs || new RoyalurArgs
       password?:string
     ){
       let cmdNewGame = new Commands.NewLobby(this.url, lobby_name, game_name, players, bots, timeout, args, password);

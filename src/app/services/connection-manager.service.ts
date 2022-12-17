@@ -1,19 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiService, MatchInfo } from './api-service/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConnectionManagerService {
-
   private _url: string = "";
   private _username: string = "";
+
+  private api:ApiService= new ApiService();
   
   private _isConnected: boolean = false;
+  //deve prenderlo dalla home
+  public lobbylistvar?: MatchInfo[];
 
   constructor(
     private readonly router: Router,
+    
   ) { }
+
+  async onApiError(message: string){
+    alert("Error: " + message)
+  }
+
+  async lobbyList() {
+    let onSuccess = (gameList:MatchInfo[])=>{ 
+      this.lobbylistvar = gameList;
+      let text = JSON.stringify(gameList)
+      console.log("lobbyList: "+text);
+     
+    }
+    let req = this.api.lobbyList( onSuccess );
+    req.onError = this.onApiError;
+    
+  }
 
   public get isConnected(): boolean {
     return this._isConnected;
@@ -35,7 +56,9 @@ export class ConnectionManagerService {
     // Add the below lines to the connect method
      this._isConnected = true;
      this.router.navigate(['/home']);
-
+     //after the right connection  show the lobby list
+     this.lobbyList();
+        
     // TO REMOVE: Temporary return true
     return new Promise((resolve, reject) => {
       setTimeout(() => {

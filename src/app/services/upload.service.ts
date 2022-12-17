@@ -10,8 +10,6 @@ export class UploadService {
   game! : MatchInfo | null;
   gameId!:string | null;
 
-  uploadData:any = {};
-
   constructor(private router:Router) { }
 
   setGame(token:string|null):string|null{
@@ -82,5 +80,4 @@ export class UploadService {
     this.gameId=""
     console.log("[Service] Gameplay was reset.")
   }
-
 }

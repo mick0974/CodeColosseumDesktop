@@ -109,6 +109,24 @@ export namespace Packets{
       }
       */
     }
+
+    export class RoyalurArgs{
+      public pace?:string;
+
+      constructor(pace?:string) {
+        this.pace = pace;
+      }
+    }
+
+    export class RoshamboArgs{
+      public rounds?:string;
+      public pace?:string;
+
+      constructor(rounds?:string, pace?:string) {
+        this.rounds = rounds;
+        this.pace = pace;
+      }
+    }
   
     export class GameParams {
       public players?:number;
@@ -152,7 +170,12 @@ export namespace Packets{
       }
       export class GameList extends Message  {}
       export class GameDescription extends Message  {
-        name: string = "";
+        name?: string;
+
+        constructor(name?: string){
+          super();
+          this.name = name;
+        }
       }
       export class GameNew extends Message  {
         name?:string;

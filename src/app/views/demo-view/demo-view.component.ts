@@ -7,8 +7,7 @@ import { ReplaySubject } from 'rxjs';
 import { Commands } from 'src/app/services/api-service/api.commands';
 @Component({
   selector: 'app-demo-view',
-  templateUrl: './demo-view.component.html',
-  styleUrls: ['./demo-view.component.scss']
+  templateUrl: './demo-view.component.html'
 })
 export class DemoViewComponent implements OnInit {
   public child: Child | undefined;
@@ -23,7 +22,7 @@ export class DemoViewComponent implements OnInit {
   constructor(
     private zone: NgZone,
     private api: ApiService
-    ) { }
+    ) {}
 
   ngOnInit(): void {
   }
@@ -43,6 +42,17 @@ export class DemoViewComponent implements OnInit {
       this.refreshOutput();
     }
     let req = this.api.gameList( onSuccess );
+    req.onError = this.onApiError;
+  }
+
+  async apiGameDescription() {
+    let onSuccess = (gameDescription:string)=>{ 
+      let text = JSON.stringify(gameDescription)
+      this.output = text
+      console.log("gameDescription: "+text);
+      this.refreshOutput();
+    }
+    let req = this.api.gameDescription( "roshambo", onSuccess );
     req.onError = this.onApiError;
   }
 
