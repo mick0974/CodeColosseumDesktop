@@ -1,0 +1,23 @@
+<div class="cc-column-layout">
+
+    <div class="cc-error-404" *ngIf="(game===null)"  >
+        <h2> It looks like this game doesn't exist. </h2>
+        <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'"></button>
+    </div>
+
+    <div>
+        <h1> Playing game {{this.gameName}}</h1>
+        <h4> ID: {{this.gameId}} </h4>
+    </div>
+
+
+    <p-steps [(activeIndex)]="currStep" [model]="items" ></p-steps>
+
+    
+
+    <router-outlet></router-outlet>
+
+    <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
+
+
+</div>

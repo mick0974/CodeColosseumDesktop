@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DemoViewComponent } from './demo-view.component';
+import { CcUploadComponent } from './cc-upload.component';
 
-describe('DemoViewComponent', () => {
-  let component: DemoViewComponent;
-  let fixture: ComponentFixture<DemoViewComponent>;
+describe('CcUploadComponent', () => {
+  let component: CcUploadComponent;
+  let fixture: ComponentFixture<CcUploadComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DemoViewComponent ]
+      declarations: [ CcUploadComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DemoViewComponent);
+    fixture = TestBed.createComponent(CcUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

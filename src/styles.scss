@@ -1,17 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import "primeflex/primeflex.css";
+@import '~primeicons/primeicons.css';
+@import "~primeng/resources/themes/saga-blue/theme.css";
+//@import "~primeng/resources/themes/bootstrap4-dark-blue/theme.css";
 $layout-padding: 2rem;
+
+.cc-page{
+    background-color:var(--surface-a) !important;
+}
 
 * {
   font-family: 'Open Sans', sans-serif;
 }
 
+body{
+    margin:0;
+}
 
 p{
     margin:0;
 }
 
-/*
 div.cc-column-layout {
     width:800px;
     max-width:100vw;
@@ -29,11 +38,57 @@ div.cc-center-layout {
 .p-scrollpanel:hover .p-scrollpanel-bar, .p-scrollpanel:active .p-scrollpanel-bar{
     background-color: var(--primary-color);
 }
+.p-scrollpanel .p-scrollpanel-bar{
+    opacity: .5;
+    background-color: var(--primary-color);
+}
 
-.p-scrollpanel-wrapper{
-    border-radius: 10px;
+h1,h2,h3,h4,h5,p {
+    color: var(--surface-900);
 }
-.surface-ground{
-    border-radius: 10px;
+
+.background {
+    color:var(--surface-section)
+    !important
 }
-*/
+
+@mixin chattriangle($color,$right){
+    width: 0;
+    height: 0;
+        border-bottom-width: 20px;
+        border-bottom-style: solid;
+        border-bottom-color: transparent;
+        border-right-width: 20px;
+    @if($right){
+        border-right-style: solid;
+        border-right-color: var($color);
+        transform: translate(-20px, -10px);
+        -webkit-transform: translate(-20px, -10px);
+        -moz-transform: translate(-20px, -10px);
+        -ms-transform: translate(-20px, -10px);
+        -o-transform: translate(-20px, -10px);
+    }
+    @else{      
+        border-left-width: 20px;
+        border-left-style: solid;
+        border-left-color: var($color);
+        transform: translate(20px, -10px);
+        -webkit-transform: translate(20px, -10px);
+        -moz-transform: translate(20px, -10px);
+        -ms-transform: translate(20px, -10px);
+        -o-transform: translate(20px, -10px);
+
+    }
+    
+}
+
+#tri-me{
+    @include chattriangle(--cyan-500,true)
+}
+#tri-other{
+    @include chattriangle(--yellow-500,false)
+}
+#tri-server{
+    @include chattriangle(--surface-700,false)
+}
+
