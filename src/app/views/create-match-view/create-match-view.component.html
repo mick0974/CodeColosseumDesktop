@@ -9,10 +9,11 @@
                         <input #lobby= "ngModel" [(ngModel)]="createMatchData.lobby" type="text" name="lobby" (change)="lobbyChange($event)"  id="lobby" required [ngClass]="{'ng-dirty': (lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
                         <label for="lobby">Lobby name</label>
                     </span>
+                    <br>
+                    <small class="p-error" *ngIf="(lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)">Lobby name is required</small>
                 </div>
                 <div class="field col-12 md:col-6" id="password-div">
-                    <p-inplace [closable]="true">
-                        <ng-template pTemplate="display">
+                    <p-inplace [closable]="true">                        <ng-template pTemplate="display">
                             <button pButton pRipple type="button" id="btnpassword" label="SET PASSWORD PROTECTION" class="border-round"></button>
                             
                         </ng-template>
@@ -34,10 +35,10 @@
                     
                 </div>                
             </div>        
-            <p-tabView>
+            <p-tabView (onChange)="handleChange($event)">
                 <ng-template ngFor let-game [ngForOf]="gamedetails">
                     
-                    <p-tabPanel header="{{game.game_description.name}}" leftIcon="pi pi-plus">
+                    <p-tabPanel header="{{game.game_description.name}}"  *ngFor="let i = index" [selected]="i == 0" [(ngModel)]="game_name" leftIcon="pi pi-plus">
                         <article class="container-outer">
                             <section class="description-info">
                                         <h4>Descrizione del gioco</h4>
@@ -49,7 +50,7 @@
                                     <div class="grid p-fluid">
                                         <div class="field col-12 md:col-4">
                                             <label for="player-num">Numero di giocatori</label>
-                                            <p-inputNumber [(ngModel)]="game.game_params.players" mode="decimal" [showButtons]="true" inputId="player-num" [min]="2" [max]="2">
+                                            <p-inputNumber [(ngModel)]="game_players" value="game.game_params.players" mode="decimal" [showButtons]="true" inputId="player-num" [min]="2" [max]="3">
                                             </p-inputNumber>
                                         </div>
                                         <div class="field col-12 md:col-4">
@@ -71,8 +72,8 @@
                                         <div class="p-fluid" class="field">
                                     
                                             <ng-template ngFor let-arg [ngForOf]="game.args">
-                                                    <label for="{{ arg.name }}" id="label-arg">{{ arg.name }}</label>
-                                                        <input type="text" id="{{ arg.name }}" placeholder="{{ arg.value }}" class="border-round appearance-none focus:border-primary" pInputText>
+                                                    <label for="{{ arg.name }}"[(ngModel)]="arg_name" id="label-arg">{{ arg.name }}</label>
+                                                    <input type="text" [(ngModel)] = "arg_value" id="{{ arg.name }}" placeholder="{{ arg.value }}" class="border-round appearance-none focus:border-primary" pInputText>
                                                     
                                             </ng-template>
                                         </div>

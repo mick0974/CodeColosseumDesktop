@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { CREATE_GAMES } from 'mock-create-match';
 import { GameParams } from 'src/app/services/api-service/api.service';
 import { UploadService } from 'src/app/services/upload.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-match-view',
@@ -12,8 +13,15 @@ export class CreateMatchViewComponent implements OnInit {
   password: string = '';
   serverpwd: string = '';
   submitted: boolean = false;
+  arg_name: string[] = [];
+  arg_value: string[] = [];
+  game_name: string ='';
+  //How can I get this value from the html
+  //game.game_description.name?: string;
+  game_players: number = 7;
+
+  public createMatchData:any = {};
   
-  public createMatchData:any={};
   gamedetails:any[] = CREATE_GAMES;
   isLoading:boolean = false;
   loading:boolean = true;
@@ -21,10 +29,10 @@ export class CreateMatchViewComponent implements OnInit {
   view_mode: string = "card";
   hasGames:boolean=false;
 
-  constructor(private uploadService:UploadService) { }
+  constructor(private uploadService:UploadService, private readonly router: Router) { }
   
   ngOnInit(): void {
-    console.log("[Homeview] Resetting create match...")
+    console.log("[Createview] Resetting create match...")
     this.uploadService.reset()
 
     //todo Loading table will probably have to be disabled if we refresh often 
@@ -47,6 +55,31 @@ export class CreateMatchViewComponent implements OnInit {
   }
   onClickCreateMatch(){
     console.log("Click of new match button");
+    //doubt : do we check again with connection manager if the user is connected?
+    
+    if(this.createMatchData.lobby){
+      console.log("Players of game = " + this.createMatchData.game_name + "is = "+ this.createMatchData.game_players);
+      const newMatch= { 
+        players:this.createMatchData.game_players,
+        bots:1,
+        timeout:10.0,
+        args : {},//{this.createMatchData.arg_name: this.createMatchData.arg_value},
+        id: "hHhtyyGg",
+        name: this.createMatchData.lobby,
+        game: this.createMatchData.game_name,
+        running: false,
+        time: 0,
+        connected: {},
+        spectators: 0,
+        password: this.createMatchData.password,
+        verified: this.createMatchData.serverpwd
+      }
+      this.router.navigateByUrl("/home");
+      return;
+    }
+    this.submitted= true;
   }
-
+  handleChange(event: any){
+    var index = event.index;
+  }
 }
