@@ -2,7 +2,7 @@ import { ASTWithSource } from '@angular/compiler';
 import { ThisReceiver } from '@angular/compiler/public_api';
 import { Component, OnInit } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
-import { MatchInfo } from 'src/app/services/api.service';
+import { MatchInfo } from 'src/app/services/api-service/api.service';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 import { UploadService } from 'src/app/services/upload.service';
 
@@ -43,6 +43,7 @@ export class HomeViewComponent implements OnInit {
     }
 
     this.connectionManager.lobbyList1(onSuccess)
+
     
 
   }

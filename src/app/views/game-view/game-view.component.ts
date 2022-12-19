@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatchInfo } from 'src/app/services/api.service';
+import { MatchInfo } from 'src/app/services/api-service/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { UploadService } from 'src/app/services/upload.service';

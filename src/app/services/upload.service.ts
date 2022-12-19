@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatchInfo } from './api.service';
+import { MatchInfo } from './api-service/api.service';
 import { GAMES } from 'mock-games';
 import { Router } from '@angular/router';
 import { ConnectionManagerService } from './connection-manager.service';

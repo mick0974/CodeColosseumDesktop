@@ -7,7 +7,7 @@ import { ApiService, MatchInfo } from './api-service/api.service';
 })
 export class ConnectionManagerService {
   private _url: string = "ws://127.0.0.1:8088/";
-  private _username: string = "";
+  private _username: string = "Username";
 
   private api:ApiService= new ApiService();
   

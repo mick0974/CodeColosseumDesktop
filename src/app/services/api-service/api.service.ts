@@ -108,13 +108,13 @@ export class ApiService {
     ){
     
     let cmdConnect = new Commands.Connect(this.url, lobbyID, displayName, password);
-    
     cmdConnect.onReciveJoin = (message) => { 
+      console.log(message.info.Err)
       if (message.info.Err){ 
         if (cmdConnect.onError) { cmdConnect.onError("Failed to join lobby: "+message.info.Err)  } 
         return;
       }
-      if(onEvent) { onEvent(LobbyEventType.Join) } 
+      if(onEvent) {console.log("test"); onEvent(LobbyEventType.Join) } 
       if(onMatchUpdate && message.info.Ok) { onMatchUpdate(message.info.Ok) }
     }
     cmdConnect.onReciveStart = (message) => { if(onEvent) { onEvent(LobbyEventType.Start) } }
