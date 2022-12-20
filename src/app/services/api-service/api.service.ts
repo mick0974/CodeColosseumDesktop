@@ -114,7 +114,7 @@ export class ApiService {
         if (cmdConnect.onError) { cmdConnect.onError("Failed to join lobby: "+message.info.Err)  } 
         return;
       }
-      if(onEvent) {console.log("test"); onEvent(LobbyEventType.Join) } 
+      if(onEvent) { onEvent(LobbyEventType.Join) } 
       if(onMatchUpdate && message.info.Ok) { onMatchUpdate(message.info.Ok) }
     }
     cmdConnect.onReciveStart = (message) => { if(onEvent) { onEvent(LobbyEventType.Start) } }

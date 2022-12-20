@@ -5,6 +5,7 @@ import { UploadService } from 'src/app/services/upload.service';
 import { ApiService } from 'src/app/services/api-service/api.service';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 import { LobbyEventType } from 'src/app/services/api-service/api.service';
+import { MatchInfo } from 'src/app/services/api-service/api.service';
 @Component({
   selector: 'cc-upload',
   templateUrl: './cc-upload.component.html',
@@ -19,6 +20,13 @@ export class CcUploadComponent implements OnInit {
   currProgramName:string = "No uploaded file yet."
 
   stateOptions: any[]= [{value:'python',label:'Python'}, {value: 'cpp',label:'C++'}];
+
+
+
+  lastMatchState!:MatchInfo;
+  newMsg:string="";
+
+  
 
 
 
@@ -62,9 +70,35 @@ export class CcUploadComponent implements OnInit {
 
      let onEvent = (type:LobbyEventType)=>{
       //TODO if connection aint established
-      console.log("aaaa")
-      this.router.navigate(['game/play']);
+      console.log("onEvent (join) was executed")
+      //this.router.navigate(['game/play']);
       }
+    
+    let onMatchUpdate = (matchInfo:MatchInfo)=>{
+      console.log("onMatchUpdate (join) was executed")
+
+      if (!this.lastMatchState){
+        this.newMsg=""
+      }
+      else{ //to be tested!
+        let newPlayer=""
+      
+       // this finds the name of the new player that has joined.
+
+       let pastConnected=this.lastMatchState.connected;
+       let newConnected=matchInfo.connected=matchInfo.connected
+        if(pastConnected.length < newConnected.length){
+          newPlayer=newConnected.filter((item)=>pastConnected.indexOf(item))[0]
+          this.newMsg=newPlayer+" has joined the match!";
+        }
+        else{
+          newPlayer=pastConnected.filter((item)=>newConnected.indexOf(item))[0]
+          this.newMsg=newPlayer+" has left the match!";
+        }
+      
+      }
+      this.lastMatchState=matchInfo;
+    }
 
 
      this.apiService.connectToPlay(
@@ -72,7 +106,7 @@ export class CcUploadComponent implements OnInit {
       this.connectionService.username,
       this.uploadData.password,
       onEvent,
-      undefined,
+      onMatchUpdate,
       undefined)
 
 
