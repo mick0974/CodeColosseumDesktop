@@ -38,7 +38,7 @@
             <p-tabView (onChange)="handleChange($event)">
                 <ng-template ngFor let-game [ngForOf]="gamedetails">
                     
-                    <p-tabPanel header="{{game.game_description.name}}"  *ngFor="let i = index" [selected]="i == 0" [(ngModel)]="game_name" leftIcon="pi pi-plus">
+                    <p-tabPanel header="{{game.game_description.name}}" name="createMatchData.game_name" ngDefaultControl [(ngModel)]="createMatchData.game_name" leftIcon="pi pi-plus">
                         <article class="container-outer">
                             <section class="description-info">
                                         <h4>Descrizione del gioco</h4>
@@ -50,19 +50,18 @@
                                     <div class="grid p-fluid">
                                         <div class="field col-12 md:col-4">
                                             <label for="player-num">Numero di giocatori</label>
-                                            <p-inputNumber [(ngModel)]="game_players" value="game.game_params.players" mode="decimal" [showButtons]="true" inputId="player-num" [min]="2" [max]="3">
+                                            <p-inputNumber [(ngModel)]="game.game_params.players" name="createMatchData.players" ngDefaultControl mode="decimal" [showButtons]="true" inputId="player-num" [min]="2" [max]="3">
                                             </p-inputNumber>
                                         </div>
                                         <div class="field col-12 md:col-4">
-                                        
                                             <label for="bots-num">Numero di server bot</label>
-                                            <p-inputNumber [(ngModel)]="game.game_params.bots" mode="decimal" [showButtons]="true" inputId="bots-num" [min]="1" [max]="1">
+                                            <p-inputNumber [(ngModel)]="game.game_params.bots" name="createMatchData.bots" ngDefaultControl mode="decimal" [showButtons]="true" inputId="bots-num" [min]="1" [max]="1">
                                             </p-inputNumber>
                                         </div>
                                         <div class="field col-12 md:col-4">
                                         
                                             <label for="timeout">Timeout di inattività</label>
-                                            <p-inputNumber [(ngModel)]="game.game_params.timeout" mode="decimal" [showButtons]="true" inputId="timeout" [min]="2" [max]="100">
+                                            <p-inputNumber [(ngModel)]="game.game_params.timeout" name="createMatchData.timeout" ngDefaultControl mode="decimal" [showButtons]="true" inputId="timeout" [min]="2" [max]="100">
                                             </p-inputNumber>
                                         </div>
                                     </div>
@@ -72,8 +71,8 @@
                                         <div class="p-fluid" class="field">
                                     
                                             <ng-template ngFor let-arg [ngForOf]="game.args">
-                                                    <label for="{{ arg.name }}"[(ngModel)]="arg_name" id="label-arg">{{ arg.name }}</label>
-                                                    <input type="text" [(ngModel)] = "arg_value" id="{{ arg.name }}" placeholder="{{ arg.value }}" class="border-round appearance-none focus:border-primary" pInputText>
+                                                    <label for="{{ arg.name }}"[(ngModel)]="arg_name" name="createMatchData.arg_name" ngDefaultControl  id="label-arg">{{ arg.name }}</label>
+                                                    <input type="text" [(ngModel)] = "arg_value" name="createMatchData.arg_value" ngDefaultControl id="{{ arg.name }}" placeholder="{{ arg.value }}" class="border-round appearance-none focus:border-primary" pInputText>
                                                     
                                             </ng-template>
                                         </div>

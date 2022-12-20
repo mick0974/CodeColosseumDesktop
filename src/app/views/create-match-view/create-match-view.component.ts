@@ -28,7 +28,7 @@ export class CreateMatchViewComponent implements OnInit {
   stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
   view_mode: string = "card";
   hasGames:boolean=false;
-
+  gameDescription:string = '';
   constructor(private uploadService:UploadService, private readonly router: Router) { }
   
   ngOnInit(): void {
@@ -81,5 +81,7 @@ export class CreateMatchViewComponent implements OnInit {
   }
   handleChange(event: any){
     var index = event.index;
+    console.log("Index of tab that had an event: " + index);
+    console.log("Name of match in the tab : "+this.createMatchData.game_name);
   }
 }
