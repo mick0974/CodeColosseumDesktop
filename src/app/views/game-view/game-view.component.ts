@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 import { LobbyEventType } from 'src/app/services/api-service/api.service';
 import { ChatMessage } from 'src/app/ChatMessage';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-game-view',
@@ -104,12 +105,19 @@ export class GameViewComponent implements OnInit {
           this.newMsg = this.newMsg.substring(0,this.newMsg.length-2)
           this.messages.push({sender:"server",content:this.newMsg})
         
-      }
-
+        }
       }
       else{ 
+
+        // Check if game started running
+        if (!this.lastMatchState.running && matchInfo.running){
+          this.messages.push({sender:"server",content:"Game is starting!"})
+        }
+
+
+
+
         // this finds the name of the new player that has joined.
-        console.log(matchInfo.connected)
         let newPlayer=""
         let pastConnected=this.lastMatchState.connected;
         let newConnected=matchInfo.connected=matchInfo.connected
