@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MatchInfo } from 'src/app/services/api-service/api.service';
+import { ApiService, MatchInfo } from 'src/app/services/api-service/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { UploadService } from 'src/app/services/upload.service';
 import { Router } from '@angular/router';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
+import { LobbyEventType } from 'src/app/services/api-service/api.service';
 
 @Component({
   selector: 'app-game-view',
@@ -13,81 +14,118 @@ import { ConnectionManagerService } from 'src/app/services/connection-manager.se
 })
 export class GameViewComponent implements OnInit {
 
+  //Gen
   game! : MatchInfo | null;
-
   gameId : string= "" ;
   gameName : string = "";
-  
   currStep : number = 0;
-  
-  items: MenuItem[]= [
-    {label: 'Match setup', routerLink: ['upload']},
-    {label: 'Match results', routerLink:['play']},
-    {label: 'Match review', routerLink:['review']}
-];
+  hasPassword:boolean = true;
 
+  // Upload screen
+  myfile:any[] = [];
+  submitted:boolean = false;
+  currProgramName:string = "No uploaded file yet."
+  stateOptions: any[]= [{value:'python',label:'Python'}, {value: 'cpp',label:'C++'}];
+  uploadData:any={'programType':"python"};
 
-  constructor(private router:Router,private activatedroute:ActivatedRoute, private uploadService:UploadService) { }
+  // Messages from APIs
+  lastMatchState!:MatchInfo;
+  newMsg:string="";
+
+  constructor(private router:Router,
+    private activatedroute:ActivatedRoute,
+    private connectionManager:ConnectionManagerService,
+    private apiService:ApiService,
+    private connectionService:ConnectionManagerService) { }
 
   ngOnInit(): void {
-
-    //TODO: redirect to a 404 page rather than immediate redirect
-
-
-    /*The flow here is:
-    
-    User clicks on play
-     --> go to /game/set/<id> 
-     --> this component catches it and sets the id in service
-     --> this components redirects to /game
-     --> this component checks if id was set or not
-       --> if id was set, redirect to /upload
-       --> if not, redirect to home
-
-    User tries to access game screen directly through URL
-    --> this component catches it and checks if id was set
-      --> if yes, everything's fine
-      --> if na, redirect to home
-    
-      // todo: if user accesses /game/upload with no id set, redirect to home. Might be worth it to move all these controls inside the service?
-    */
-    
     let token = this.activatedroute.snapshot.paramMap.get('id');
-
+    // Asks APIs for list and saves game if current game exists
+    let validLobbies:MatchInfo[]=[]
     if (token){
-      console.log("1.SET")
-      this.uploadService.setGame1(token).then(
-        ()=>{ // Asks APIs for list and saves game if exists
-          console.log(this.uploadService.isGameSet());
-          console.log(this.uploadService.game);
-          this.game = this.uploadService.game;
-          this.gameId = this.uploadService.game?.id ?? "";
-          this.gameName = this.game?.name ?? "";
-          this.router.navigate(['game'])
+      let onSuccess = (matchList:MatchInfo[])=>{
+        validLobbies=matchList;
+        //Check if this ID exists, if so saves game in this.game
+        validLobbies.find( (g) => (this.game = g.id === token ? g : null) )  
+        if (this.game){
+          this.gameId = this.game!.id;
+          this.gameName = this.game!.name;
+          this.hasPassword = this.game.password ? true : false;
+          console.log("Gameview: Joining game " + this.game)
         }
-      )
-
-    } 
-    else{
-      console.log("2.check")
-      if (this.uploadService.isGameSet()){
-        console.log("[Gameview] Gameplay was already set to "+this.uploadService.game!.id +". Loading upload view...")
-        this.router.navigate(['game/upload'])
-        this.game = this.uploadService.game;
-        this.gameId = this.uploadService.game?.id ?? "";
-        this.gameName = this.game?.name ?? "";
+        else{
+          this.game=null;
+          console.log("Gameview: game token is not valid.")
+        }
       }
-      else{
-        console.log("[Gameview] Game was not set! Redirecting to Homeview. ")
-        this.router.navigate(['home'])
-      }
+      this.connectionManager.lobbyList1(onSuccess)
     }
-
-
-
+    else {
+      this.game=null;
+      console.log("Gameview: No token was given.")
+    }
   }
 
 
+  // UPLOAD METHODS
+
+  navigateToPlay():void{
+
+    // TODO! Checks compilation of stuff, emtpy for testing then everything will ned to be in here
+    if ((this.hasPassword && this.uploadData.password&&this.uploadData.program)||(!this.hasPassword &&this.uploadData.program)){ 
+    }
+  
+    // When first connection is established with apiService.connectToPlat, 
+    // client will receive a JoinEvent (that will execute a onEvent)
+    // and a MatchUpdate (that will execute a onMatchUpdate).
+
+    // Executed on join event
+    let onEvent = (type:LobbyEventType)=>{
+    //TODO handle if connection aint established
+    console.log("onEvent (join) was executed")
+    this.currStep++;
+    }
+
+    // Executed on match update (you get a match update immediately after joining, as the #
+    // of players has changed.)
+    let onMatchUpdate = (matchInfo:MatchInfo)=>{
+      console.log("onMatchUpdate (join) was executed")
+
+      if (!this.lastMatchState){
+        this.newMsg=""
+      }
+      else{ 
+        // this finds the name of the new player that has joined.
+        let newPlayer=""
+        let pastConnected=this.lastMatchState.connected;
+        let newConnected=matchInfo.connected=matchInfo.connected
+        if(pastConnected.length < newConnected.length){
+          newPlayer=newConnected.filter((item)=>pastConnected.indexOf(item))[0]
+          this.newMsg=newPlayer+" has joined the match!";
+        }
+        else{
+          newPlayer=pastConnected.filter((item)=>newConnected.indexOf(item))[0]
+          this.newMsg=newPlayer+" has left the match!";
+        }
+      
+      }
+      this.lastMatchState=matchInfo;
+    }
+  
+    this.apiService.connectToPlay(
+    this.game!.id,
+    this.connectionService.username,
+    this.uploadData.password,
+    onEvent,
+    onMatchUpdate,
+    undefined)
+  }
+
+  fileUpload(event:any){console.log(event)
+    this.uploadData.program = event.target.files[0]
+    this.currProgramName = this.uploadData.program.name
+    console.log(this.uploadData)
+  }
 
   
 }
