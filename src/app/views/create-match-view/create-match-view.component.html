@@ -38,7 +38,7 @@
             <p-tabView (onChange)="handleChange($event)">
                 <ng-template ngFor let-game [ngForOf]="gamedetails">
                     
-                    <p-tabPanel header="{{game.game_description.name}}" name="createMatchData.game_name" ngDefaultControl [(ngModel)]="createMatchData.game_name" leftIcon="pi pi-plus">
+                    <p-tabPanel #game_name= "ngModel" header="{{game.game_description.name}}" name="game_name" [(ngModel)]="createMatchData.game_name" leftIcon="pi pi-plus">
                         <article class="container-outer">
                             <section class="description-info">
                                         <h4>Descrizione del gioco</h4>
@@ -50,7 +50,7 @@
                                     <div class="grid p-fluid">
                                         <div class="field col-12 md:col-4">
                                             <label for="player-num">Numero di giocatori</label>
-                                            <p-inputNumber [(ngModel)]="game.game_params.players" name="createMatchData.players" ngDefaultControl mode="decimal" [showButtons]="true" inputId="player-num" [min]="2" [max]="3">
+                                            <p-inputNumber #game_players="ngModel" [(ngModel)]="game.game_params.players" (change)="tabPanelChange($event)" name="createMatchData.players" ngDefaultControl mode="decimal" [showButtons]="true" inputId="player-num" [min]="2" [max]="3">
                                             </p-inputNumber>
                                         </div>
                                         <div class="field col-12 md:col-4">

@@ -49,7 +49,10 @@ export class CreateMatchViewComponent implements OnInit {
     console.log(event);
     console.log(this.createMatchData);
   }
-  
+  tabPanelChange(event: any){
+    console.log("Event on the tabPanel" + event);
+    console.log(this.createMatchData);
+  }
   getFormatTime(value:number):string{
     return ""+(value/60).toFixed(0)+":"+value%60;
   }
