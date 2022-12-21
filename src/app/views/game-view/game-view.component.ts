@@ -6,6 +6,7 @@ import { UploadService } from 'src/app/services/upload.service';
 import { Router } from '@angular/router';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 import { LobbyEventType } from 'src/app/services/api-service/api.service';
+import { ChatMessage } from 'src/app/ChatMessage';
 
 @Component({
   selector: 'app-game-view',
@@ -31,6 +32,7 @@ export class GameViewComponent implements OnInit {
   // Messages from APIs
   lastMatchState!:MatchInfo;
   newMsg:string="";
+  messages:ChatMessage[]=[];
 
   constructor(private router:Router,
     private activatedroute:ActivatedRoute,
@@ -83,7 +85,7 @@ export class GameViewComponent implements OnInit {
     let onEvent = (type:LobbyEventType)=>{
     //TODO handle if connection aint established
     console.log("onEvent (join) was executed")
-    this.currStep++;
+    this.currStep=1;
     }
 
     // Executed on match update (you get a match update immediately after joining, as the #
@@ -92,20 +94,34 @@ export class GameViewComponent implements OnInit {
       console.log("onMatchUpdate (join) was executed")
 
       if (!this.lastMatchState){
-        this.newMsg=""
+        this.newMsg="Connection established."
+        this.messages.push({sender:"server",content:this.newMsg})
+        if(matchInfo.connected.length>0){
+          this.newMsg="Already connected players: "
+          for(let i=0; i < matchInfo.connected.length; i++){
+            this.newMsg += matchInfo.connected[i] + ", "
+          }
+          this.newMsg = this.newMsg.substring(0,this.newMsg.length-2)
+          this.messages.push({sender:"server",content:this.newMsg})
+        
+      }
+
       }
       else{ 
         // this finds the name of the new player that has joined.
+        console.log(matchInfo.connected)
         let newPlayer=""
         let pastConnected=this.lastMatchState.connected;
         let newConnected=matchInfo.connected=matchInfo.connected
         if(pastConnected.length < newConnected.length){
           newPlayer=newConnected.filter((item)=>pastConnected.indexOf(item))[0]
           this.newMsg=newPlayer+" has joined the match!";
+          this.messages.push({sender:"server",content:this.newMsg})
         }
-        else{
+        else if (pastConnected.length > newConnected.length){
           newPlayer=pastConnected.filter((item)=>newConnected.indexOf(item))[0]
           this.newMsg=newPlayer+" has left the match!";
+          this.messages.push({sender:"server",content:this.newMsg})
         }
       
       }
@@ -121,11 +137,17 @@ export class GameViewComponent implements OnInit {
     undefined)
   }
 
-  fileUpload(event:any){console.log(event)
+  fileUpload(event:any){
+    console.log(event)
     this.uploadData.program = event.target.files[0]
     this.currProgramName = this.uploadData.program.name
     console.log(this.uploadData)
   }
+
+  navigateToUpload():void{
+    this.currStep=0;
+  }
+
 
   
 }
