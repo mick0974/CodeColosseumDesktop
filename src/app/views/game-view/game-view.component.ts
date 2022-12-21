@@ -22,6 +22,7 @@ export class GameViewComponent implements OnInit {
   gameName : string = "";
   currStep : number = 0;
   hasPassword:boolean = true;
+  errorMessage:string="aaaaaaaaaa";
 
   // Upload screen
   myfile:any[] = [];
@@ -136,13 +137,19 @@ export class GameViewComponent implements OnInit {
       this.lastMatchState=matchInfo;
     }
   
+    let onError = (errorMessage:string)=>{
+      this.errorMessage = errorMessage;
+      console.log(errorMessage)
+      }
+
     this.apiService.connectToPlay(
     this.game!.id,
     this.connectionService.username,
     this.uploadData.password,
     onEvent,
     onMatchUpdate,
-    undefined)
+    undefined, //todo onData
+    onError)
   }
 
   fileUpload(event:any){

@@ -1,5 +1,7 @@
 <div class="cc-column-layout">
 
+    <h1>{{errorMessage}}</h1>
+
     <div class="cc-error-404 flex-column justify-content-center" *ngIf="game===null"  >
         <h2> It looks like this game doesn't exist. </h2>
         <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'"></button>
