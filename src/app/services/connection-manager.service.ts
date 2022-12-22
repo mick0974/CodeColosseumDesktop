@@ -6,8 +6,8 @@ import { ApiService, MatchInfo } from './api-service/api.service';
   providedIn: 'root'
 })
 export class ConnectionManagerService {
-  private _url: string = "";
-  private _username: string = "";
+  private _url: string = "ws://127.0.0.1:8088/";
+  private _username: string = "Username";
 
   private api:ApiService= new ApiService();
   
@@ -25,15 +25,23 @@ export class ConnectionManagerService {
   }
 
   async lobbyList() {
+    
     let onSuccess = (gameList:MatchInfo[])=>{ 
       this.lobbylistvar = gameList;
-      let text = JSON.stringify(gameList)
-      console.log("lobbyList: "+text);
-     
+      //let text = JSON.stringify(gameList)
+      //console.log("lobbyList: "+text);
+      console.log("connectionmanager:")
+      console.log(gameList)
     }
     let req = this.api.lobbyList( onSuccess );
     req.onError = this.onApiError;
-    
+    console.log(req)
+  }
+
+  async lobbyList1(onSuccess:(gameList:MatchInfo[])=>void ) {
+    let req = this.api.lobbyList( onSuccess );
+    req.onError = this.onApiError;
+    console.log(req)
   }
 
   public get isConnected(): boolean {

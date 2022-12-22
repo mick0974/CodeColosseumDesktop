@@ -58,18 +58,7 @@ export namespace Packets{
         this.pace = pace;
       }
     }
-    /*
-    export class GameDetails{
-      public game_description?:Message.GameDescription;
-      public game_params?:GameParams;
-      public args?:(RoshamboArgs | RoyalurArgs);
-      constructor(game_description?:Message.GameDescription, game_params?:GameParams, args?:(RoshamboArgs | RoyalurArgs)){
-        this.game_description = game_description;
-        this.game_params = game_params;
-        this.args = args;
-      }
-    }*/
-    
+  
     export class GameParams {
       public players?:number;
       public bots?:number;

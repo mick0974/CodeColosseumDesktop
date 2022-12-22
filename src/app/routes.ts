@@ -23,23 +23,12 @@ export const routes: Routes = [
         path: 'home',
         canActivate: [AuthGuard],
         component: HomeViewComponent
-    },
-    {
-        path: 'game/set/:id',
-        canActivate: [AuthGuard],
-        component: GameViewComponent,
-        
-    },
-    {
-        path: 'game',
-        canActivate: [AuthGuard],
-        component: GameViewComponent,
-        children: [
-            { path: 'upload', component: CcUploadComponent, pathMatch: 'full'  },
-            { path: 'play', component: CcPlayComponent, pathMatch: 'full'  },
-            { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
-        ]
     },{
+        path:'game/:id',
+        canActivate: [AuthGuard],
+        component: GameViewComponent
+    },
+    {
         path: 'newmatch',
         canActivate: [AuthGuard],
         component: CreateMatchViewComponent,
@@ -49,7 +38,4 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         component: SpectateViewComponent,
     }
-
-/*
-    { path: "**", redirectTo: "/connect" },*/
 ];

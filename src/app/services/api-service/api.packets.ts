@@ -155,7 +155,7 @@ export namespace Packets{
         public game: string="";
         public running: boolean=false;
         public time: number=0;
-        public connected={};
+        public connected:any[]=[];
         public spectators: number=0;
         public password: boolean=false;
         public verified: boolean=false;
