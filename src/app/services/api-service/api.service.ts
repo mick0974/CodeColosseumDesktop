@@ -9,7 +9,7 @@ export interface GameParams extends Packets.GameParams{}
 export interface MatchInfo extends Packets.MatchInfo{}
 export interface RoshamboArgs extends Packets.RoshamboArgs {}
 export interface RoyalurArgs extends Packets.RoyalurArgs {}
-
+//export interface GameDetails extends Packets.GameDetails{}
 export enum LobbyEventType{ 
   Join = 'LobbyJoin', 
   Start = 'LobbyStart', 
