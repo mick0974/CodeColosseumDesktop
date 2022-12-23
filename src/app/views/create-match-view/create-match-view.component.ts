@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { CREATE_GAMES } from 'mock-create-match';
-import { GameParams } from 'src/app/services/api-service/api.service';
+import { GameDescription, GameDetails, GameParams } from 'src/app/services/api-service/api.service';
 import { UploadService } from 'src/app/services/upload.service';
 import { Router } from '@angular/router';
 
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-match-view.component.scss']
 })
 export class CreateMatchViewComponent implements OnInit {
+  
   password: string = '';
   serverpwd: string = '';
   submitted: boolean = false;
@@ -59,7 +60,7 @@ export class CreateMatchViewComponent implements OnInit {
   }
   onClickCreateMatch(game: any, index: number){
     this.selectedGame = game;
-    console.log("SelectedGame name: ", this.selectedGame.game_description.name);
+    console.log("SelectedGame name: ", this.selectedGame.game_description.game_name);
     console.log("Game players: ", this.gamedetails[index].game_params.players);
     console.log("Click of new match button");
     console.log("Arg name: ", this.gamedetails[index].args[0].name);
@@ -70,20 +71,19 @@ export class CreateMatchViewComponent implements OnInit {
     //doubt : do we check again with connection manager if the user is connected?
     if(this.createMatchData.lobby){
       console.log("Players of game = " + this.createMatchData.game_name + "is = "+ this.createMatchData.game_players);
-      const newMatch= { 
-        players:this.gamedetails[index].players,
-        bots: this.gamedetails[index].bots,
-        timeout: this.gamedetails[index].timeout,
-        args : this.gamedetails[index].args,//{this.createMatchData.arg_name: this.createMatchData.arg_value},
-        id: "hHhtyyGg",
-        name: this.createMatchData.lobby,
-        game: this.gamedetails[index].game_description.name,
-        running: false,
-        time: 0,
-        connected: {},
-        spectators: 0,
+      const newMatch: GameDetails= { 
+        lobby_name: this.createMatchData.lobby,
         password: this.createMatchData.password,
-        verified: this.createMatchData.serverpwd
+        game_description:{
+          game_name: this.gamedetails[index].game_description.game_name ,
+          game_descr: this.gamedetails[index].game_description.game_descr
+        },
+        game_params: {  
+          players:this.gamedetails[index].players,
+          bots: this.gamedetails[index].bots,
+          timeout: this.gamedetails[index].timeout,
+        },
+        args : this.gamedetails[index].args
       }
       this.router.navigateByUrl("/home");
       return;

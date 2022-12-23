@@ -38,11 +38,11 @@
             <p-tabView (onChange)="handleChange($event)">
                 <ng-template ngFor let-game [ngForOf]="gamedetails" let-i="index">
                     
-                    <p-tabPanel header="{{game.game_description.name}}" ngDefaultControl name="game_name" [(ngModel)]="createMatchData.game_name" leftIcon="pi pi-plus">
+                    <p-tabPanel header="{{game.game_description.game_name}}" ngDefaultControl name="game_name" [(ngModel)]="createMatchData.game_name" leftIcon="pi pi-plus">
                         <article class="container-outer">
                             <section class="description-info">
                                         <h4>Descrizione del gioco</h4>
-                                        <p>{{game.game_description.description}}</p>
+                                        <p><btf-markdown>{{game.game_description.game_descr}}</btf-markdown> </p>
                                 
                             </section>
                             <div class="container-inner">
