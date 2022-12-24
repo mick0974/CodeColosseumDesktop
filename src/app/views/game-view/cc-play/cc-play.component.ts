@@ -9,6 +9,7 @@ import { MOCKMESSAGES } from 'mock-messages';
 })
 export class CcPlayComponent implements OnInit {
 
+  msg:string=""
   gameId:string = "";
   messages:any[]=MOCKMESSAGES;
 
@@ -16,7 +17,7 @@ export class CcPlayComponent implements OnInit {
   constructor(private router:Router,private uploadService:UploadService) { }
 
   ngOnInit(): void {
-    //this.uploadService.redirectIfGameNotSet()    
+      
   }
 
   navigateToNext() {   

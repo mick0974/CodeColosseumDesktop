@@ -109,6 +109,24 @@ export namespace Packets{
       }
       */
     }
+
+    export class RoyalurArgs{
+      public pace?:string;
+
+      constructor(pace?:string) {
+        this.pace = pace;
+      }
+    }
+
+    export class RoshamboArgs{
+      public rounds?:string;
+      public pace?:string;
+
+      constructor(rounds?:string, pace?:string) {
+        this.rounds = rounds;
+        this.pace = pace;
+      }
+    }
   
     export class GameParams {
       public players?:number;
@@ -137,7 +155,7 @@ export namespace Packets{
         public game: string="";
         public running: boolean=false;
         public time: number=0;
-        public connected={};
+        public connected:any[]=[];
         public spectators: number=0;
         public password: boolean=false;
         public verified: boolean=false;
@@ -152,7 +170,12 @@ export namespace Packets{
       }
       export class GameList extends Message  {}
       export class GameDescription extends Message  {
-        name: string = "";
+        name?: string;
+
+        constructor(name?: string){
+          super();
+          this.name = name;
+        }
       }
       export class GameNew extends Message  {
         name?:string;
