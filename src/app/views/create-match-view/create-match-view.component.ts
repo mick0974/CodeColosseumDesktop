@@ -10,7 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-match-view.component.scss']
 })
 export class CreateMatchViewComponent implements OnInit {
-  
+  public name: string = '**The Big Bang Theory**';
+  public text: string = 'Custom **Markdown in Angular** example!';
   password: string = '';
   serverpwd: string = '';
   submitted: boolean = false;

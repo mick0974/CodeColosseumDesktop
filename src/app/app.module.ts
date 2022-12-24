@@ -42,7 +42,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateMatchViewComponent } from './views/create-match-view/create-match-view.component';
 import { CcChatComponent } from './components/cc-chat/cc-chat.component';
 import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
-import { MarkdownComponent } from './views/create-match-view/markdown.component';
+import { MarkdownPipe } from './markdown.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +56,7 @@ import { MarkdownComponent } from './views/create-match-view/markdown.component'
     CreateMatchViewComponent,
     CcChatComponent,
     SpectateViewComponent,
-    MarkdownComponent,
+    MarkdownPipe
   ],
   imports: [
     BrowserModule,

@@ -42,7 +42,7 @@
                         <article class="container-outer">
                             <section class="description-info">
                                         <h4>Descrizione del gioco</h4>
-                                        <p><btf-markdown>{{game.game_description.game_descr}}</btf-markdown> </p>
+                                        <p [innerHTML]="game.game_description.game_descr | markdown"></p>
                                 
                             </section>
                             <div class="container-inner">
