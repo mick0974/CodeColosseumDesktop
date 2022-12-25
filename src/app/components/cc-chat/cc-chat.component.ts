@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MOCKMESSAGES } from 'mock-messages';
 import { ChatMessage } from 'src/app/ChatMessage';
 import { Input } from '@angular/core';
 
