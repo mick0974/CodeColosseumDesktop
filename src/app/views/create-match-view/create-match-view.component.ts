@@ -41,14 +41,14 @@ export class CreateMatchViewComponent implements OnInit {
     this.uploadService.reset()
 
     //todo Loading table will probably have to be disabled if we refresh often 
-    /*setTimeout(() => {
+    setTimeout(() => {
         this.gamedetails = CREATE_GAMES;
         this.loading = false;
     }, 1000);
 
-    this.hasGames = this.gamedetails.length !== 0;*/
+    this.hasGames = this.gamedetails.length !== 0;
     
-    let onSuccess = (gamedetails:GameDetails[])=>{ 
+    /*let onSuccess = (gamedetails:GameDetails[])=>{ 
       this.loading=true;
       this.gamedetails = gamedetails;
       this.loading=false;
@@ -59,7 +59,7 @@ export class CreateMatchViewComponent implements OnInit {
     }
     this.uploadService.gameDetailsList(onSuccess)
     //this.connectionManager.lobbyList1(onSuccess)
-
+    */
   
   }
   
