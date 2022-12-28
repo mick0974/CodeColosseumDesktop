@@ -50,7 +50,7 @@ export enum LobbyEventType{
 
 export enum ErrorType{ 
   LobbyJoinFailed = 'LobbyJoinFailed',
-  LobbyCreateFailed = 'LobbyCreateFailed'
+  LobbyCreateFailed = 'LobbyCeateFailed'
 }
 
 
@@ -147,11 +147,12 @@ export class ApiService {
       onEvent?: (state:LobbyEventType)=>void,
       onMatchUpdate?: (matchInfo: MatchInfo)=>void, 
       onData?: (data:string)=>void,
+      onError?:(data:string)=>void
     ){
     
     let cmdConnect = new Commands.Connect(this.url, lobbyID, displayName, password);
-    
     cmdConnect.onReciveJoin = (message) => { 
+      console.log(message.info.Err)
       if (message.info.Err){ 
         if (cmdConnect.onError) { cmdConnect.onError("Failed to join lobby: "+message.info.Err)  } 
         return;
@@ -163,6 +164,7 @@ export class ApiService {
     cmdConnect.onReciveEnd = (message) => { if(onEvent) { onEvent(LobbyEventType.End) } }
     cmdConnect.onReciveUpdate = (message) => { if(onMatchUpdate ) { onMatchUpdate(message.info) } }
     cmdConnect.onReciveBinary = (message) => { if(onData) { onData(message)} }
+    cmdConnect.onError = onError
     
     cmdConnect.run();
     return cmdConnect;

@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -34,11 +35,15 @@ import {InplaceModule} from 'primeng/inplace';
 import {TabViewModule} from 'primeng/tabview';
 import {CardModule} from 'primeng/card';
 import {InputNumberModule} from 'primeng/inputnumber';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateMatchViewComponent } from './views/create-match-view/create-match-view.component';
 import { CcChatComponent } from './components/cc-chat/cc-chat.component';
 import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
+import { MarkdownPipe } from './markdown.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +56,7 @@ import { SpectateViewComponent } from './views/spectate-view/spectate-view/spect
     CreateMatchViewComponent,
     CcChatComponent,
     SpectateViewComponent,
+    MarkdownPipe
   ],
   imports: [
     BrowserModule,
@@ -74,9 +80,11 @@ import { SpectateViewComponent } from './views/spectate-view/spectate-view/spect
     HttpClientModule,
     InplaceModule,
     TabViewModule,
-    InputNumberModule
+    InputNumberModule,
+    ProgressSpinnerModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
