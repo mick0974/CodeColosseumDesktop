@@ -107,9 +107,9 @@ export class CreateMatchViewComponent implements OnInit {
           game_descr: this.gamedetails[index].game_description.game_descr
         },
         game_params: {  
-          players:this.gamedetails[index].players,
-          bots: this.gamedetails[index].bots,
-          timeout: this.gamedetails[index].timeout,
+          players:this.gamedetails[index].game_params.players,
+          bots: this.gamedetails[index].game_params.bots,
+          timeout: this.gamedetails[index].game_params.timeout,
         },
         args : this.gamedetails[index].args
       }

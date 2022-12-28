@@ -100,12 +100,13 @@ export class UploadService {
     let onSuccess = (newGame:string)=>{ 
       this.lobbyIdvar = newGame;
       this.gameDetailsvar = gameDet;
+
       //let text = JSON.stringify(gameList)
       //console.log("lobbyList: "+text);
       console.log("Upload service id of new ame created:")
       console.log(this.lobbyIdvar)
     }
-    let req = this.api.createNewLobby( onSuccess,this.gameDetailsvar );
+    let req = this.api.createNewLobby( onSuccess, gameDet);
     req.onError = this.onApiError;
     console.log(req)
   }
