@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatchInfo } from './api-service/api.service';
+import { ApiService, GameDetails, MatchInfo } from './api-service/api.service';
 import { GAMES } from 'mock-games';
 import { Router } from '@angular/router';
 import { ConnectionManagerService } from './connection-manager.service';
@@ -10,6 +10,11 @@ import { ConnectionManagerService } from './connection-manager.service';
 export class UploadService {
   game! : MatchInfo | null;
   validLobbies:MatchInfo[]=[];
+  private api:ApiService= new ApiService();
+  //deve prenderlo dalla createNewMatch
+  public lobbyIdvar?: string;
+  public gameDetailsvar: GameDetails = {};
+  
 
   constructor(private router:Router,private connectionManager:ConnectionManagerService) { }
 
@@ -81,4 +86,37 @@ export class UploadService {
     this.game=null;
     console.log("[Service] Gameplay was reset.")
   }
+  
+  async onApiError(message: string){
+    alert("Error: "+message)
+  }
+  /*async gameDetailsList(onSuccess:(gamedetailsList:GameDetails[])=>void ) {
+    let req = this.api.lobbyList( onSuccess );
+    req.onError = this.onApiError;
+    console.log(req)
+  }*/
+
+  async createNewLobby(gameDet:GameDetails){
+    let onSuccess = (newGame:string)=>{ 
+      this.lobbyIdvar = newGame;
+      this.gameDetailsvar = gameDet;
+      //let text = JSON.stringify(gameList)
+      //console.log("lobbyList: "+text);
+      console.log("Upload service id of new ame created:")
+      console.log(this.lobbyIdvar)
+    }
+    let req = this.api.createNewLobby( onSuccess,this.gameDetailsvar );
+    req.onError = this.onApiError;
+    console.log(req)
+  }
+  /*async apiNewGame() {
+    let onSuccess = (newGame:string)=>{
+      let text = newGame
+      this.output = text
+      console.log("newGame: "+text);
+      this.lobbyID = newGame;
+    let req = this.api.createNewLobby(onSuccess,"new_lobby","roshambo", 2, 0);
+    req.onError = this.onApiError;
+  }*/
 }
+

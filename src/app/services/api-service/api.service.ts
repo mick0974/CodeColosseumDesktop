@@ -50,7 +50,7 @@ export enum LobbyEventType{
 
 export enum ErrorType{ 
   LobbyJoinFailed = 'LobbyJoinFailed',
-  LobbyCreateFailed = 'LobbyCreateFailed'
+  LobbyCreateFailed = 'LobbyCeateFailed'
 }
 
 

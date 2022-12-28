@@ -32,19 +32,34 @@ export class CreateMatchViewComponent implements OnInit {
   view_mode: string = "card";
   hasGames:boolean=false;
   gameDescription:string = '';
-  constructor(private uploadService:UploadService, private readonly router: Router) { }
+  constructor(private uploadService:UploadService, private readonly router: Router) { 
+    
+  }
   
   ngOnInit(): void {
     console.log("[Createview] Resetting create match...")
     this.uploadService.reset()
 
     //todo Loading table will probably have to be disabled if we refresh often 
-    setTimeout(() => {
+    /*setTimeout(() => {
         this.gamedetails = CREATE_GAMES;
         this.loading = false;
     }, 1000);
 
-    this.hasGames = this.gamedetails.length !== 0;
+    this.hasGames = this.gamedetails.length !== 0;*/
+    
+    let onSuccess = (gamedetails:GameDetails[])=>{ 
+      this.loading=true;
+      this.gamedetails = gamedetails;
+      this.loading=false;
+      this.hasGames = this.gamedetails.length !== 0;
+      for(let i=0;i<this.gamedetails.length;i++){
+        this.gamedetails[i].time=(this.gamedetails[i].time-Date.now()/1000);
+      }
+    }
+    this.uploadService.gameDetailsList(onSuccess)
+    //this.connectionManager.lobbyList1(onSuccess)
+
   
   }
   
@@ -58,6 +73,18 @@ export class CreateMatchViewComponent implements OnInit {
   }
   getFormatTime(value:number):string{
     return ""+(value/60).toFixed(0)+":"+value%60;
+  }
+  
+  public async createMatch(newMatch:GameDetails): Promise<void> {
+
+    //await this.connectionManager.connect(this.connectData.server, this.connectData.username);
+    //if (this.connectionManager.isConnected) {
+    //} else {
+      // TODO: Show error message
+    //}
+    this.uploadService.createNewLobby(newMatch);
+    this.router.navigateByUrl("/home"); //poi credo sia la home ad aggiornare i game disponibili
+    
   }
   onClickCreateMatch(game: any, index: number){
     this.selectedGame = game;
@@ -86,10 +113,13 @@ export class CreateMatchViewComponent implements OnInit {
         },
         args : this.gamedetails[index].args
       }
-      this.router.navigateByUrl("/home");
+      this.createMatch(newMatch);
       return;
     }
     this.submitted= true;
+  }
+  onClickBack(){
+    this.router.navigateByUrl("/home");
   }
   handleChange(event: any){
     var index = event.index;
