@@ -72,23 +72,21 @@ p-inputNumber{
     width: 154;
     height: 45;
 }
-.description-div{
+/*.parent{
     //border: 1px;
-    //overflow: hidden;
-    //display: flex;
-}
-.callout{
-    object-fit: cover;
+    //width:276;
+    overflow: hidden;
+    display: flex;
 }
 img{
-    //max-width: inherit;
-    //max-height: inherit;
-    width: 50px;
-    height: 10px;
-    //height: inherit;
-    //width: inherit;
-    //object-fit: cover;
-}
+    max-width: inherit;
+    max-height: inherit;
+    //width: 270px;
+    //height: 100px;
+    height: inherit;
+    width: inherit;
+    object-fit: cover;
+}*/
 .container-outer {
     display: flex;
     align-items: stretch; /* tells boxes to stretch vertically (default value)  */
@@ -102,6 +100,7 @@ img{
     //justify-content: center;
     //align-items: center;
     width: 75%;
+    overflow: hidden;
     //border: 3px solid red;
     //font-family: verdana;
     //font-weight: bold;

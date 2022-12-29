@@ -40,13 +40,14 @@
                     
                     <p-tabPanel header="{{game.game_description.game_name}}" ngDefaultControl name="game_name" [(ngModel)]="createMatchData.game_name" leftIcon="pi pi-plus">
                         <article class="container-outer">
+                            
                             <section class="description-info">
-                                        <h4>Descrizione del gioco</h4>
-                                        <div class="description-div">
-                                            <p [innerHTML]="game.game_description.game_descr | markdown"></p>
-                                        </div>
-                                        
+                                <h4>Descrizione del gioco</h4>
+                                <p [innerHTML]="game.game_description.game_descr | markdown"></p>
+                                
                             </section>
+                        
+                            
                             <div class="container-inner">
                                 <section class="game-params">
                                     <div class="grid p-fluid">
