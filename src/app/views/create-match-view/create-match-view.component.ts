@@ -26,6 +26,7 @@ export class CreateMatchViewComponent implements OnInit {
   selectedGame:any = {};
   
   gameNameList:string[] = [];
+  gameDescriptionList:string[] = [];
   gamedetails:any[] = CREATE_GAMES;
   isLoading:boolean = false;
   loading:boolean = true;
@@ -35,6 +36,22 @@ export class CreateMatchViewComponent implements OnInit {
   gameDescription:string = '';
   constructor(private uploadService:UploadService, private readonly router: Router) { 
     
+  }
+
+  getNameFromDescr(gameDescription:string) {
+    let name = gameDescription.split(" ")[1];
+    return name;
+  }
+
+  replaceImageCode(gameDescription:string) {
+    let descr;
+    descr = gameDescription.replace("{{#include royalur-board.svg}}", '<br><br><img src="../../assets/images/royalur-board.svg" alt="royalur" width="276"><br><br>'); 
+    descr = descr.replaceAll("\\(", "(");
+    descr = descr.replaceAll("\\)", ")");
+
+    console.log(descr.search("\\("));
+
+    return descr;
   }
   
   ngOnInit(): void {
@@ -54,29 +71,42 @@ export class CreateMatchViewComponent implements OnInit {
       this.gameNameList = gameNameList;
       this.loading=false;
       this.hasGames = this.gameNameList.length !== 0;
+
+      let onSuccess1 = (gameDescription:string) => { 
+        this.hasGames = this.gameNameList.length !== 0;
+        this.gameDescriptionList[this.gameDescriptionList.length] = gameDescription;
+        console.log(gameDescription);
+        console.log(this.gameDescriptionList);
+
+        this.gamedetails.forEach((gameDetail:GameDetails) => {
+          let gameName = this.getNameFromDescr(gameDescription);
+
+          if(gameDetail.game_description!.game_name === gameName) {
+            gameDetail.game_description!.game_descr = this.replaceImageCode(gameDescription);
+          }
+        });
+      }
+
+      this.gameNameList.forEach((gameName:string) => {
+        this.uploadService.apiGameDescription1(gameName, onSuccess1);
+      });
       /*for(let i=0;i<this.gameNameList.length;i++){
         this.gameNameList[i].time=(this.gameNameList[i].time-Date.now()/1000);
       }*/
     }
     this.uploadService.apiGameList1(onSuccess);
+    
     /*
     for(let i=0; i < this.gameNameList.length;i++){
-      let onSuccess1 = (gameName[i],gameDescription:string)=>{ 
-        this.loading=true;
-        this.gameNameList = gameNameList;
-        this.loading=false;
+      let onSuccess1 = (gameDescription:string) => { 
         this.hasGames = this.gameNameList.length !== 0;
-        /*for(let i=0;i<this.gameNameList.length;i++){
-          this.gameNameList[i].time=(this.gameNameList[i].time-Date.now()/1000);
-        }*/
-        
-      //}
-      //this.uploadService.apiGameList1(onSuccess);
-      
-    //}
-    
-
-  
+        this.gameDescriptionList[this.gameDescriptionList.length] = gameDescription;
+        console.log("description");
+        console.log(this.gameDescriptionList);
+      }
+      this.uploadService.apiGameDescription1(this.gameNameList[i], onSuccess1);
+    }
+    */
   }
   
   lobbyChange(event: any){
