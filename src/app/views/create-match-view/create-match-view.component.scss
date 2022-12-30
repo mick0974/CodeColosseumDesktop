@@ -31,21 +31,21 @@ h3{
     text-align: center;
 
 }
-#status-div{
+/*#status-div{
     text-align: center;
 
-}
+}*/
 
 #btnpassword{
     width: 232px;
     height: 36px;
     font-size: 14px;
 }
-#btnstatus{
+/*#btnstatus{
     width: 232px;
     height: 36px;
     font-size: 14px;
-}
+}*/
 
 #btn-create{
     text-align: center;
@@ -72,8 +72,20 @@ p-inputNumber{
     width: 154;
     height: 45;
 }
-/*#roshambo-tab{
-    background-image: url(../../../assets/images/colosseum-18.png);
+/*.parent{
+    //border: 1px;
+    //width:276;
+    overflow: hidden;
+    display: flex;
+}
+img{
+    max-width: inherit;
+    max-height: inherit;
+    //width: 270px;
+    //height: 100px;
+    height: inherit;
+    width: inherit;
+    object-fit: cover;
 }*/
 .container-outer {
     display: flex;
@@ -88,6 +100,7 @@ p-inputNumber{
     //justify-content: center;
     //align-items: center;
     width: 75%;
+    overflow: hidden;
     //border: 3px solid red;
     //font-family: verdana;
     //font-weight: bold;

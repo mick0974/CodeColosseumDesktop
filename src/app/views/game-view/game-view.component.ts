@@ -142,7 +142,7 @@ export class GameViewComponent implements OnInit {
       console.log(errorMessage)
       }
 
-    this.apiService.connectToPlay(
+    let cmd = this.apiService.connectToPlay(
     this.game!.id,
     this.connectionService.username,
     this.uploadData.password,
@@ -150,6 +150,8 @@ export class GameViewComponent implements OnInit {
     onMatchUpdate,
     undefined, //todo onData
     onError)
+
+    cmd.sendBinary
   }
 
   fileUpload(event:any){

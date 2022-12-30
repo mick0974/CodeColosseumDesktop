@@ -13,7 +13,7 @@ export class CreateMatchViewComponent implements OnInit {
   public name: string = '**The Big Bang Theory**';
   public text: string = 'Custom **Markdown in Angular** example!';
   password: string = '';
-  serverpwd: string = '';
+  // is not necessary serverpwd: string = '';
   submitted: boolean = false;
   arg_name: string[] = [];
   arg_value: string[] = [];
@@ -25,6 +25,7 @@ export class CreateMatchViewComponent implements OnInit {
   public createMatchData:any = {};
   selectedGame:any = {};
   
+  gameNameList:string[] = [];
   gamedetails:any[] = CREATE_GAMES;
   isLoading:boolean = false;
   loading:boolean = true;
@@ -48,18 +49,33 @@ export class CreateMatchViewComponent implements OnInit {
 
     this.hasGames = this.gamedetails.length !== 0;
     
-    /*let onSuccess = (gamedetails:GameDetails[])=>{ 
+    let onSuccess = (gameNameList:string[])=>{ 
       this.loading=true;
-      this.gamedetails = gamedetails;
+      this.gameNameList = gameNameList;
       this.loading=false;
-      this.hasGames = this.gamedetails.length !== 0;
-      for(let i=0;i<this.gamedetails.length;i++){
-        this.gamedetails[i].time=(this.gamedetails[i].time-Date.now()/1000);
-      }
+      this.hasGames = this.gameNameList.length !== 0;
+      /*for(let i=0;i<this.gameNameList.length;i++){
+        this.gameNameList[i].time=(this.gameNameList[i].time-Date.now()/1000);
+      }*/
     }
-    this.uploadService.gameDetailsList(onSuccess)
-    //this.connectionManager.lobbyList1(onSuccess)
-    */
+    this.uploadService.apiGameList1(onSuccess);
+    /*
+    for(let i=0; i < this.gameNameList.length;i++){
+      let onSuccess1 = (gameName[i],gameDescription:string)=>{ 
+        this.loading=true;
+        this.gameNameList = gameNameList;
+        this.loading=false;
+        this.hasGames = this.gameNameList.length !== 0;
+        /*for(let i=0;i<this.gameNameList.length;i++){
+          this.gameNameList[i].time=(this.gameNameList[i].time-Date.now()/1000);
+        }*/
+        
+      //}
+      //this.uploadService.apiGameList1(onSuccess);
+      
+    //}
+    
+
   
   }
   
@@ -76,23 +92,16 @@ export class CreateMatchViewComponent implements OnInit {
   }
   
   public async createMatch(newMatch:GameDetails): Promise<void> {
-
-    //await this.connectionManager.connect(this.connectData.server, this.connectData.username);
-    //if (this.connectionManager.isConnected) {
-    //} else {
-      // TODO: Show error message
-    //}
     this.uploadService.createNewLobby(newMatch);
-    this.router.navigateByUrl("/home"); //poi credo sia la home ad aggiornare i game disponibili
-    
+    this.router.navigateByUrl("/home"); //home will update the list of lobby with new lobby name
   }
   onClickCreateMatch(game: any, index: number){
     this.selectedGame = game;
-    console.log("SelectedGame name: ", this.selectedGame.game_description.game_name);
+    /*console.log("SelectedGame name: ", this.selectedGame.game_description.game_name);
     console.log("Game players: ", this.gamedetails[index].game_params.players);
     console.log("Click of new match button");
     console.log("Arg name: ", this.gamedetails[index].args[0].name);
-    console.log("Arg value", this.gamedetails[index].args[0].value);
+    console.log("Arg value", this.gamedetails[index].args[0].value);*/
     //console.log("Arg name: ", this.gamedetails[index].args[1].name);
     //console.log("Arg value", this.gamedetails[index].args[1].value);
    
