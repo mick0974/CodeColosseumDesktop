@@ -25,6 +25,7 @@ export class CreateMatchViewComponent implements OnInit {
   public createMatchData:any = {};
   selectedGame:any = {};
   
+  gameNameList:string[] = [];
   gamedetails:any[] = CREATE_GAMES;
   isLoading:boolean = false;
   loading:boolean = true;
@@ -48,18 +49,33 @@ export class CreateMatchViewComponent implements OnInit {
 
     this.hasGames = this.gamedetails.length !== 0;
     
-    /*let onSuccess = (gamedetails:GameDetails[])=>{ 
+    let onSuccess = (gameNameList:string[])=>{ 
       this.loading=true;
-      this.gamedetails = gamedetails;
+      this.gameNameList = gameNameList;
       this.loading=false;
-      this.hasGames = this.gamedetails.length !== 0;
-      for(let i=0;i<this.gamedetails.length;i++){
-        this.gamedetails[i].time=(this.gamedetails[i].time-Date.now()/1000);
-      }
+      this.hasGames = this.gameNameList.length !== 0;
+      /*for(let i=0;i<this.gameNameList.length;i++){
+        this.gameNameList[i].time=(this.gameNameList[i].time-Date.now()/1000);
+      }*/
     }
-    this.uploadService.gameDetailsList(onSuccess)
-    //this.connectionManager.lobbyList1(onSuccess)
-    */
+    this.uploadService.apiGameList1(onSuccess);
+    /*
+    for(let i=0; i < this.gameNameList.length;i++){
+      let onSuccess1 = (gameName[i],gameDescription:string)=>{ 
+        this.loading=true;
+        this.gameNameList = gameNameList;
+        this.loading=false;
+        this.hasGames = this.gameNameList.length !== 0;
+        /*for(let i=0;i<this.gameNameList.length;i++){
+          this.gameNameList[i].time=(this.gameNameList[i].time-Date.now()/1000);
+        }*/
+        
+      //}
+      //this.uploadService.apiGameList1(onSuccess);
+      
+    //}
+    
+
   
   }
   
