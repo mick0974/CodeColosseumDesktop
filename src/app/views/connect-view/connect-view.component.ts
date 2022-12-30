@@ -15,7 +15,7 @@ export class ConnectViewComponent implements OnInit {
   
   submitted: boolean = false;
   
- public connectData:any={};
+  public connectData:any={};
   
   constructor(
     private readonly connectionManager: ConnectionManagerService,
@@ -35,22 +35,14 @@ export class ConnectViewComponent implements OnInit {
     }
   }
   serverChange(event: any){
-    console.log(event);
-    console.log(this.connectData);
+    //console.log(event);
+    //console.log(this.connectData);
   }
   usernameChange(event: any){
-    console.log(event);
-    console.log(this.connectData);
+    //console.log(event);
+    //console.log(this.connectData);
   }
   onClick(){
-    /*if(!this.server){
-      alert('Please insert a server url!')
-      return;
-    }
-    if(!this.username){
-      alert('Please insert a username!')
-      return;
-    }*/
     if(this.connectData.server && this.connectData.username){
       this.connect();
       return;

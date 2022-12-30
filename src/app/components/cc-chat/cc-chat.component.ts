@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MOCKMESSAGES } from 'mock-messages';
 import { ChatMessage } from 'src/app/ChatMessage';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'cc-chat',
@@ -9,7 +10,7 @@ import { ChatMessage } from 'src/app/ChatMessage';
 })
 export class CcChatComponent implements OnInit {
 
-  messages:ChatMessage[]=MOCKMESSAGES
+  @Input() messages:ChatMessage[]=[];
   constructor() { }
 
   ngOnInit(): void {

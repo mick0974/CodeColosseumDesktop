@@ -1,5 +1,5 @@
 import { MatchInfo } from "src/app/services/api-service/api.service";
-export const GAMES:MatchInfo[] = [
+export const GAMES:MatchInfo[] = [/*
     {
 
         players:2,
@@ -111,5 +111,5 @@ export const GAMES:MatchInfo[] = [
         spectators: 2,
         password: true,
         verified: true,
-    },
+    },*/
 ]
