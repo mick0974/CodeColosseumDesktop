@@ -105,11 +105,13 @@ export class UploadService {
     req.onError = this.onApiError;
     console.log(req);
   }
-  async apiGameList1(onSuccess:(gameNameList:string[])=>void){
-    let req = this.api.gameList( onSuccess );
-    req.onError = this.onApiError;
-    console.log(req);
-  }
+
+  async apiGameList1(onSuccess:(gameNameList:string[])=>void)
+    {
+      let req = this.api.gameList( onSuccess );
+      req.onError = this.onApiError;
+      console.log(req);
+    }
 
   async apiGameDescription(gameName:string) {
     let onSuccess = (gameDescription:string)=>{ 
@@ -124,7 +126,6 @@ export class UploadService {
     //req1.onError = this.onApiError;
   }
   async apiGameDescription1(gameName:string, onSuccess:(gameDescription:string)=> void) {
-    
     //here we have to substitute "roshambo" and "royalur" with elements 
     let req = this.api.gameDescription( gameName, onSuccess );
     //let req1 = this.api.gameDescription( "roshambo", onSuccess);
