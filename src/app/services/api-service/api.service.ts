@@ -6,6 +6,8 @@ import { CoCoSocket } from './api.socket';
 
 export interface GameParams extends Packets.GameParams{}
 export interface MatchInfo extends Packets.MatchInfo{}
+export interface ConnectCommand extends Commands.Connect{}
+
 export class Args{
   public name:string;
   public value:string;
@@ -50,7 +52,7 @@ export enum LobbyEventType{
 
 export enum ErrorType{ 
   LobbyJoinFailed = 'LobbyJoinFailed',
-  LobbyCreateFailed = 'LobbyCeateFailed'
+  LobbyCreateFailed = 'LobbyCreateFailed'
 }
 
 
@@ -59,7 +61,7 @@ export enum ErrorType{
   providedIn: 'root'
 })
 
-export class ApiService {
+export class ApiService{
   public url = 'ws://localhost:8088';
   public ws?:CoCoSocket;
 
@@ -104,8 +106,6 @@ export class ApiService {
 
   public createNewLobby( 
       onData:(newGame:string)=>void, 
-      gameDetails:GameDetails
-      /*
       lobby_name:string, 
       game_name:string, 
       players?:number,
@@ -113,17 +113,8 @@ export class ApiService {
       timeout?:number,
       args?:{}, //new RoshamboArgs || new RoyalurArgs
       password?:string
-      */
     ){
-      let gameArgs;
-      if(gameDetails.args!.length > 1) { 
-        gameArgs = new Packets.RoshamboArgs(gameDetails.args![0].value, gameDetails.args![1].value);
-      }
-      else if(gameDetails.args!.length === 1){
-        gameArgs = new Packets.RoyalurArgs(gameDetails.args![0].value);
-      }
-
-      let cmdNewGame = new Commands.NewLobby(this.url, gameDetails.lobby_name, gameDetails.game_description!.game_name, gameDetails.game_params!.players, gameDetails.game_params!.bots, gameDetails.game_params!.timeout, gameArgs, gameDetails.password);
+      let cmdNewGame = new Commands.NewLobby(this.url, lobby_name, game_name, players, bots, timeout, args, password);
       cmdNewGame.onReciveNewLobby = (message)=>{
         if(onData){
           if(message.id["Err"] != undefined){
@@ -143,16 +134,16 @@ export class ApiService {
   public connectToPlay( 
       lobbyID:string, 
       displayName:string, 
-      password?:string,
+      password?:string, 
       onEvent?: (state:LobbyEventType)=>void,
       onMatchUpdate?: (matchInfo: MatchInfo)=>void, 
       onData?: (data:string)=>void,
-      onError?:(data:string)=>void
+      onError?: (error:string)=>void,
     ){
     
     let cmdConnect = new Commands.Connect(this.url, lobbyID, displayName, password);
+    
     cmdConnect.onReciveJoin = (message) => { 
-      console.log(message.info.Err)
       if (message.info.Err){ 
         if (cmdConnect.onError) { cmdConnect.onError("Failed to join lobby: "+message.info.Err)  } 
         return;
@@ -160,11 +151,12 @@ export class ApiService {
       if(onEvent) { onEvent(LobbyEventType.Join) } 
       if(onMatchUpdate && message.info.Ok) { onMatchUpdate(message.info.Ok) }
     }
+
     cmdConnect.onReciveStart = (message) => { if(onEvent) { onEvent(LobbyEventType.Start) } }
     cmdConnect.onReciveEnd = (message) => { if(onEvent) { onEvent(LobbyEventType.End) } }
     cmdConnect.onReciveUpdate = (message) => { if(onMatchUpdate ) { onMatchUpdate(message.info) } }
     cmdConnect.onReciveBinary = (message) => { if(onData) { onData(message)} }
-    cmdConnect.onError = onError
+    cmdConnect.onError = (message) => { if(onError) { onError(message) } }
     
     cmdConnect.run();
     return cmdConnect;

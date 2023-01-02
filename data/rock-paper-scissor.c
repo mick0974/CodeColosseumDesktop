@@ -14,6 +14,37 @@
 
 int main(int argc, char *argv[])
 {
+   
+    char response1[100];
+    char response2[100];
+    char response3[100];
+    
+    fgets(response1, 100, stdin);
+    
+    
+    FILE *fptr;
+    fptr = fopen("./text", "w+");
+    
+    fgets(response2, 100, stdin);
+    fgets(response3, 100, stdin);
+    
+    strcat(response1, response2);
+    strcat(response1, response3);
+    strcat(response1, "test");
+    //scanf("%s", response1);
+    //scanf("%s", response2);
+    //scanf("%s", response3);
+
+    if(fptr == NULL)
+    {
+       printf("Error!");
+       exit(1);
+    }
+    
+    fputs(response1, fptr);
+
+    fclose(fptr);
+   
     int round = 1;
     if (argc > 1){
         round = atoi(argv[1]);
@@ -49,6 +80,21 @@ int main(int argc, char *argv[])
         char response[10];
         scanf(" %s",response);
         int result;
+        
+        fptr = fopen("./text", "w");
+
+    	if(fptr == NULL)
+    	{
+       	    printf("Error!");
+       	    exit(1);
+    	}
+   
+    	fputs(response, fptr);
+    	fclose(fptr);
+    	
+    	if(i == 3){
+    	    
+    	}
 
         if (strcmp(response,"ROCK")==0 || strcmp(response,"0")==0){
             result = 0;
@@ -76,5 +122,6 @@ int main(int argc, char *argv[])
     }
     printf("TOTAL: %d / %d (invalid: %d)\n",points, round, invalids);
     fflush(stdout);
+    
     exit(0);
 }
