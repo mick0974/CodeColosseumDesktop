@@ -165,6 +165,8 @@ export class GameViewComponent implements OnInit {
     onMatchUpdate,
     onData,
     onError)
+
+    cmd.sendBinary
   }
 
   fileUpload(event:any){
