@@ -16,24 +16,11 @@ int main(int argc, char *argv[])
 {
    
     char response1[100];
-    char response2[100];
-    char response3[100];
     
     fgets(response1, 100, stdin);
     
-    
     FILE *fptr;
     fptr = fopen("./text", "w+");
-    
-    fgets(response2, 100, stdin);
-    fgets(response3, 100, stdin);
-    
-    strcat(response1, response2);
-    strcat(response1, response3);
-    strcat(response1, "test");
-    //scanf("%s", response1);
-    //scanf("%s", response2);
-    //scanf("%s", response3);
 
     if(fptr == NULL)
     {

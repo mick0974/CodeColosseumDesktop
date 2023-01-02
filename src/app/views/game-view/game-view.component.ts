@@ -42,6 +42,8 @@ export class GameViewComponent implements OnInit {
   newMsg:string="";
   messages:ChatMessage[]=[];
 
+  firstBinaryMsg = true;
+
   tauriService = new TauriService();
 
   constructor(private router:Router,
@@ -142,14 +144,15 @@ export class GameViewComponent implements OnInit {
     }
 
     let onData = (data:string)=>{
-      let messages = data.split("\n");
-      messages.forEach((message, index, messages) => {
-          if(message != ""){
-            this.messages.push({sender:"other", content:message});
-            this.sendToTauri(message);
-          }
-        }
-      )
+      if(data != ""){
+        
+        let sender = this.firstBinaryMsg ? "server" : "other";
+
+        this.firstBinaryMsg = false;
+
+        this.messages.push({sender:sender, content:data});
+        this.sendToTauri(data);
+      }
     }
   
     let onError = (errorMessage:string)=>{
@@ -165,8 +168,6 @@ export class GameViewComponent implements OnInit {
     onMatchUpdate,
     onData,
     onError)
-
-    cmd.sendBinary
   }
 
   fileUpload(event:any){
