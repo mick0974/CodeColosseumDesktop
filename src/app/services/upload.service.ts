@@ -15,7 +15,10 @@ export class UploadService {
   public gameDetailsvar: GameDetails = {};
   public gameListvar?:string[];
 
-  constructor(private router:Router,private connectionManager:ConnectionManagerService) { }
+  constructor(private router:Router,private connectionManager:ConnectionManagerService) { 
+    this.onApiError = this.onApiError.bind(this)
+
+  }
 
   async setGame1(token:string|null):Promise<void>{
     return new Promise<void>(
@@ -87,7 +90,8 @@ export class UploadService {
   }
   
   async onApiError(message: string){
-    alert("Error: "+message)
+    //alert("Error: "+ message)
+    this.connectionManager.onApiError(message);
   }
 
   //idea for every member of game list I will show its description

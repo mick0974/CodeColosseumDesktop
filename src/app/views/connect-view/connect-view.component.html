@@ -2,13 +2,16 @@
   <div class="card" className="cc-card">
     <h1>Welcome to <br>Code Colosseum.</h1> 
       <div class="fromgrid grid" className="cc-grid">
+        <div class="field col-12" id="error-div">
+          <small class="p-error" *ngIf="(error)">Couldn't establish connection! Because server is not active.</small>
+        </div>
         <div class="field col-12" id="server-div">
           <span class="p-float-label" id="server-span">
             <input #server= "ngModel" [(ngModel)]="connectData.server" type="text" name="server" (change)="serverChange($event)"  id="server" required [ngClass]="{'ng-dirty': (server.invalid && submitted) || (server.dirty && server.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
             <label for="server">Server URL</label>  
           </span>
           <br>
-          <small class="p-error" *ngIf="(server.invalid && submitted) || (server.dirty && server.invalid)">Server url is required</small>
+          <small class="p-error" *ngIf="(server.invalid && submitted) || (server.dirty && server.invalid)">Server url is required. </small>
         </div>
         <div class="field col-12" id="username-div">
           <span class="p-float-label" id="username-span">
