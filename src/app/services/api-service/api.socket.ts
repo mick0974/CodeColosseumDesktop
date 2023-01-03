@@ -64,8 +64,8 @@ export class CoCoSocket{
   public sendBinary(data: string) {
     let payload = this.binEncoder.encode(data);
     if (!this.isOpen()) {
-      this.didError("CoCoSocket:sendBinary: unable to send, socket is null")
-      return false
+      this.didError("CoCoSocket:sendBinary: unable to send, socket is null");
+      return false;
     } 
     console.log("CoCoSocket:sendBinary: sending payload \n"+payload);
     this.ws!.next(payload.buffer);
