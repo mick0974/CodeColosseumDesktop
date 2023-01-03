@@ -204,7 +204,7 @@ export class GameViewComponent implements OnInit {
     }
 
     //Todo put in actual parameters, these are now hardcoded
-    this.tauriService.execProgram(onStdOut, onStdErr,
+    this.tauriService.execProgram(this.filePath, onStdOut, onStdErr,
       "10", "1");
   }
 }

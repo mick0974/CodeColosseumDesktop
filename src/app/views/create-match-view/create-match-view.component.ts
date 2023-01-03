@@ -111,11 +111,11 @@ export class CreateMatchViewComponent implements OnInit {
   
   lobbyChange(event: any){
     console.log(event);
-    console.log("Create match data: " + this.createMatchData.lobby);
+    console.log(this.createMatchData);
   }
   tabPanelChange(event: any){
     console.log("Event on the tabPanel" + event);
-    console.log("Create match data: " + this.createMatchData.lobby);
+    console.log(this.createMatchData);
   }
   getFormatTime(value:number):string{
     return ""+(value/60).toFixed(0)+":"+value%60;

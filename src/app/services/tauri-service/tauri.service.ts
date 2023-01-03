@@ -60,7 +60,7 @@ export class TauriService {
   
       console.log("Sending to Tauri: " + message + ", process " + this.child?.pid);
   
-      this.child.write(message).then((value) => {
+      this.child?.write(message).then((value) => {
         console.log("Write to Tauri of {" + message + "} successful");
       }, (reason) => {
         console.log("Write to Tauri failed: " + reason);
@@ -72,16 +72,9 @@ export class TauriService {
   }
 
   writeInputBuffer(){
-    console.log("buffer size " + this.inputBuffer.length)
-    this.inputBuffer.forEach((value, index, _array) => {
-      this.delay(1500 * index).then(()=>{
-        this.sendToProcess(value);
-      });
+    this.inputBuffer.forEach((value, _index, _array) => {
+      this.sendToProcess(value);
     })
-  }
-
-  delay(ms:number){
-    return new Promise(resolve=>setTimeout(resolve,ms))
   }
 
   async execProgram(
