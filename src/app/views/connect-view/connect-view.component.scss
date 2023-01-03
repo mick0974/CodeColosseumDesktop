@@ -16,11 +16,17 @@ h1{
     /*width: 378px;
     height: 112px;*/
 }
+#error-div{
+    text-align: center;
+    display: center;
+    justify-content: center;  
+}
 #server-div{
     text-align: center;
     display: center;
     justify-content: center;
 }
+
 #server-span{
     display: inline-block;
     position: relative;
