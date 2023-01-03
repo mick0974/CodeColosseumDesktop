@@ -14,21 +14,24 @@ export class ConnectViewComponent implements OnInit {
   //public username: string = "";
   
   submitted: boolean = false;
-  
+  error:boolean = false;
   public connectData:any={};
-  
+    
   constructor(
     private readonly connectionManager: ConnectionManagerService,
     private readonly router: Router,
-  ) { }
+  ) {
+    this.error = this.connectionManager.error;
+   }
 
   ngOnInit(): void {
+    this.error = this.connectionManager.error;
   }
 
   public async connect(): Promise<void> {
     await this.connectionManager.connect(this.connectData.server, this.connectData.username);
 
-    if (this.connectionManager.isConnected) {
+    if (this.connectionManager.isConnected && !this.connectionManager.error ) {
       this.router.navigateByUrl('/home');
     } else {
       // TODO: Show error message
@@ -43,11 +46,11 @@ export class ConnectViewComponent implements OnInit {
     //console.log(this.connectData);
   }
   onClick(){
+    
     if(this.connectData.server && this.connectData.username){
       this.connect();
       return;
     }
-    
     //this.newConnection.emit();
     this.submitted = true;
     

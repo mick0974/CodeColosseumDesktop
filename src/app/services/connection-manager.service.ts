@@ -14,14 +14,21 @@ export class ConnectionManagerService {
   private _isConnected: boolean = false;
   //deve prenderlo dalla home
   public lobbylistvar?: MatchInfo[];
+  public error: boolean = false;
 
   constructor(
     private readonly router: Router,
     
-  ) { }
+  ) { 
+    this.onApiError = this.onApiError.bind(this)
+  }
 
   async onApiError(message: string){
-    alert("Error: " + message)
+    console.log("Couldn't establish connection! For error " + message);
+    //alert("Error: " + message)
+    this.error = true;
+    this._isConnected = false;
+    this.router.navigate(['/connect']);
   }
 
   async lobbyList() {
@@ -41,6 +48,7 @@ export class ConnectionManagerService {
   async lobbyList1(onSuccess:(gameList:MatchInfo[])=>void ) {
     let req = this.api.lobbyList( onSuccess );
     req.onError = this.onApiError;
+    //qui avviene l'errore che non riesce a connettersi al server
     console.log(req)
   }
 
@@ -62,10 +70,11 @@ export class ConnectionManagerService {
     
     // TODO: connect to server
     // Add the below lines to the connect method
-     this._isConnected = true;
-     this.router.navigate(['/home']);
+    this.lobbyList();
+    
+    this._isConnected = true;
      //after the right connection  show the lobby list
-     this.lobbyList();
+     this.router.navigate(['/home']);
         
     // TO REMOVE: Temporary return true
     return new Promise((resolve, reject) => {
@@ -80,6 +89,7 @@ export class ConnectionManagerService {
   public disconnect(): void {
     this._isConnected = false;
     this.router.navigate(['/connect']);
+    //this.router.navigateByUrl('localhost:4200/connect');
   }
 
 }
