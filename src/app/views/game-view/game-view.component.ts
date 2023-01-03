@@ -8,6 +8,8 @@ import { ConnectionManagerService } from 'src/app/services/connection-manager.se
 import { LobbyEventType } from 'src/app/services/api-service/api.service';
 import { ChatMessage } from 'src/app/ChatMessage';
 import { ThisReceiver } from '@angular/compiler';
+import { TauriService } from '../../services/tauri-service/tauri.service';
+import { ConnectCommand } from '../../services/api-service/api.service';
 
 @Component({
   selector: 'app-game-view',
@@ -15,6 +17,9 @@ import { ThisReceiver } from '@angular/compiler';
   styleUrls: ['./game-view.component.scss']
 })
 export class GameViewComponent implements OnInit {
+
+  //Connect command
+  connectCmd?: ConnectCommand;
 
   //Gen
   game! : MatchInfo | null;
@@ -28,6 +33,7 @@ export class GameViewComponent implements OnInit {
   myfile:any[] = [];
   submitted:boolean = false;
   currProgramName:string = "No uploaded file yet."
+  filePath:string = ""
   stateOptions: any[]= [{value:'python',label:'Python'}, {value: 'cpp',label:'C++'}];
   uploadData:any={'programType':"python"};
 
@@ -35,6 +41,10 @@ export class GameViewComponent implements OnInit {
   lastMatchState!:MatchInfo;
   newMsg:string="";
   messages:ChatMessage[]=[];
+
+  firstBinaryMsg = true;
+
+  tauriService = new TauriService();
 
   constructor(private router:Router,
     private activatedroute:ActivatedRoute,
@@ -105,18 +115,15 @@ export class GameViewComponent implements OnInit {
           }
           this.newMsg = this.newMsg.substring(0,this.newMsg.length-2)
           this.messages.push({sender:"server",content:this.newMsg})
-        
         }
       }
       else{ 
-
         // Check if game started running
         if (!this.lastMatchState.running && matchInfo.running){
           this.messages.push({sender:"server",content:"Game is starting!"})
+
+          this.launchTauri();
         }
-
-
-
 
         // this finds the name of the new player that has joined.
         let newPlayer=""
@@ -132,39 +139,68 @@ export class GameViewComponent implements OnInit {
           this.newMsg=newPlayer+" has left the match!";
           this.messages.push({sender:"server",content:this.newMsg})
         }
-      
       }
       this.lastMatchState=matchInfo;
+    }
+
+    let onData = (data:string)=>{
+      if(data != ""){
+        
+        let sender = this.firstBinaryMsg ? "server" : "other";
+
+        this.firstBinaryMsg = false;
+
+        this.messages.push({sender:sender, content:data});
+        this.sendToTauri(data);
+      }
     }
   
     let onError = (errorMessage:string)=>{
       this.errorMessage = errorMessage;
       console.log(errorMessage)
-      }
+    }
 
-    let cmd = this.apiService.connectToPlay(
+    this.connectCmd = this.apiService.connectToPlay(
     this.game!.id,
     this.connectionService.username,
     this.uploadData.password,
     onEvent,
     onMatchUpdate,
-    undefined, //todo onData
+    onData,
     onError)
-
-    cmd.sendBinary
   }
 
   fileUpload(event:any){
-    console.log(event)
-    this.uploadData.program = event.target.files[0]
-    this.currProgramName = this.uploadData.program.name
-    console.log(this.uploadData)
+    console.log(event);
+    this.uploadData.program = event.target.files[0];
+    this.filePath = this.uploadData.program.webkitRelativePath;
+    console.log("filepath" + this.filePath);
+    this.currProgramName = this.uploadData.program.name;
+    console.log("File uploaded: " + this.uploadData);
   }
 
   navigateToUpload():void{
     this.currStep=0;
   }
 
+  sendToTauri(message:string) {
+    this.tauriService.sendToProcess(message);
+  }
 
-  
+  launchTauri(){
+    console.log("Launching Tauri process");
+
+    let onStdOut = (output:string) => {
+      console.log("Tauri output: " + output);
+      this.messages.push({sender:"me",content: output});
+      this.connectCmd?.sendBinary(output);
+    }
+
+    let onStdErr = (error:string) => {
+      console.log("Errore nel processo tauri: " + error);
+    }
+
+    this.tauriService.execProgram(this.filePath, onStdOut, onStdErr,
+      "10", "1");
+  }
 }

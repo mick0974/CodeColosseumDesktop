@@ -149,8 +149,7 @@ export namespace Commands{
       public override didReciveHandshake( handshake: Packets.Reply.Handshake){
         super.didReciveHandshake(handshake);
 
-        let msg = new Packets.Request.GameDescription();
-        this.coco.send(msg);
+        this.coco.send(this.msg);
       }
 
       public override didRecive(payload:Packets.PacketsPayload){

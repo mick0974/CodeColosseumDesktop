@@ -161,7 +161,7 @@
 
 "@angular/cdk@^12.0.0":
   version "12.2.13"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-12.2.13.tgz#1fdbe814adfd6b4ff906c6d9c4c6df07b83f09d8"
+  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-12.2.13.tgz"
   integrity sha512-zSKRhECyFqhingIeyRInIyTvYErt4gWo+x5DQr0b7YLUbU8DZSwWnG4w76Ke2s4U8T7ry1jpJBHoX/e8YBpGMg==
   dependencies:
     tslib "^2.2.0"
@@ -1295,7 +1295,7 @@
 
 "@nebular/eva-icons@8.0.0":
   version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@nebular/eva-icons/-/eva-icons-8.0.0.tgz#186bfda564be9521b0584eb23a09e4a1be036bb9"
+  resolved "https://registry.npmjs.org/@nebular/eva-icons/-/eva-icons-8.0.0.tgz"
   integrity sha512-eUNEQJP5w+XiAW1FyEVneno0qiNKoDZlobkglhdvVR1u7e3D4a5IxwnaKK0Izl/6j6eSs/qoBuzrBkJ4alaNjw==
 
 "@nebular/theme@^8.0.0":
@@ -1407,7 +1407,7 @@
     node-gyp "^8.2.0"
     read-package-json-fast "^2.0.1"
 
-"@schematics/angular@13.3.9":
+"@schematics/angular@13.3.9", "@schematics/angular@~13.3.5":
   version "13.3.9"
   resolved "https://registry.npmjs.org/@schematics/angular/-/angular-13.3.9.tgz"
   integrity sha512-tm5wst7+Z8cOgOJ/4JVlYKOFCCOVnqKYFtYf0BIWq6RFBXcw6QqbGW1wXH8ASmuev4QZXKgqc7YKALPpYAKCeQ==
@@ -1432,7 +1432,7 @@
 
 "@tauri-apps/api@^1.2.0":
   version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.2.0.tgz#1f196b3e012971227f41b98214c846430a4eb477"
+  resolved "https://registry.npmjs.org/@tauri-apps/api/-/api-1.2.0.tgz"
   integrity sha512-lsI54KI6HGf7VImuf/T9pnoejfgkNoXveP14pVV7XarrQ46rOejIVJLFqHI9sRReJMGdh2YuCoI3cc/yCWCsrw==
 
 "@tauri-apps/cli-darwin-arm64@1.2.2":
@@ -1477,12 +1477,12 @@
 
 "@tauri-apps/cli-win32-x64-msvc@1.2.2":
   version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@tauri-apps/cli-win32-x64-msvc/-/cli-win32-x64-msvc-1.2.2.tgz#9b8ea7c63f2883af105e204fc4f1f11a83990a59"
+  resolved "https://registry.npmjs.org/@tauri-apps/cli-win32-x64-msvc/-/cli-win32-x64-msvc-1.2.2.tgz"
   integrity sha512-YRPJguJma+zSuRZpFoSZqls6+laggG1vqG0FPQWQTi+ywATgMpai2b2RZnffDlpHKp9mt4V/s2dtqOy6bpGZHg==
 
 "@tauri-apps/cli@^1.2.1":
   version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@tauri-apps/cli/-/cli-1.2.2.tgz#cf7cb90d11c3c3b757efe07b7e2c48abde045ada"
+  resolved "https://registry.npmjs.org/@tauri-apps/cli/-/cli-1.2.2.tgz"
   integrity sha512-D8zib3A0vWCvPPSyYLxww/OdDlVcY7fpcDVBH6qUvheOjj2aCyU7H9AYMRBwpgCfz8zY5+vomee+laLeB0H13w==
   optionalDependencies:
     "@tauri-apps/cli-darwin-arm64" "1.2.2"
@@ -1545,6 +1545,13 @@
   resolved "https://registry.npmjs.org/@types/cors/-/cors-2.8.12.tgz"
   integrity sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==
 
+"@types/dompurify@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/@types/dompurify/-/dompurify-2.4.0.tgz"
+  integrity sha512-IDBwO5IZhrKvHFUl+clZxgf3hn2b/lU6H1KaBShPkQyGJUQ0xwebezIPSuiyGwfz1UzJWQl4M7BDxtHtCCPlTg==
+  dependencies:
+    "@types/trusted-types" "*"
+
 "@types/eslint-scope@^3.7.3":
   version "3.7.4"
   resolved "https://registry.npmjs.org/@types/eslint-scope/-/eslint-scope-3.7.4.tgz"
@@ -1602,6 +1609,11 @@
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.11.tgz"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
+"@types/marked@^4.0.8":
+  version "4.0.8"
+  resolved "https://registry.npmjs.org/@types/marked/-/marked-4.0.8.tgz"
+  integrity sha512-HVNzMT5QlWCOdeuBsgXP8EZzKUf0+AXzN+sLmjvaB3ZlLqO+e4u0uXrdw9ub69wBKFs+c6/pA4r9sy6cCDvImw==
+
 "@types/mime@*":
   version "3.0.1"
   resolved "https://registry.npmjs.org/@types/mime/-/mime-3.0.1.tgz"
@@ -1653,6 +1665,11 @@
   integrity sha512-f0KEEe05NvUnat+boPTZ0dgaLZ4SfSouXUgv5noUiefG2ajgKjmETo9ZJyuqsl7dfl2aHlLJUiki6B4ZYldiiw==
   dependencies:
     "@types/node" "*"
+
+"@types/trusted-types@*":
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.2.tgz"
+  integrity sha512-F5DIZ36YVLE+PN+Zwws4kJogq47hNgX3Nx6WyDJ3kcplxyke3XIzB8uK5n/Lpm1HBsbGzd6nmGehL8cPekP+Tg==
 
 "@types/ws@^8.2.2":
   version "8.5.3"
@@ -2831,6 +2848,11 @@ domhandler@^4.2.0, domhandler@^4.3.1:
   dependencies:
     domelementtype "^2.2.0"
 
+dompurify@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/dompurify/-/dompurify-2.4.1.tgz"
+  integrity sha512-ewwFzHzrrneRjxzmK6oVz/rZn9VWspGFRDb4/rRtIsM1n36t9AKma/ye8syCpcw+XJ25kOK/hOG7t1j2I2yBqA==
+
 domutils@^2.8.0:
   version "2.8.0"
   resolved "https://registry.npmjs.org/domutils/-/domutils-2.8.0.tgz"
@@ -3537,6 +3559,11 @@ hdr-histogram-percentiles-obj@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/hdr-histogram-percentiles-obj/-/hdr-histogram-percentiles-obj-3.0.0.tgz"
   integrity sha512-7kIufnBqdsBGcSZLPJwqHT3yhk1QTsSlFsVD3kx5ixH/AlgBs9yM1q6DPhXZ8f8gtdqgh7N7/5btRLpQsS2gHw==
+
+highlight.js@^11.7.0:
+  version "11.7.0"
+  resolved "https://registry.npmjs.org/highlight.js/-/highlight.js-11.7.0.tgz"
+  integrity sha512-1rRqesRFhMO/PRF+G86evnyJkCgaZFOI+Z6kdj15TA18funfoqJXvgPCLSf0SWq3SRfg1j3HlDs8o4s3EGq1oQ==
 
 hosted-git-info@^4.0.1:
   version "4.1.0"
@@ -4328,6 +4355,11 @@ make-fetch-happen@^9.1.0:
     promise-retry "^2.0.1"
     socks-proxy-agent "^6.0.0"
     ssri "^8.0.0"
+
+marked@^4.2.5:
+  version "4.2.5"
+  resolved "https://registry.npmjs.org/marked/-/marked-4.2.5.tgz"
+  integrity sha512-jPueVhumq7idETHkb203WDD4fMA3yV9emQ5vLwop58lu8bTclMghBWcYAavlDqIEMaisADinV1TooIFCfqOsYQ==
 
 media-typer@0.3.0:
   version "0.3.0"
