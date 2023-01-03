@@ -26,16 +26,18 @@ export class ConnectViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.error = this.connectionManager.error;
+    console.log('Page reload error = ' + this.error);
   }
 
   public async connect(): Promise<void> {
     await this.connectionManager.connect(this.connectData.server, this.connectData.username);
 
     if (this.connectionManager.isConnected && !this.connectionManager.error ) {
-      this.router.navigateByUrl('/home');
+      //this.router.navigateByUrl('/home');
     } else {
       // TODO: Show error message
     }
+
   }
   serverChange(event: any){
     //console.log(event);
