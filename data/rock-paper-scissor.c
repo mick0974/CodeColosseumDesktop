@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
     
     fgets(response1, 100, stdin);
     
+    /*
     FILE *fptr;
     fptr = fopen("./text", "w+");
 
@@ -30,7 +31,7 @@ int main(int argc, char *argv[])
     
     fputs(response1, fptr);
 
-    fclose(fptr);
+    fclose(fptr);*/
    
     int round = 1;
     if (argc > 1){
@@ -68,6 +69,7 @@ int main(int argc, char *argv[])
         scanf(" %s",response);
         int result;
         
+        /*
         fptr = fopen("./text", "w");
 
     	if(fptr == NULL)
@@ -77,7 +79,7 @@ int main(int argc, char *argv[])
     	}
    
     	fputs(response, fptr);
-    	fclose(fptr);
+    	fclose(fptr);*/
     	
     	if(i == 3){
     	    

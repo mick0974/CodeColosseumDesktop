@@ -33,7 +33,6 @@ export class GameViewComponent implements OnInit {
   myfile:any[] = [];
   submitted:boolean = false;
   currProgramName:string = "No uploaded file yet."
-  filePath:string = ""
   stateOptions: any[]= [{value:'python',label:'Python'}, {value: 'cpp',label:'C++'}];
   uploadData:any={'programType':"python"};
 
@@ -161,22 +160,24 @@ export class GameViewComponent implements OnInit {
     }
 
     this.connectCmd = this.apiService.connectToPlay(
-    this.game!.id,
-    this.connectionService.username,
-    this.uploadData.password,
-    onEvent,
-    onMatchUpdate,
-    onData,
-    onError)
+      this.game!.id,
+      this.connectionService.username,
+      this.uploadData.password,
+      onEvent,
+      onMatchUpdate,
+      onData,
+      onError
+    )
   }
 
   fileUpload(event:any){
-    console.log(event);
     this.uploadData.program = event.target.files[0];
-    this.filePath = this.uploadData.program.webkitRelativePath;
-    console.log("filepath" + this.filePath);
-    this.currProgramName = this.uploadData.program.name;
-    console.log("File uploaded: " + this.uploadData);
+
+    this.tauriService.uploadFile(this.uploadData.program, ()=>{
+      this.currProgramName = this.uploadData.program.name;
+    }, (reason)=>{
+      console.log("Error, could not write file: " + reason)
+    })
   }
 
   navigateToUpload():void{
@@ -200,7 +201,7 @@ export class GameViewComponent implements OnInit {
       console.log("Errore nel processo tauri: " + error);
     }
 
-    this.tauriService.execProgram(this.filePath, onStdOut, onStdErr,
+    this.tauriService.execProgram(onStdOut, onStdErr,
       "10", "1");
   }
 }
