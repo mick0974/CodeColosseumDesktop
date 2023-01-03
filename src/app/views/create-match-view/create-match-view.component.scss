@@ -4,7 +4,7 @@
     padding-top: 0px;
 }
 h1{
-    margin-top: 60px;
+    margin-top: 30px;
     text-align: center;
     /*width: 378px;
     height: 112px;*/
@@ -31,24 +31,127 @@ h3{
     text-align: center;
 
 }
-#status-div{
+/*#status-div{
     text-align: center;
 
-}
+}*/
+
 #btnpassword{
     width: 232px;
     height: 36px;
     font-size: 14px;
 }
-#btnstatus{
+/*#btnstatus{
     width: 232px;
     height: 36px;
     font-size: 14px;
+}*/
+
+#btn-create{
+    text-align: center;
+ 
+}
+#btn-back{
+    text-align: center;
+}
+button{
+    width: 232px;
+    height: 36px;
+    font-size: 14px;
+}
+#btncreate{
+    margin:4px;
+}
+#btnback{
+    margin:4px;
+    color:#0d89ec;
+    background-color: #ffffff;
+    border-color:#ffffff
 }
 p-inputNumber{
     width: 154;
     height: 45;
 }
-/*#roshambo-tab{
-    background-image: url(../../../assets/images/colosseum-18.png);
+/*.parent{
+    //border: 1px;
+    //width:276;
+    overflow: hidden;
+    display: flex;
+}
+img{
+    max-width: inherit;
+    max-height: inherit;
+    //width: 270px;
+    //height: 100px;
+    height: inherit;
+    width: inherit;
+    object-fit: cover;
 }*/
+.container-outer {
+    display: flex;
+    align-items: stretch; /* tells boxes to stretch vertically (default value)  */
+    width: 100%; 
+    //min-height: 250px;
+    //border: 5px solid mistyrose;   
+}
+.description-info {
+    display: flex;          /* nested flexbox, to enable flex properties */
+    flex-direction: column;
+    //justify-content: center;
+    //align-items: center;
+    width: 75%;
+    overflow: hidden;
+    //border: 3px solid red;
+    //font-family: verdana;
+    //font-weight: bold;
+    //font-size: 2em;
+    //color: red;
+    box-sizing: border-box;
+    overflow: auto;
+    margin-right: 30px;
+}
+.container-inner {
+    display: flex;         /* nested flexbox */
+    flex-direction: column;
+    width: 100%;
+    //border: 3px dashed black;
+    overflow: auto;
+    margin-left: 30px;
+}
+.game-params {
+    display: flex;         /* nested flexbox */
+    //justify-content: center;
+    //align-items: center;
+    //height: 200px;          /* fixed height */
+    //border: 3px solid green;
+    //font-family: verdana;
+    //font-weight: bold;
+    //font-size: 1.5em;
+    //color: green;
+    box-sizing: border-box;
+    overflow: auto;
+}
+.args-content {
+    display: flex;          /* nested flexbox */
+    //justify-content: center;
+    //align-items: center;
+    flex-grow: 1;          /* box takes all available space (stretch, basically) */
+    //border: 3px solid blue;
+    //font-family: verdana;
+    //font-weight: bold;
+    //font-size: 2em;
+    //color: blue;
+    box-sizing: border-box;
+    overflow: auto;
+}
+#label-arg{
+margin-top: 10px;
+}
+input{
+
+    width: 365px;
+    height: 56px;
+}
+#div-btn{
+    margin-top: 10px;
+}
