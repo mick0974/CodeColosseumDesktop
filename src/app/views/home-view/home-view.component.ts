@@ -2,6 +2,7 @@ import { ASTWithSource } from '@angular/compiler';
 import { ThisReceiver } from '@angular/compiler/public_api';
 import { Component, OnInit } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
+import { ChatMessage } from 'src/app/ChatMessage';
 import { MatchInfo } from 'src/app/services/api-service/api.service';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 import { UploadService } from 'src/app/services/upload.service';
@@ -12,14 +13,22 @@ import { UploadService } from 'src/app/services/upload.service';
   styleUrls: ['./home-view.component.scss']
 })
 export class HomeViewComponent implements OnInit {
+
+
   gamelist:MatchInfo[]=[];
-  hasGames:boolean=true;
+  hasGames:boolean = true;
   loading:boolean = true;
 
   refreshSub:Subscription=new Subscription();
 
   stateOptions: any[]= [{icon: 'pi pi-bars', value: 'table'}, {icon: 'pi pi-th-large', value: 'card'}];
   view_mode: string = "card";
+
+  // Questi serve per mostrare il tempo nella view, perché apparentemente
+  // non posso usare Math nella valutazione di Typescript nell' html
+  truncateDecimals = function (number:number) {
+    return Math[number < 0 ? 'ceil' : 'floor'](number);
+  };
   
 
   constructor(private uploadService:UploadService, private connectionManager:ConnectionManagerService) {
@@ -28,6 +37,7 @@ export class HomeViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
 
     console.log("[Homeview] Resetting gameplay...")
     this.uploadService.reset()
