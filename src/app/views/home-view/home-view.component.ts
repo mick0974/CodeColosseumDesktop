@@ -61,11 +61,6 @@ export class HomeViewComponent implements OnInit {
   }
 
  
-
-
-
-  // Clicking on refresh button will refresh results. Would be
-  // optimal to have this as "autorefresh every X seconds" instead.
   onClickRefresh(){
 
     let onSuccess = (gameList:MatchInfo[])=>{ 
