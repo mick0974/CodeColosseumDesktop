@@ -14,14 +14,32 @@ export class ConnectionManagerService {
   private _isConnected: boolean = false;
   //deve prenderlo dalla home
   public lobbylistvar?: MatchInfo[];
+  public error: boolean = false;
 
   constructor(
     private readonly router: Router,
     
-  ) { }
+  ) { 
+    this.onApiError = this.onApiError.bind(this)
+  }
+
+  reloadComponent(self:boolean, urlToNavigateTo ?:string){
+    //skipLocationChange:true means dont update the url to / when navigating
+   console.log("Current route I am on:",this.router.url);
+   const url=self ? this.router.url :urlToNavigateTo;
+   this.router.navigateByUrl('/home',{skipLocationChange:true}).then(()=>{
+     this.router.navigate([`/${url}`]).then(()=>{
+       console.log(`After navigation I am on:${this.router.url}`)
+     })
+   })
+ }
 
   async onApiError(message: string){
-    alert("Error: " + message)
+    console.log("Couldn't establish connection! For error " + message);
+    //alert("Error: " + message)
+    this.error = true;
+    this._isConnected = false;
+    this.reloadComponent(true);
   }
 
   async lobbyList() {
@@ -32,7 +50,11 @@ export class ConnectionManagerService {
       //console.log("lobbyList: "+text);
       console.log("connectionmanager:")
       console.log(gameList)
+      this._isConnected = true;
+      this.router.navigate(['/home']);
+      
     }
+    
     let req = this.api.lobbyList( onSuccess );
     req.onError = this.onApiError;
     console.log(req)
@@ -41,6 +63,7 @@ export class ConnectionManagerService {
   async lobbyList1(onSuccess:(gameList:MatchInfo[])=>void ) {
     let req = this.api.lobbyList( onSuccess );
     req.onError = this.onApiError;
+    //qui avviene l'errore che non riesce a connettersi al server
     console.log(req)
   }
 
@@ -62,16 +85,16 @@ export class ConnectionManagerService {
     
     // TODO: connect to server
     // Add the below lines to the connect method
-     this._isConnected = true;
-     this.router.navigate(['/home']);
+    this.lobbyList();
+    
+    //this._isConnected = true;
      //after the right connection  show the lobby list
-     this.lobbyList();
         
     // TO REMOVE: Temporary return true
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        this._isConnected = true;
-        this.router.navigate(['/home']);
+        //this._isConnected = true;
+        //this.router.navigate(['/home']);
         resolve(true);
       }, 2000);
     });
@@ -80,6 +103,7 @@ export class ConnectionManagerService {
   public disconnect(): void {
     this._isConnected = false;
     this.router.navigate(['/connect']);
+    //this.router.navigateByUrl('localhost:4200/connect');
   }
 
 }
