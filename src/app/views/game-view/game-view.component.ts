@@ -117,6 +117,7 @@ export class GameViewComponent implements OnInit {
           this.messages.push({sender:"server",content:this.newMsg})
         }
       }
+      
       else{ 
         // Check if game started running
         if (!this.lastMatchState.running && matchInfo.running){
