@@ -30,8 +30,7 @@ export class GameViewComponent implements OnInit {
   myfile:any[] = [];
   submitted:boolean = false;
   currProgramName:string = "No uploaded file yet."
-  stateOptions: any[]= [{value:'python',label:'Python'}, {value: 'cpp',label:'C++'}];
-  uploadData:any={'programType':"python"};
+  uploadData:any={};
 
   // Messages from APIs
   lastMatchState!:MatchInfo;
