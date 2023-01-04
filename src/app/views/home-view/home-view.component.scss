@@ -1,0 +1,69 @@
+
+.cc-gamelist-header {
+    display:flex;
+    justify-content: space-between;
+    > * {
+        margin: 10px;
+    }
+    button {
+        margin:0 10px 0 0;
+    }
+}
+
+
+.cc-home-container {
+    margin: 0% 10% 0% 10%;
+    
+    p-scrollPanel{
+        margin:40px 0 0 40px;
+        text-align: center;
+        width:100%;
+        height:600px;
+    }
+}
+
+p-selectbutton {
+    display:flex;
+    align-self:center;
+}
+
+.cc-play-buttons > * {
+    margin:10px
+}
+
+:host ::ng-deep .custom-spinner .p-progress-spinner-circle {
+    animation: custom-progress-spinner-dash 1.5s ease-in-out infinite, custom-progress-spinner-color 6s ease-in-out infinite;
+    -webkit-animation: custom-progress-spinner-dash 1.5s ease-in-out infinite, custom-progress-spinner-color 6s ease-in-out infinite;
+}
+
+@keyframes custom-progress-spinner-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+
+@keyframes custom-progress-spinner-color {
+    100%,
+    0% {
+        stroke: #16697A;
+    }
+    40% {
+        stroke: #489FB5;
+    }
+    66% {
+        stroke: #82C0CC;
+    }
+    80%,
+    90% {
+        stroke: #FFA62B;
+    }
+}

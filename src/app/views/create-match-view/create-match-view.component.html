@@ -1,0 +1,121 @@
+<div class="cc-create-match-container">
+    <div class="cc-column-layout">
+        <div class="p-fluid" class="field">
+            <h1>Create match</h1> 
+            <h3>General settings</h3>
+            <div class="fromgrid grid" className="cc-grid">
+                <div class="field col-12" id="lobby-div" >
+                    <span class="p-float-label" id="lobby-span">
+                        <input #lobby= "ngModel" [(ngModel)]="createMatchData.lobby" type="text" name="lobby" (change)="lobbyChange($event)"  id="lobby" required [ngClass]="{'ng-dirty': (lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
+                        <label for="lobby">Lobby name</label>
+                    </span>
+                    <br>
+                    <small class="p-error" *ngIf="(lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)">Lobby name is required</small>
+                </div>
+                <div class="field col-12" id="password-div">
+                    <p-inplace [closable]="true">                        <ng-template pTemplate="display">
+                            <button pButton pRipple type="button" id="btnpassword" label="SET PASSWORD PROTECTION" class="border-round"></button>
+                            
+                        </ng-template>
+                        <ng-template pTemplate="content">
+                            <p-password [(ngModel)] = "createMatchData.password" id="password" [feedback]="false" placeholder="Game password" pTooltip="If you want, you can limit access to your game by setting a password that players will have to provide to play." tooltipPosition="top"></p-password>
+                        </ng-template>
+                    </p-inplace>
+                </div>
+                <!--<div class="field col-12 md:col-6" id="status-div">
+                    <p-inplace [closable]="true">
+                        <ng-template pTemplate="display">
+                            <button pButton pRipple type="button" id="btnstatus" label="ADD VERIFIED STATUS" class="border-round"></button>
+                            
+                        </ng-template>
+                        <ng-template pTemplate="content">
+                        <p-password [(ngModel)] = "serverpwd" id="serverpwd" [feedback]="false" placeholder="Server master password" pTooltip="If you know the master password of this server, fill it here to give the verified status to your game." tooltipPosition="top"></p-password>
+                        </ng-template>
+                    </p-inplace>
+                    
+                </div>-->                
+            </div>        
+            <p-tabView (onChange)="handleChange($event)">
+                <ng-template ngFor let-game [ngForOf]="gamedetails" let-i="index">
+                    
+                    <p-tabPanel header="{{game.game_description.game_name}}" ngDefaultControl name="game_name" [(ngModel)]="createMatchData.game_name" leftIcon="pi pi-plus">
+                        <article class="container-outer">
+                            
+                            <section class="description-info">
+                                <h4>Descrizione del gioco</h4>
+                                <p [innerHTML]="game.game_description.game_descr | markdown"></p>
+                                
+                            </section>
+                        
+                            
+                            <div class="container-inner">
+                                <section class="game-params">
+                                    <div class="grid p-fluid">
+                                        <div class="field col-12 md:col-4">
+                                            <label for="player-num">Numero di giocatori</label>
+                                            <p-inputNumber [(ngModel)]="gamedetails[i].game_params.players" mode="decimal" [showButtons]="true" [min]="2" [max]="2">
+                                            </p-inputNumber>
+                                        </div>
+                                        <div class="field col-12 md:col-4">
+                                            <label for="bots-num">Numero di server bot</label>
+                                            <div *ngIf="gamedetails[i].game_description.game_name == 'royalur'; else otherGames">
+                                                <p-inputNumber [(ngModel)]="gamedetails[i].game_params.bots" mode="decimal" [showButtons]="true" [min]="1" [max]="1">
+                                                </p-inputNumber>
+                                          
+                                            </div>
+                                            <ng-template #otherGames>
+                                                <p-inputNumber [(ngModel)]="gamedetails[i].game_params.bots" mode="decimal" [showButtons]="true" [min]="0" [max]="100">
+                                                </p-inputNumber>
+                                      
+                                            </ng-template>
+                                            
+                                        </div>
+                                        <div class="field col-12 md:col-4">
+                                            <label for="timeout">Timeout di inattività</label>
+                                            <p-inputNumber [(ngModel)]="gamedetails[i].game_params.timeout" mode="decimal" [showButtons]="true" inputId="timeout" [min]="2" [max]="100">
+                                            </p-inputNumber>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="args-content">
+                                    <!--<div class="cc-column-layout">-->
+                                        <div class="p-fluid" class="field">
+                                    
+                                            <ng-template ngFor let-arg [ngForOf]="game.args" let-j="index">
+                                                    <label for="{{ arg.name }}" [(ngModel)]="gamedetails[i].args[j].name" ngDefaultControl id="label-arg">{{ arg.name }}</label>
+                                                    <input type="text" [(ngModel)]="gamedetails[i].args[j].value"  ngDefaultControl id="{{ arg.name }}" class="border-round appearance-none focus:border-primary" pInputText>
+                                                    
+                                            </ng-template>
+                                        </div>
+                                    <!--</div>-->
+                        
+                                </section>
+                            </div>
+                        
+                                
+                        </article>
+                        <div class="fromgrid grid" className="cc-grid" id="div-btn">
+                            <div class="field col-12" id="btn-create" >                
+                                <button pButton pRipple type="button" id="btncreate" label="CREATE GAME LOBBY" class="border-round" (click)="onClickCreateMatch(game, i)"></button>
+                            <!--</div>
+                            <div class="field col-12 md:col-6" id="btn-back">-->
+                                <button pButton pRipple type="button" id="btnback" label="GO BACK TO GAME SCREEN" class="border-round" (click)="onClickBack()"></button>      
+            
+                            </div>
+                        </div>
+                    </p-tabPanel>    
+                        
+                </ng-template>
+                <p-tabPanel header="More coming!" [disabled]="true">
+                </p-tabPanel>
+            </p-tabView>
+            <!--<div class="fromgrid grid" className="cc-grid" id="div-btn">
+                <div class="field col-12" id="btn-create" >                
+                    <button pButton pRipple type="button" id="btncreate" label="CREATE GAME LOBBY" class="border-round" (click)="onClickCreateMatch(game)"></button>
+                    <button pButton pRipple type="button" id="btnback" label="GO BACK TO GAME SCREEN" class="border-round" routerLink="/home"></button>      
+
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>
