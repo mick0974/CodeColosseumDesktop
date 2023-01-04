@@ -14,6 +14,25 @@
 
 int main(int argc, char *argv[])
 {
+   
+    char response1[100];
+    
+    fgets(response1, 100, stdin);
+    
+    /*
+    FILE *fptr;
+    fptr = fopen("./text", "w+");
+
+    if(fptr == NULL)
+    {
+       printf("Error!");
+       exit(1);
+    }
+    
+    fputs(response1, fptr);
+
+    fclose(fptr);*/
+   
     int round = 1;
     if (argc > 1){
         round = atoi(argv[1]);
@@ -39,7 +58,7 @@ int main(int argc, char *argv[])
         {
             case 0: printf("ROCK\n"); break;
             case 1: printf("PAPER\n"); break;
-            case 2: printf("SCISSOR\n"); break;
+            case 2: printf("SCISSORS\n"); break;
         }
         fflush(stdout);
         
@@ -49,12 +68,28 @@ int main(int argc, char *argv[])
         char response[10];
         scanf(" %s",response);
         int result;
+        
+        /*
+        fptr = fopen("./text", "w");
+
+    	if(fptr == NULL)
+    	{
+       	    printf("Error!");
+       	    exit(1);
+    	}
+   
+    	fputs(response, fptr);
+    	fclose(fptr);*/
+    	
+    	if(i == 3){
+    	    
+    	}
 
         if (strcmp(response,"ROCK")==0 || strcmp(response,"0")==0){
             result = 0;
         }else if (strcmp(response,"PAPER")==0 || strcmp(response,"1")==0){
             result = 1;
-        }else if (strcmp(response,"SCISSOR")==0 || strcmp(response,"2")==0){
+        }else if (strcmp(response,"SCISSORS")==0 || strcmp(response,"2")==0){
             result = 2;
         }else{
             result = -1;
@@ -74,7 +109,8 @@ int main(int argc, char *argv[])
         //printf("[%d] %s\n",(point),response);
         //fflush(stdout);
     }
-    printf("TOTAL: %d / %d (invalid: %d)\n",points, round, invalids);
+    //printf("TOTAL: %d / %d (invalid: %d)\n",points, round, invalids);
     fflush(stdout);
+    
     exit(0);
 }
