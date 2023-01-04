@@ -35,9 +35,6 @@
                         <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
                     </div>                        
 
-                    <div class="field mb-4 col-12">
-                        <p-selectButton [options]="stateOptions" [(ngModel)]="uploadData.programType" optionLabel="label" optionValue="value"></p-selectButton>
-                    </div>
 
 
                     <div class="field mb-4 col-12" *ngIf="hasPassword">
@@ -70,10 +67,6 @@
 
         </div>
         <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
-
     </div>
-
-
-
 </div>
 
