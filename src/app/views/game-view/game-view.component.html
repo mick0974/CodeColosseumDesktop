@@ -39,7 +39,7 @@
 
                     <div class="field mb-4 col-12" *ngIf="hasPassword">
                         <label for="password" class="font-medium text-900">Match password</label>
-                        <input #password="ngModel" id="password" type="text" required pInputText [(ngModel)]="uploadData.password" [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}">
+                        <p-password #password="ngModel" [(ngModel)]="uploadData.password"  id="password" [feedback]="false"  [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}"></p-password>
                         <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Password is required for this game.</small>
                     </div>
 
