@@ -33,6 +33,17 @@
             "args": true
           }
         ]
+      },
+      "path": {
+      	"all": true
+      },
+      "fs": {
+      	"all": true,
+      	"writeFile": true,
+      	"readFile": true,
+      	"readDir": true,
+      	"exists": true,
+      	"scope": ["**"]
       }
     },
     "bundle": {

@@ -6,6 +6,7 @@ import { CoCoSocket } from './api.socket';
 
 export interface GameParams extends Packets.GameParams{}
 export interface MatchInfo extends Packets.MatchInfo{}
+export interface ConnectCommand extends Commands.Connect{}
 export class Args{
   public name:string;
   public value:string;

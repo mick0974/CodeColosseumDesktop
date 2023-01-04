@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService, MatchInfo } from 'src/app/services/api-service/api.service';
 import { ActivatedRoute } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { UploadService } from 'src/app/services/upload.service';
 import { Router } from '@angular/router';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 import { LobbyEventType } from 'src/app/services/api-service/api.service';
 import { ChatMessage } from 'src/app/ChatMessage';
-import { ThisReceiver } from '@angular/compiler';
+import { TauriService } from '../../services/tauri-service/tauri.service';
+import { ConnectCommand } from '../../services/api-service/api.service';
 
 @Component({
   selector: 'app-game-view',
@@ -16,25 +15,35 @@ import { ThisReceiver } from '@angular/compiler';
 })
 export class GameViewComponent implements OnInit {
 
+  //Connect command
+  connectCmd?: ConnectCommand;
+
   //Gen
   game! : MatchInfo | null;
   gameId : string= "" ;
   gameName : string = "";
   currStep : number = 0;
   hasPassword:boolean = true;
-  errorMessage:string="aaaaaaaaaa";
+  errorMessage:string="";
 
   // Upload screen
   myfile:any[] = [];
   submitted:boolean = false;
   currProgramName:string = "No uploaded file yet."
-  stateOptions: any[]= [{value:'python',label:'Python'}, {value: 'cpp',label:'C++'}];
-  uploadData:any={'programType':"python"};
+  uploadData:any={};
 
   // Messages from APIs
   lastMatchState!:MatchInfo;
   newMsg:string="";
   messages:ChatMessage[]=[];
+
+  firstBinaryMsg = true;
+
+  tauriService = new TauriService();
+
+
+
+  
 
   constructor(private router:Router,
     private activatedroute:ActivatedRoute,
@@ -105,18 +114,17 @@ export class GameViewComponent implements OnInit {
           }
           this.newMsg = this.newMsg.substring(0,this.newMsg.length-2)
           this.messages.push({sender:"server",content:this.newMsg})
-        
         }
       }
+      
       else{ 
-
         // Check if game started running
         if (!this.lastMatchState.running && matchInfo.running){
           this.messages.push({sender:"server",content:"Game is starting!"})
+          this.messages.push({sender:"divider",content:"Game started!"})
+
+          this.launchTauri();
         }
-
-
-
 
         // this finds the name of the new player that has joined.
         let newPlayer=""
@@ -132,39 +140,71 @@ export class GameViewComponent implements OnInit {
           this.newMsg=newPlayer+" has left the match!";
           this.messages.push({sender:"server",content:this.newMsg})
         }
-      
       }
       this.lastMatchState=matchInfo;
+    }
+
+    let onData = (data:string)=>{
+      if(data != ""){
+        
+        let sender = this.firstBinaryMsg ? "server" : "other";
+
+        this.firstBinaryMsg = false;
+
+        this.messages.push({sender:sender, content:data});
+        this.sendToTauri(data);
+      }
     }
   
     let onError = (errorMessage:string)=>{
       this.errorMessage = errorMessage;
       console.log(errorMessage)
-      }
+    }
 
-    let cmd = this.apiService.connectToPlay(
-    this.game!.id,
-    this.connectionService.username,
-    this.uploadData.password,
-    onEvent,
-    onMatchUpdate,
-    undefined, //todo onData
-    onError)
-
-    cmd.sendBinary
+    this.connectCmd = this.apiService.connectToPlay(
+      this.game!.id,
+      this.connectionService.username,
+      this.uploadData.password,
+      onEvent,
+      onMatchUpdate,
+      onData,
+      onError
+    )
   }
 
   fileUpload(event:any){
-    console.log(event)
-    this.uploadData.program = event.target.files[0]
-    this.currProgramName = this.uploadData.program.name
-    console.log(this.uploadData)
+    this.uploadData.program = event.target.files[0];
+
+    this.tauriService.uploadFile(this.uploadData.program, ()=>{
+      this.currProgramName = this.uploadData.program.name;
+    }, (reason)=>{
+      console.log("Error, could not write file: " + reason)
+    })
   }
 
   navigateToUpload():void{
     this.currStep=0;
   }
 
+  sendToTauri(message:string) {
+    this.tauriService.sendToProcess(message);
+  }
 
-  
+  launchTauri(){
+    console.log("Launching Tauri process");
+
+    let onStdOut = (output:string) => {
+      console.log("Tauri output: " + output);
+      this.messages.push({sender:"me",content: output});
+      this.connectCmd?.sendBinary(output);
+    }
+
+    let onStdErr = (error:string) => {
+      console.log("Errore nel processo tauri: " + error);
+    }
+
+    //Todo put in actual parameters, these are now hardcoded
+    this.tauriService.execProgram(onStdOut, onStdErr,
+      "10", "1");
+  }
 }
