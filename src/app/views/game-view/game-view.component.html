@@ -1,6 +1,5 @@
 <div class="cc-column-layout">
 
-    <h1>{{errorMessage}}</h1>
 
     <div class="cc-error-404 flex-column justify-content-center" *ngIf="game===null"  >
         <h2> It looks like this game doesn't exist. </h2>
@@ -32,15 +31,20 @@
                             <button pRipple class="p-element p-ripple w-auto mt-3 p-button p-component" pbutton="" (click)="fileUploader.click()">Upload</button>
                             <div class="m-4">{{currProgramName}}</div>
                         </div>
-                        <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
+                        <div>
+                            
+                            <small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
                     </div>                        
 
 
 
                     <div class="field mb-4 col-12" *ngIf="hasPassword">
                         <label for="password" class="font-medium text-900">Match password</label>
-                        <p-password #password="ngModel" [(ngModel)]="uploadData.password"  id="password" [feedback]="false"  [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}"></p-password>
-                        <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Password is required for this game.</small>
+                        <p-password required #password="ngModel" name="password" [(ngModel)]="uploadData.password"  id="password" [feedback]="false"  [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}"></p-password>
+                        <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">This game requires a password.</small>
+                    
+
+                    
                     </div>
 
 
@@ -50,8 +54,9 @@
                     </div>
 
 
-                    <div class="col-12">
+                    <div class="col-12 ">
                         <button pRipple (click)="navigateToPlay()" pbutton="" pripple="" label="Start match!" class="p-element p-ripple w-auto mt-3 p-button p-component"><span class="p-button-label">Start match!</span><span class="p-ink"></span></button>
+                        <small class="m-2 p-error">{{errorMessage}}</small>
                     </div>
                 </div>
             </div>
