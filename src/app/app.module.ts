@@ -31,6 +31,7 @@ import {InplaceModule} from 'primeng/inplace';
 import {TabViewModule} from 'primeng/tabview';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {ToggleButtonModule} from 'primeng/togglebutton';
 
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -74,6 +75,7 @@ import { MarkdownPipe } from './markdown.pipe';
     TabViewModule,
     InputNumberModule,
     ProgressSpinnerModule,
+    ToggleButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent],

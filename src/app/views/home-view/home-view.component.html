@@ -10,11 +10,15 @@
             </ng-template>
         </p-selectButton> 
 
-        <div>
-            <button pButton pRipple type="button" class="p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClickRefresh()"></button>
-            <button pButton pRipple class="p-button-raised" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch' "></button>
+        <div class="align-items-end">
+           
+            <button *ngIf="!autorefresh"  pButton pRipple type="button" class="topbuttons p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClickRefresh()"></button>
+
+            <p-toggleButton class="topbuttons"  [(ngModel)]="autorefresh" onLabel="Auto-refresh lobby list" offLabel="Autorefresh" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
+
+            <button pButton pRipple class="p-button-raised topbuttons" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch' "></button>
         </div>
-</div>
+    </div>
 
     <div *ngIf='loading' class="flex justify-content-center ">
         <p-progressSpinner strokeWidth="8" [styleClass]="'custom-spinner'" ></p-progressSpinner></div>
