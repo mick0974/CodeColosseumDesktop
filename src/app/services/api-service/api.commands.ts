@@ -2,7 +2,52 @@ import { CoCoSocket } from "./api.socket";
 import { Packets } from "./api.packets";
 
 export namespace Commands{
+    /*
+    export class Command{
+      public ws?: CoCoSockets.CoCoSocket;
+      public url?:string;
+      public resultHandshake?:(message:Packets.Reply.Handshake)=>void; 
+      public resultClosed?:()=>void;
+      public resultError?:(error:any)=>void;
   
+      constructor(url:string){
+        this.url = url;
+      }
+  
+      public run(){
+        this.ws = new CoCoSockets.CoCoSocket(this.url!);
+        this.ws.resultError = (error)=>{ this.connectionError(error); };
+        this.ws.resultClosed = ()=>{ this.connectionClosed(); };
+        this.ws.connect();
+  
+        let msg = new Packets.Request.Handshake();
+        this.ws.send(msg,
+          (payload, msgClass)=>{
+            let msgName = Packets.Message.findPacketName(msgClass, payload);
+            let message = new Packets.Reply.Handshake();
+            message.fromMultiPacket(payload, msgName);
+            this.handshakeRecieved(message)}, 
+        Packets.Reply.Handshake.name );
+      }
+  
+      public connectionClosed(){
+  
+        //alert("Command:connectionClosed");
+        if (this.resultClosed){ this.resultClosed();}
+      }
+  
+      public connectionError(error:any){
+        //alert("Command:connectionError "+error);
+        if (this.resultError){ this.resultError(error);}
+      }
+  
+      public handshakeRecieved(message:Packets.Reply.Handshake){
+        //alert("Command:handshakeRecieved");
+        if (this.resultHandshake && message) { this.resultHandshake(message); }
+      }
+    }
+    */
+
     export class Command{
       public coco: CoCoSocket;
       public url?:string;
