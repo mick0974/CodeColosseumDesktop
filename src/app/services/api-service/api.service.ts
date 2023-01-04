@@ -32,13 +32,15 @@ export class GameDetails{
   public game_description?:GameDescription;
   public game_params?:GameParams;
   public args?:Args[];
+  public verification?:string;
 
-  constructor(lobby_name:string, password:string, game_description?:GameDescription, game_params?:GameParams, args?:Args[]){
+  constructor(lobby_name:string, password:string, game_description?:GameDescription, game_params?:GameParams, args?:Args[], verification?:string){
     this.lobby_name = lobby_name;
     this.password = password;
     this.game_description = game_description;
     this.game_params = game_params;
     this.args = args;
+    this.verification = verification;
   }
 }
 
@@ -124,7 +126,7 @@ export class ApiService {
         gameArgs = new Packets.RoyalurArgs(gameDetails.args![0].value);
       }
 
-      let cmdNewGame = new Commands.NewLobby(this.url, gameDetails.lobby_name, gameDetails.game_description!.game_name, gameDetails.game_params!.players, gameDetails.game_params!.bots, gameDetails.game_params!.timeout, gameArgs, gameDetails.password);
+      let cmdNewGame = new Commands.NewLobby(this.url, gameDetails.lobby_name, gameDetails.game_description!.game_name, gameDetails.game_params!.players, gameDetails.game_params!.bots, gameDetails.game_params!.timeout, gameArgs, gameDetails.password, gameDetails.verification);
       cmdNewGame.onReciveNewLobby = (message)=>{
         if(onData){
           if(message.id["Err"] != undefined){
