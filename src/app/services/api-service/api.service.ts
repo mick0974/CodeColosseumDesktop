@@ -56,8 +56,6 @@ export enum ErrorType{
   LobbyCreateFailed = 'LobbyCeateFailed'
 }
 
-
-
 @Injectable({
   providedIn: 'root'
 })
