@@ -44,3 +44,10 @@ testem.log
 Thumbs.db
 
 CodeColosseum/*
+
+
+# Compiled rockaperscissor executable
+/data/executable
+/data/executable.exe
+/data/rock-paper-scissor
+/data/rock-paper-scissor.exe

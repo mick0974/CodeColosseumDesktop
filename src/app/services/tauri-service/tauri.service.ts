@@ -3,6 +3,8 @@ import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell';
 import { resolve } from "dns";
 import { timeout } from "rxjs";
 import { fs, path } from '@tauri-apps/api';
+import { type } from '@tauri-apps/api/os';
+import { E } from "@tauri-apps/api/shell-cbf4da8b";
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +12,7 @@ import { fs, path } from '@tauri-apps/api';
 export class TauriService {
   public child: Child | undefined;
   public filepath: string = "./../data/executable";
+  public absoluteFilePath = "";
 
   public inputBuffer = new Array<string>();
 
@@ -18,10 +21,26 @@ export class TauriService {
   async uploadFile(file: any, onFileWritten:()=>void, onError:(reason:any)=>void){
     let filereader = new FileReader();
 
+    const osType = await type();
+    
     filereader.onload = ()=>{
+
+      // If we're on windows, we need to add an extension (any extension!)
+      // because if the original file has no extension
+      // Windows doensn't allow execution. (thank u Bill)
+      if (osType=="Windows_NT"){
+        this.filepath+=".exe"
+      }
+
       path.resolve(this.filepath).then((absolutepath:string)=>{
         if(filereader.result != null){
           fs.writeBinaryFile(absolutepath, filereader.result as ArrayBuffer).then(()=>{
+            
+          this.absoluteFilePath = absolutepath;
+
+          // On Linux (and MacOs), in order to be able to execute a file, we need
+          // to add exectute permissions.
+          if (osType!="Windows_NT"){
             const command = new Command("sh", ["-c", `chmod +x ${absolutepath}`]);
 
             command.on("close", ()=>{
@@ -33,6 +52,7 @@ export class TauriService {
             })
 
             command.spawn();
+          }
 
           }, (reason:any)=>{
             onError(reason);
@@ -82,8 +102,19 @@ export class TauriService {
     onProcessStdErr?: (error:string)=>void,
     ...args: string[]){
 
-    //this.filename = "../data/rock-paper-scissor";
-    const command = new Command("sh", ["-c", `${this.filepath} ${args.join(" ")}`]);
+      
+    const osType = await type();
+
+    let command;
+
+    // TODO! At the moment, spaces in the filepath break the program.
+    // In Windows, a new cmd is executed to run the file with its arguments. 
+    if (osType == "Windows_NT"){
+      command = new Command('sh-windows', [ "/c", `${this.absoluteFilePath} 10 1`])
+    // In Linux/MacOs, sh is used.
+    }else{
+      command = new Command("sh", ["-c", `${this.filepath} ${args.join(" ")}`]);
+    }
 
     command.stdout.on("data", (line: any) => {
       if(!line.endsWith("\n")){
