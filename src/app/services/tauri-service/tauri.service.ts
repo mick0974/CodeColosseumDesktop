@@ -1,7 +1,5 @@
 import { Injectable, OnInit } from "@angular/core";
 import { Child, Command, open as ShellOpen } from '@tauri-apps/api/shell';
-import { resolve } from "dns";
-import { timeout } from "rxjs";
 import { fs, path } from '@tauri-apps/api';
 import { type } from '@tauri-apps/api/os';
 import { E } from "@tauri-apps/api/shell-cbf4da8b";
@@ -43,7 +41,9 @@ export class TauriService {
           if (osType!="Windows_NT"){
             const command = new Command("sh", ["-c", `chmod +x ${absolutepath}`]);
 
+            console.log("lol1")
             command.on("close", ()=>{
+              console.log("lol2")
               onFileWritten();
             })
 
@@ -87,20 +87,23 @@ export class TauriService {
       });
     }
     else{
+      console.log("Tauri process not running yet, saving {" + message + "} into queue");
       this.inputBuffer.push(message);
     }
   }
 
-  writeInputBuffer(){
-    this.inputBuffer.forEach((value, _index, _array) => {
-      this.sendToProcess(value);
-    })
+  async writeInputBuffer(){
+    for(let i = 0; i < this.inputBuffer.length; i++){
+      let value = this.inputBuffer[i];
+      console.log("Writing queued message {" + value + "} to Tauri process");
+      await this.sendToProcess(value);
+    }
   }
 
   async execProgram(
+    args: string[],
     onProcessStdOut: (output:string)=>void,
-    onProcessStdErr?: (error:string)=>void,
-    ...args: string[]){
+    onProcessStdErr?: (error:string)=>void){
 
       
     const osType = await type();

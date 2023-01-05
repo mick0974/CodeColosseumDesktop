@@ -31,12 +31,8 @@
                             <button pRipple class="p-element p-ripple w-auto mt-3 p-button p-component" pbutton="" (click)="fileUploader.click()">Upload</button>
                             <div class="m-4">{{currProgramName}}</div>
                         </div>
-                        <div>
-                            
-                            <small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
-                    </div>                        
-
-
+                        <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
+                    </div>
 
                     <div class="field mb-4 col-12" *ngIf="hasPassword">
                         <label for="password" class="font-medium text-900">Match password</label>
@@ -50,7 +46,7 @@
 
                     <div class="field mb-4 col-12">
                         <label for="parameters" class="font-medium text-900">Parameters</label>
-                        <textarea id="parameters" type="text" pinputtextarea="" rows="5" class="p-inputtextarea p-inputtext p-component p-element p-inputtextarea-resizable" style="height: 132px; overflow: hidden;"></textarea>
+                        <textarea id="parameters" [(ngModel)]="executableParameters" type="text" pinputtextarea="" rows="5" class="p-inputtextarea p-inputtext p-component p-element p-inputtextarea-resizable" style="height: 132px; overflow: hidden;"></textarea>
                     </div>
 
 

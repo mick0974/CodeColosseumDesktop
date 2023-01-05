@@ -15,6 +15,8 @@ export class SpectateViewComponent implements OnInit {
   newMsg:string="";
   messages:ChatMessage[]=[];
 
+  firstBinaryMsg = true;
+
   constructor(private activatedRoute:ActivatedRoute,
     private apiService:ApiService) { }
 
@@ -43,10 +45,8 @@ export class SpectateViewComponent implements OnInit {
         // Check if game started running
         if (!this.lastMatchState.running && matchInfo.running){
           this.messages.push({sender:"server",content:"Game is starting!"})
+          this.messages.push({sender:"divider",content:"Game started!"})
         }
-
-
-
 
         // this finds the name of the new player that has joined.
         let newPlayer=""
@@ -62,22 +62,25 @@ export class SpectateViewComponent implements OnInit {
           this.newMsg=newPlayer+" has left the match!";
           this.messages.push({sender:"server",content:this.newMsg})
         }
-      
       }
       this.lastMatchState=matchInfo;
     }
   
 
     let onData = (data:string)=>{
-      console.log("---ondata happened")
-      console.log(data)
+      let sender = this.firstBinaryMsg ? "server" : "other";
+
+      this.firstBinaryMsg = false;
+      
+      this.messages.push({sender:sender, content:data});
     }
 
     let onEvent = (type:LobbyEventType)=>{
       //TODO handle if connection aint established
-      console.log("onEvent (join) was executed")
-      console.log(type)
+      if(type == LobbyEventType.End){
+        this.messages.push({sender:"server", content:"Game ended!"})
       }
+    }
 
     // gestire se l'id è canato
     this.apiService.connectToSpectate(
@@ -86,12 +89,5 @@ export class SpectateViewComponent implements OnInit {
       onMatchUpdate,
       onData
     )
-    
-
-
-
-
-
   }
-
 }

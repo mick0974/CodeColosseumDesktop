@@ -7,6 +7,7 @@ import { LobbyEventType } from 'src/app/services/api-service/api.service';
 import { ChatMessage } from 'src/app/ChatMessage';
 import { TauriService } from '../../services/tauri-service/tauri.service';
 import { ConnectCommand } from '../../services/api-service/api.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-game-view',
@@ -34,22 +35,21 @@ export class GameViewComponent implements OnInit {
 
   // Messages from APIs
   lastMatchState!:MatchInfo;
-  newMsg:string="";
-  messages:ChatMessage[]=[];
+  newMsg:string = "";
+  messages:ChatMessage[] = [];
+
+  executableParameters:string = "";
 
   firstBinaryMsg = true;
 
   tauriService = new TauriService();
 
-
-
-  
-
   constructor(private router:Router,
     private activatedroute:ActivatedRoute,
     private connectionManager:ConnectionManagerService,
     private apiService:ApiService,
-    private connectionService:ConnectionManagerService) { }
+    private connectionService:ConnectionManagerService,
+    private ref:ChangeDetectorRef) { }
 
   ngOnInit(): void {
     let token = this.activatedroute.snapshot.paramMap.get('id');
@@ -91,57 +91,60 @@ export class GameViewComponent implements OnInit {
       // client will receive a JoinEvent (that will execute a onEvent)
       // and a MatchUpdate (that will execute a onMatchUpdate).
 
-      // Executed on join event
-      let onEvent = (type:LobbyEventType)=>{
+    // Executed on join event
+    let onEvent = (type:LobbyEventType)=>{
       //TODO handle if connection aint established
-      console.log("onEvent (join) was executed")
-      this.currStep=1;
+      if(type == LobbyEventType.End){
+        this.messages.push({sender:"server", content:"Game ended!"})
       }
+      else{
+        this.currStep=1;
+      }
+    }
 
-      // Executed on match update (you get a match update immediately after joining, as the #
-      // of players has changed.)
-      let onMatchUpdate = (matchInfo:MatchInfo)=>{
-        console.log("onMatchUpdate (join) was executed")
+    // Executed on match update (you get a match update immediately after joining, as the #
+    // of players has changed.)
+    let onMatchUpdate = (matchInfo:MatchInfo)=>{
+      console.log("onMatchUpdate (join) was executed")
 
-        if (!this.lastMatchState){
-          this.newMsg="Connection established."
+      if (!this.lastMatchState){
+        this.newMsg="Connection established."
+        this.messages.push({sender:"server",content:this.newMsg})
+        if(matchInfo.connected.length>0){
+          this.newMsg="Already connected players: "
+          for(let i=0; i < matchInfo.connected.length; i++){
+            this.newMsg += matchInfo.connected[i] + ", "
+          }
+          this.newMsg = this.newMsg.substring(0,this.newMsg.length-2)
           this.messages.push({sender:"server",content:this.newMsg})
-          if(matchInfo.connected.length>0){
-            this.newMsg="Already connected players: "
-            for(let i=0; i < matchInfo.connected.length; i++){
-              this.newMsg += matchInfo.connected[i] + ", "
-            }
-            this.newMsg = this.newMsg.substring(0,this.newMsg.length-2)
-            this.messages.push({sender:"server",content:this.newMsg})
-          }
         }
-        
-        else{ 
-          // Check if game started running
-          if (!this.lastMatchState.running && matchInfo.running){
-            this.messages.push({sender:"server",content:"Game is starting!"})
-            this.messages.push({sender:"divider",content:"Game started!"})
-
-            this.launchTauri();
-          }
-
-          // this finds the name of the new player that has joined.
-          let newPlayer=""
-          let pastConnected=this.lastMatchState.connected;
-          let newConnected=matchInfo.connected=matchInfo.connected
-          if(pastConnected.length < newConnected.length){
-            newPlayer=newConnected.filter((item)=>pastConnected.indexOf(item))[0]
-            this.newMsg=newPlayer+" has joined the match!";
-            this.messages.push({sender:"server",content:this.newMsg})
-          }
-          else if (pastConnected.length > newConnected.length){
-            newPlayer=pastConnected.filter((item)=>newConnected.indexOf(item))[0]
-            this.newMsg=newPlayer+" has left the match!";
-            this.messages.push({sender:"server",content:this.newMsg})
-          }
-        }
-        this.lastMatchState=matchInfo;
       }
+      else{ 
+        // Check if game started running
+        if (!this.lastMatchState.running && matchInfo.running){
+          this.messages.push({sender:"server",content:"Game is starting!"})
+          this.messages.push({sender:"divider",content:"Game started!"})
+
+          this.launchTauri();
+        }
+  
+        // this finds the name of the new player that has joined.
+        let newPlayer="";
+        let pastConnected=this.lastMatchState.connected;
+        let newConnected=matchInfo.connected=matchInfo.connected
+        if(pastConnected.length < newConnected.length){
+          newPlayer=newConnected.filter((item)=>pastConnected.indexOf(item))[0]
+          this.newMsg=newPlayer+" has joined the match!";
+          this.messages.push({sender:"server",content:this.newMsg})
+        }
+        else if (pastConnected.length > newConnected.length){
+          newPlayer=pastConnected.filter((item)=>newConnected.indexOf(item))[0]
+          this.newMsg=newPlayer+" has left the match!";
+          this.messages.push({sender:"server",content:this.newMsg})
+        }
+      }
+      this.lastMatchState=matchInfo;
+    }
 
       let onData = (data:string)=>{
         if(data != ""){
@@ -178,6 +181,7 @@ export class GameViewComponent implements OnInit {
 
     this.tauriService.uploadFile(this.uploadData.program, ()=>{
       this.currProgramName = this.uploadData.program.name;
+      this.ref.detectChanges();
     }, (reason)=>{
       console.log("Error, could not write file: " + reason)
     })
@@ -204,8 +208,20 @@ export class GameViewComponent implements OnInit {
       console.log("Errore nel processo tauri: " + error);
     }
 
+    let params = this.executableParameters.trim();
+    let paramsArray:string[] = [];
+
+    if(params != ""){
+      paramsArray = params.split(",");
+      
+      for(let i = 0; i < paramsArray.length; i++){
+        paramsArray[i] = paramsArray[i].trim();
+      }
+    }
+
+    console.log(paramsArray.toString());
+
     //Todo put in actual parameters, these are now hardcoded
-    this.tauriService.execProgram(onStdOut, onStdErr,
-      "10", "1");
+    this.tauriService.execProgram(paramsArray, onStdOut, onStdErr);
   }
 }
