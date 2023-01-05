@@ -15,7 +15,7 @@ export class HomeViewComponent implements OnInit {
   gamelist:MatchInfo[]=[];
   hasGames:boolean = true;
   loading:boolean = true;
-  autorefresh:boolean = true;
+  autorefresh:boolean = false;
 
   refreshSub:Subscription=new Subscription();
 
@@ -33,9 +33,27 @@ export class HomeViewComponent implements OnInit {
 
   constructor(private uploadService:UploadService, private connectionManager:ConnectionManagerService) {
 
+    // Actual refresh is done every 10 seconds only to not overwhelm server.
     if(this.autorefresh){
-      this.refreshSub = interval(1000).subscribe(func => { if (this.autorefresh){this.onClickRefresh()} else {};})
+      this.refreshSub = interval(10000).subscribe(func => { if (this.autorefresh){this.onClickRefresh()} else {};})
     }
+
+    // Fake autorefresh (only dials down time!)
+      this.refreshSub = interval(1000)
+      .subscribe( ()=> { 
+          for(let i=0;i<this.gamelist.length;i++){
+            if(this.gamelist[i].time > 0){
+              console.log(this.gamelist[i].time)
+              this.gamelist[i].time = this.gamelist[i].time - 1;
+            }
+            else{
+              this.gamelist.splice(i,1);
+              }
+            }
+          }
+        )
+
+    
   }
 
   ngOnInit(): void {
