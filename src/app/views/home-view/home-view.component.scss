@@ -2,14 +2,15 @@
 .cc-gamelist-header {
     display:flex;
     justify-content: space-between;
-    > * {
-        margin: 10px;
-    }
-    button {
-        margin:0 10px 0 0;
-    }
+}
+.topbuttons{
+    margin: 0px 10px 0px 0px
 }
 
+p-selectbutton {
+    display:flex;
+    align-self:center;
+}
 
 .cc-home-container {
     margin: 0% 10% 0% 10%;
@@ -22,10 +23,7 @@
     }
 }
 
-p-selectbutton {
-    display:flex;
-    align-self:center;
-}
+
 
 .cc-play-buttons > * {
     margin:10px

@@ -25,6 +25,8 @@ export class CreateMatchViewComponent implements OnInit {
   public createMatchData:any = {};
   selectedGame:any = {};
   
+  showDesc:boolean = false;
+  
   gameNameList:string[] = [];
   gameDescriptionList:string[] = [];
   gamedetails:any[] = CREATE_GAMES;
@@ -164,6 +166,10 @@ export class CreateMatchViewComponent implements OnInit {
     var index = event.index;
     console.log("Index of tab that had an event: " + index);
 
+  }
+
+  toggleDesc(){
+    this.showDesc = !this.showDesc;
   }
   
 }
