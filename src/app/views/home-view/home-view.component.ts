@@ -38,12 +38,11 @@ export class HomeViewComponent implements OnInit {
       this.refreshSub = interval(10000).subscribe(func => { if (this.autorefresh){this.onClickRefresh()} else {};})
     }
 
-    // Fake autorefresh (only dials down time!)
+    // Fake autorefresh (only dials down time and deletes game if it reaches 0!)
       this.refreshSub = interval(1000)
       .subscribe( ()=> { 
           for(let i=0;i<this.gamelist.length;i++){
             if(this.gamelist[i].time > 0){
-              console.log(this.gamelist[i].time)
               this.gamelist[i].time = this.gamelist[i].time - 1;
             }
             else{
