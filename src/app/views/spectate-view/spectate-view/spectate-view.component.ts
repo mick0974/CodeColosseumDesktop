@@ -15,8 +15,6 @@ export class SpectateViewComponent implements OnInit {
   newMsg:string="";
   messages:ChatMessage[]=[];
 
-  firstBinaryMsg = true;
-
   constructor(private activatedRoute:ActivatedRoute,
     private apiService:ApiService) { }
 
@@ -37,7 +35,6 @@ export class SpectateViewComponent implements OnInit {
           }
           this.newMsg = this.newMsg.substring(0,this.newMsg.length-2)
           this.messages.push({sender:"server",content:this.newMsg})
-        
         }
       }
       else{ 
@@ -68,11 +65,7 @@ export class SpectateViewComponent implements OnInit {
   
 
     let onData = (data:string)=>{
-      let sender = this.firstBinaryMsg ? "server" : "other";
-
-      this.firstBinaryMsg = false;
-      
-      this.messages.push({sender:sender, content:data});
+      this.messages.push({sender:"server", content:data.replaceAll("\n", "<br>")});
     }
 
     let onEvent = (type:LobbyEventType)=>{
