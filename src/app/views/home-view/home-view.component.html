@@ -12,9 +12,11 @@
 
         <div class="align-items-end">
            
-            <button *ngIf="!autorefresh"  pButton pRipple type="button" class="topbuttons p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClickRefresh()"></button>
+            <button *ngIf="!autorefresh"  pButton pRipple type="button" class="topbuttons p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClickRefresh()" 
+            pTooltip="This will manually refresh the lobby list." tooltipPosition="top"></button>
 
-            <p-toggleButton class="topbuttons"  [(ngModel)]="autorefresh" onLabel="Auto-refresh lobby list" offLabel="Autorefresh" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
+            <p-toggleButton class="topbuttons"  [(ngModel)]="autorefresh" onLabel="Auto-refresh lobby list" offLabel="Autorefresh" onIcon="pi pi-check" offIcon="pi pi-times" 
+                pTooltip="Auto-refresh reloads the lobby list automatically every 10 seconds." tooltipPosition="top"></p-toggleButton>
 
             <button pButton pRipple class="p-button-raised topbuttons" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch' "></button>
         </div>
