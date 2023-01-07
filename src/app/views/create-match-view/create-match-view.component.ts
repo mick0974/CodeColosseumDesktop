@@ -1,8 +1,9 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CREATE_GAMES } from 'mock-create-match';
-import { GameDescription, GameDetails, GameParams } from 'src/app/services/api-service/api.service';
+import { GameDetails } from 'src/app/services/api-service/api.service';
 import { UploadService } from 'src/app/services/upload.service';
 import { Router } from '@angular/router';
+import { ApiService } from '../../services/api-service/api.service';
 
 @Component({
   selector: 'app-create-match-view',
@@ -36,6 +37,11 @@ export class CreateMatchViewComponent implements OnInit {
   view_mode: string = "card";
   hasGames:boolean=false;
   gameDescription:string = '';
+
+  public createError = "";
+
+  apiService = new ApiService();
+
   constructor(private uploadService:UploadService, private readonly router: Router) { 
     
   }
@@ -124,9 +130,24 @@ export class CreateMatchViewComponent implements OnInit {
   }
   
   public async createMatch(newMatch:GameDetails): Promise<void> {
-    this.uploadService.createNewLobby(newMatch);
-    this.router.navigateByUrl("/home"); //home will update the list of lobby with new lobby name
+    let onSuccess = (newGame:string) => {
+      console.log("New lobby successfully created: " + newGame);
+      this.createError = "";
+      this.router.navigateByUrl("/home"); //home will update the list of lobby with new lobby name
+    }
+    let onError = (reason:any)=>{
+      console.log("Error, could not create new lobby: " + reason);
+      let lobby_name = newMatch.lobby_name ?? "";
+      if(lobby_name.length > 24){
+        this.createError = "The lobby name must be shorter than 24 characters"
+      }
+      else{
+        this.createError = reason;
+      }
+    }
+    this.apiService.createNewLobby(onSuccess, onError, newMatch);
   }
+
   onClickCreateMatch(game: any, index: number){
     this.selectedGame = game;
     /*console.log("SelectedGame name: ", this.selectedGame.game_description.game_name);

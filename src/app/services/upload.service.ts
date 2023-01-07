@@ -143,17 +143,12 @@ export class UploadService {
     console.log(req)
   }*/
 
-  async createNewLobby(gameDet:GameDetails){
-    let onSuccess = (newGame:string)=>{ 
-      this.lobbyIdvar = newGame;
-      this.gameDetailsvar = gameDet;
-      console.log("Upload service id of new game created:")
-      console.log(this.lobbyIdvar)
-    }
+  /*
+  async createNewLobby(gameDet:GameDetails, onSuccess:(newgame:string)=>void){
     let req = this.api.createNewLobby( onSuccess, gameDet);
     req.onError = this.onApiError;
     console.log(req)
-  }
+  }*/
   /*async apiNewGame() {
     let onSuccess = (newGame:string)=>{
       let text = newGame
