@@ -36,7 +36,7 @@ export class ConnectionManagerService {
 
   async onApiError(message: string){
     console.log("Couldn't establish connection! For error " + message);
-    //alert("Error: " + message)
+    alert("Error: " + message)
     this.error = true;
     this._isConnected = false;
     this.reloadComponent(true);
