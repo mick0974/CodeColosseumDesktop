@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
 import { LobbyEventType } from 'src/app/services/api-service/api.service';
-import { ChatMessage } from 'src/app/ChatMessage';
+import { ChatMessage, ChatSender } from 'src/app/ChatMessage';
 import { TauriService } from '../../services/tauri-service/tauri.service';
 import { ConnectCommand } from '../../services/api-service/api.service';
 import { ChangeDetectorRef } from '@angular/core';
@@ -143,35 +143,33 @@ export class GameViewComponent implements OnInit {
           this.messages.push({sender:"server",content:this.newMsg})
         }
       }
+
       this.lastMatchState=matchInfo;
     }
 
-      let onData = (data:string)=>{
-        if(data != ""){
-          
-          let sender = this.firstBinaryMsg ? "server" : "other";
+    let onData = (data:string)=>{
+      if(data != ""){
+        let sender: ChatSender = this.firstBinaryMsg ? "server" : "other";
+        this.firstBinaryMsg = false;
 
-          this.firstBinaryMsg = false;
-
-          this.messages.push({sender:sender, content:data});
-          this.sendToTauri(data);
-        }
+        this.messages.push({sender:sender, content:data.replaceAll("\n", "<br>")});
+        this.sendToTauri(data);
       }
+    }
     
-      let onError = (errorMessage:string)=>{
-        this.errorMessage = errorMessage;
-        console.log(errorMessage)
-      }
+    let onError = (errorMessage:string)=>{
+      this.errorMessage = errorMessage;
+      console.log(errorMessage)
+    }
 
-      this.connectCmd = this.apiService.connectToPlay(
-        this.game!.id,
-        this.connectionService.username,
-        this.uploadData.password,
-        onEvent,
-        onMatchUpdate,
-        onData,
-        onError
-      )
+    this.connectCmd = this.apiService.connectToPlay(
+      this.game!.id,
+      this.connectionService.username,
+      this.uploadData.password,
+      onEvent,
+      onMatchUpdate,
+      onData,
+      onError)
     }
   }
 
@@ -200,7 +198,7 @@ export class GameViewComponent implements OnInit {
 
     let onStdOut = (output:string) => {
       console.log("Tauri output: " + output);
-      this.messages.push({sender:"me",content: output});
+      this.messages.push({sender:"me",content: output.replaceAll("\n", "<br>")});
       this.connectCmd?.sendBinary(output);
     }
 

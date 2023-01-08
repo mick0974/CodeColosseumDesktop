@@ -8,7 +8,6 @@ import { Input } from '@angular/core';
   styleUrls: ['./cc-chat.component.scss']
 })
 export class CcChatComponent implements OnInit {
-
   @Input() messages:ChatMessage[]=[];
   constructor() { }
 
