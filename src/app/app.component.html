@@ -2,26 +2,30 @@
   <div class="cc-topbar">
     <div class="cc-topbar-logo">
       <img src="{{ path }}" alt="{{ alttext }} " width="40px" height="40px" style="margin:10px">
-      <h2 >Code Colosseum</h2>
+      <h2>Code Colosseum</h2>
     </div>
-    <div class="cc-topbar-info-list" *ngIf="isConnected">
-      <div class="cc-topbar-info cc-topbar-info-username">
+    <div class="cc-topbar-info-list">
+      <div class="cc-topbar-info cc-topbar-info-username" *ngIf="isConnected">
         <p>Ciao {{ username }}!</p>
       </div>
-      <div class="cc-topbar-info cc-topbar-info-server">
+      <div class="cc-topbar-info cc-topbar-info-server" *ngIf="isConnected">
         <p>Connesso a {{serverUrl}}</p>
       </div>
-      <div class="cc-topbar-info cc-topbar-info-logout">
+      <div class="cc-topbar-info">
+        <button pButton icon="pi {{changeThemIcon}}" (click)="toggleTheme()"></button>
+      </div>
+      <div class="cc-topbar-info cc-topbar-info-logout" *ngIf="isConnected">
         <button pButton icon="pi pi-replay" label="Cambia server" (click)="disconnect()">
         </button>
       </div>
     </div>
   </div>
-  <div class="cc-page">
+  <div class="cc-page-route">
     <router-outlet></router-outlet>
   </div>
   <footer style="text-align: center;padding: 30px;">
     <p>TalCo Team</p>
-    <a routerLink="about">About</a> <!-- TODO make about page in order to credit Colosseum icon (mandatory as per Icon8 TOS!)-->
-</footer>
+    <a routerLink="about">About</a>
+    <!-- TODO make about page in order to credit Colosseum icon (mandatory as per Icon8 TOS!)-->
+  </footer>
 </div>
