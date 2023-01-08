@@ -137,13 +137,8 @@ export class CreateMatchViewComponent implements OnInit {
     }
     let onError = (reason:any)=>{
       console.log("Error, could not create new lobby: " + reason);
-      let lobby_name = newMatch.lobby_name ?? "";
-      if(lobby_name.length > 24){
-        this.createError = "The lobby name must be shorter than 24 characters"
-      }
-      else{
-        this.createError = reason;
-      }
+      this.createError = reason;
+      
     }
     this.apiService.createNewLobby(onSuccess, onError, newMatch);
   }

@@ -5,7 +5,7 @@
             <div class="fromgrid grid" className="cc-grid">
                 <div class="field col-12" id="lobby-div" >
                     <span class="p-float-label" id="lobby-span">
-                        <input #lobby= "ngModel" [(ngModel)]="createMatchData.lobby" type="text" name="lobby" (change)="lobbyChange($event)" id="lobby" required [ngClass]="{'ng-dirty': (lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
+                        <input #lobby= "ngModel" [(ngModel)]="createMatchData.lobby" type="text" name="lobby" (change)="lobbyChange($event)" id="lobby" required maxlength="24" [ngClass]="{'ng-dirty': (lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
                         <label for="lobby">Lobby name</label>
                     </span>
                     <br>
