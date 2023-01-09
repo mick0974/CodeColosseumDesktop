@@ -39,6 +39,7 @@ export class CreateMatchViewComponent implements OnInit {
   gameDescription:string = '';
 
   public createError = "";
+  waiting = false;
 
   apiService = new ApiService();
 
@@ -53,11 +54,19 @@ export class CreateMatchViewComponent implements OnInit {
 
   replaceImageCode(gameDescription:string) {
     let descr;
+    // ! THIS HAS BEEN PUT IN THE CLIENT BY HAND AS THERE IS NO PROGRAMMATIC
+    // ! WAY OF DOWNLOADING IMAGES FROM THE SERVER. SHOULD MORE GAMES BE ADDED, 
+    // ! A WAY TO PROGRAMMATICALLY DOWNLOAD IMAGES SHOULD BE ADDED TO THE SERVER
+    // ! (OR THE IMAGES WILL ALL NEED TO BE MANUALLY IMPORTED BY YOU PROGRAMMERS
+    // ! FOR EACH GAME)
+    // ! vvv
     descr = gameDescription.replace("{{#include royalur-board.svg}}", '<br><br><img src="../../assets/images/royalur-board.svg" alt="royalur" width="276"><br><br>'); 
+    // ! ^^^
+
     descr = descr.replaceAll("\\(", "(");
     descr = descr.replaceAll("\\)", ")");
 
-    console.log(descr.search("\\("));
+    //console.log(descr.search("\\("));
 
     return descr;
   }
@@ -83,8 +92,8 @@ export class CreateMatchViewComponent implements OnInit {
       let onSuccess1 = (gameDescription:string) => { 
         this.hasGames = this.gameNameList.length !== 0;
         this.gameDescriptionList[this.gameDescriptionList.length] = gameDescription;
-        console.log(gameDescription);
-        console.log(this.gameDescriptionList);
+        //console.log(gameDescription);
+        //console.log(this.gameDescriptionList);
 
         this.gamedetails.forEach((gameDetail:GameDetails) => {
           let gameName = this.getNameFromDescr(gameDescription);
@@ -141,19 +150,12 @@ export class CreateMatchViewComponent implements OnInit {
       
     }
     this.apiService.createNewLobby(onSuccess, onError, newMatch);
+      this.waiting = false; // hides the loading wheel as server operations have ended
   }
 
   onClickCreateMatch(game: any, index: number){
     this.selectedGame = game;
-    /*console.log("SelectedGame name: ", this.selectedGame.game_description.game_name);
-    console.log("Game players: ", this.gamedetails[index].game_params.players);
-    console.log("Click of new match button");
-    console.log("Arg name: ", this.gamedetails[index].args[0].name);
-    console.log("Arg value", this.gamedetails[index].args[0].value);*/
-    //console.log("Arg name: ", this.gamedetails[index].args[1].name);
-    //console.log("Arg value", this.gamedetails[index].args[1].value);
-   
-    //doubt : do we check again with connection manager if the user is connected?
+    
     if(this.createMatchData.lobby){
       console.log("Players of game = " + this.createMatchData.game_name + "is = "+ this.createMatchData.game_players);
       const newMatch: GameDetails= { 
@@ -170,6 +172,7 @@ export class CreateMatchViewComponent implements OnInit {
         },
         args : this.gamedetails[index].args
       }
+      this.waiting=true; //shows the loading wheel
       this.createMatch(newMatch);
       return;
     }

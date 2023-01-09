@@ -5,13 +5,9 @@
             <div class="fromgrid grid" className="cc-grid">
                 <div class="field col-12" id="lobby-div" >
                     <span class="p-float-label" id="lobby-span">
-                        <input #lobby= "ngModel" [(ngModel)]="createMatchData.lobby" type="text" name="lobby" (change)="lobbyChange($event)" id="lobby" required maxlength="24" [ngClass]="{'ng-dirty': (lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
+                        <input #lobby= "ngModel" [(ngModel)]="createMatchData.lobby" type="text" name="lobby" (change)="lobbyChange($event)" id="lobby" required  [ngClass]="{'ng-dirty': (lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText maxlength="24" required/>
                         <label for="lobby">Lobby name</label>
                     </span>
-                    <br>
-                    <small class="p-error" *ngIf="(lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)">Lobby name is required</small>
-                    <br>
-                    <small class="p-error">{{createError}}</small>
                 </div>
                 <div class="field col-12" id="password-div">
                     <p-inplace [closable]="true">                        
@@ -101,13 +97,16 @@
                             </div>
                         </div>
                                 
-                        <div class="fromgrid grid " className="cc-grid" id="div-btn">
-                            <div class="field col-12 flex align-items-baseline justify-content-center" id="btn-create" >                              <!--</div>
-                            <div class="field col-12 md:col-6" id="btn-back">-->
+                        <div className="cc-grid" id="div-btn">
+                            <div class="flex align-items-centert justify-content-center">                    <br>
+                                <small class="p-error" *ngIf="(lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)">Lobby name is required</small>
+                                <br>
+                                <small class="p-error">{{createError}}</small>            
+                                <p-progressSpinner *ngIf="waiting"  [style]="{width: '50px', height: '50px'}" styleClass="custom-spinner" strokeWidth="8" animationDuration=".5s"></p-progressSpinner>
+                            </div>
+                            <div class="field col-12 flex align-items-baseline justify-content-center" id="btn-create" >
                                 <button  pButton pRipple class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'"></button>
-                        
                                 <button pButton pRipple type="button" id="btncreate" label="Create match" class="border-round" (click)="onClickCreateMatch(game, i)"></button>
-  
                             </div>
                         </div>
                     </p-tabPanel>    
