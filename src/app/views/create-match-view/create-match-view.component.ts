@@ -192,4 +192,11 @@ export class CreateMatchViewComponent implements OnInit {
     this.showDesc = !this.showDesc;
   }
 
+  resetPassword(){
+    this.createMatchData.password=undefined;
+  }
+  resetVerified(){
+    this.createMatchData.serverpwd=undefined;
+  }
+
 }

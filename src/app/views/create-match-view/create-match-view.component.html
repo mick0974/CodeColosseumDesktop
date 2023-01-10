@@ -10,7 +10,7 @@
                     </span>
                 </div>
                 <div class="field col-12 flex justify-content-center" id="password-div">
-                    <p-inplace [closable]="true">                        
+                    <p-inplace [closable]="true" (onDeactivate)="resetPassword()">                        
                         <ng-template pTemplate="display">
                             <button pButton pRipple type="button" id="btnpassword" label="Set password protection" class="border-round"
                             pTooltip="Limit access to your game with a password for players to enter." tooltipPosition="top" icon="pi pi-lock"></button>
@@ -19,7 +19,7 @@
                             <p-password [(ngModel)]="createMatchData.password" id="password" [feedback]="false" placeholder="Game password" ></p-password>
                         </ng-template>
                     </p-inplace>
-                    <p-inplace [closable]="true">
+                    <p-inplace [closable]="true" (onDeactivate)="resetVerified()">
                         <ng-template pTemplate="display">
                             <button pButton pRipple type="button" id="btnstatus" label="Unlock verified status" class="border-round"
                              pTooltip="Unlock verified status by entering the server's password." tooltipPosition="top" icon="pi pi-verified"></button>
