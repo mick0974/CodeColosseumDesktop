@@ -41,7 +41,7 @@ export class CreateMatchViewComponent implements OnInit {
   public createError = "";
   waiting = false;
 
-  apiService = new ApiService(this.connectionManager);
+  apiService = new ApiService(this.connectionManager.url);
 
   constructor(
     private uploadService:UploadService,

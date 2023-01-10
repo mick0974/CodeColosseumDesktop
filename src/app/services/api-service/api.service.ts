@@ -57,9 +57,11 @@ export enum ErrorType{
   LobbyCreateFailed = 'LobbyCeateFailed'
 }
 
+/*
 @Injectable({
   providedIn: 'root'
 })
+*/
 
 export class ApiService {
   public url:string="";
@@ -68,8 +70,14 @@ export class ApiService {
   // if I just gave the url ^^"
   // ConnectionManagerService is a singleton and can always be imported and passed by
   // importing { ConnectionManagerService } class and passing it as an argument with "private".
+  /*
   constructor(private connectionManager:ConnectionManagerService){
     this.url=connectionManager.url;
+  }
+  */
+
+  constructor(url:string){
+    this.url=url;
   }
 
   public gameList(onResult:(gameList:string[])=>void){
