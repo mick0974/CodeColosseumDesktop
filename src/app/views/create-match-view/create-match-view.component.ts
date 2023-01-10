@@ -161,6 +161,7 @@ export class CreateMatchViewComponent implements OnInit {
       const newMatch: GameDetails= { 
         lobby_name: this.createMatchData.lobby,
         password: this.createMatchData.password,
+        verification: this.createMatchData.serverpwd,
         game_description:{
           game_name: this.gamedetails[index].game_description.game_name ,
           game_descr: this.gamedetails[index].game_description.game_descr
