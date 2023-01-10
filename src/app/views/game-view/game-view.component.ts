@@ -82,18 +82,34 @@ export class GameViewComponent implements OnInit {
 
   // UPLOAD METHODS
 
+  
+  fileUpload(event:any){
+    this.uploadData.program = event.target.files[0];
+    this.currProgramName = this.uploadData.program.name;
+
+    // Uses Tauriserver to make a local copy in the front-end server of the player's bot.
+    // This is necessary because Tauri wants a path, and we can't see the user's path for
+    // security reasons.
+    this.tauriService.uploadFile(this.uploadData.program, ()=>{
+      this.currProgramName = this.uploadData.program.name;
+      this.ref.detectChanges();
+    }, (reason)=>{
+      console.log("Error, could not write file: " + reason)
+    })
+  }
+
+
   navigateToPlay():void{
     this.submitted=true;
-    // TODO! Checks compilation of stuff, emtpy for testing then everything will ned to be in here
-    if ((this.hasPassword && this.uploadData.password&&this.uploadData.program)||(!this.hasPassword &&this.uploadData.program)){ 
     
-      // When first connection is established with apiService.connectToPlat, 
-      // client will receive a JoinEvent (that will execute a onEvent)
-      // and a MatchUpdate (that will execute a onMatchUpdate).
+    if ((this.hasPassword && this.uploadData.password&&this.uploadData.program)||(!this.hasPassword &&this.uploadData.program)){ 
+  
+    // When first connection is established with apiService.connectToPlay, 
+    // client will receive a JoinEvent (that will execute a onEvent)
+    // and a MatchUpdate (that will execute a onMatchUpdate).
 
     // Executed on join event
     let onEvent = (type:LobbyEventType)=>{
-      //TODO handle if connection aint established
       if(type == LobbyEventType.End){
         this.messages.push({sender:"server", content:"Game ended!"})
       }
@@ -103,11 +119,14 @@ export class GameViewComponent implements OnInit {
     }
 
     // Executed on match update (you get a match update immediately after joining, as the #
-    // of players has changed.)
+    // of players has changed, or when the match starts)
     let onMatchUpdate = (matchInfo:MatchInfo)=>{
       console.log("onMatchUpdate (join) was executed")
 
-      if (!this.lastMatchState){
+
+      // This first block of code runs when current player has just joined.
+      // It shows already connected players
+      if (!this.lastMatchState){ 
         this.newMsg="Connection established."
         this.messages.push({sender:"server",content:this.newMsg})
         if(matchInfo.connected.length>0){
@@ -119,16 +138,19 @@ export class GameViewComponent implements OnInit {
           this.messages.push({sender:"server",content:this.newMsg})
         }
       }
+      // This other branch runs to check if this new update is because the game started or because
+      // anonther player joined/left.
       else{ 
-        // Check if game started running
+        // This is if match started
         if (!this.lastMatchState.running && matchInfo.running){
           this.messages.push({sender:"server",content:"Game is starting!"})
           this.messages.push({sender:"divider",content:"Game started!"})
 
-          this.launchTauri();
+          this.launchTauri(); //If game started running it's time to run TauriService to start user bot 
         }
   
-        // this finds the name of the new player that has joined.
+        // this  is if a player joined/left. It finds the name of the new player
+        // by comparing previous and current player list array.
         let newPlayer="";
         let pastConnected=this.lastMatchState.connected;
         let newConnected=matchInfo.connected=matchInfo.connected
@@ -144,9 +166,12 @@ export class GameViewComponent implements OnInit {
         }
       }
 
+      // Saves current info for next time we'll receive a matchInfo, so that we can check differences (e.g. player joined)
       this.lastMatchState=matchInfo;
     }
 
+    // Executed when binary data is exchanged between the player's bot and the server.
+    // Messages sent during match are of this kind.
     let onData = (data:string)=>{
       if(data != ""){
         let sender: ChatSender = this.firstBinaryMsg ? "server" : "other";
@@ -173,21 +198,11 @@ export class GameViewComponent implements OnInit {
     }
   }
 
-  fileUpload(event:any){
-    this.uploadData.program = event.target.files[0];
-    this.currProgramName = this.uploadData.program.name;
-
-    this.tauriService.uploadFile(this.uploadData.program, ()=>{
-      this.currProgramName = this.uploadData.program.name;
-      this.ref.detectChanges();
-    }, (reason)=>{
-      console.log("Error, could not write file: " + reason)
-    })
-  }
-
   navigateToUpload():void{
     this.currStep=0;
   }
+
+  // TAURI 
 
   sendToTauri(message:string) {
     this.tauriService.sendToProcess(message);

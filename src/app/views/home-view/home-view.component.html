@@ -2,7 +2,8 @@
 
 
     <h1 >Join game</h1>
-
+    
+    <!--Header with toggles, button-->
     <div class="cc-gamelist-header"> 
         <p-selectButton class="flex justify-content-center align-self-center align-items-baseline" [style]="{'box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
             <ng-template let-item>
@@ -26,6 +27,7 @@
         <p-progressSpinner strokeWidth="8" [styleClass]="'custom-spinner'" ></p-progressSpinner></div>
 
 
+    <!-- Actual data if present-->
     <p-scrollPanel *ngIf="!loading" [style]="{width:'100%',height:'600px'}">
 
         <!-- No games view-->
