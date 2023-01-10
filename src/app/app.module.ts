@@ -39,6 +39,7 @@ import { CreateMatchViewComponent } from './views/create-match-view/create-match
 import { CcChatComponent } from './components/cc-chat/cc-chat.component';
 import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
 import { MarkdownPipe } from './markdown.pipe';
+import { AboutViewComponent } from './views/about-view/about-view.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { MarkdownPipe } from './markdown.pipe';
     CreateMatchViewComponent,
     CcChatComponent,
     SpectateViewComponent,
-    MarkdownPipe
+    MarkdownPipe,
+    AboutViewComponent
   ],
   imports: [
     BrowserModule,

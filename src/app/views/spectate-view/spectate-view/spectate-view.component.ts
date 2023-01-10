@@ -69,7 +69,6 @@ export class SpectateViewComponent implements OnInit {
     }
 
     let onEvent = (type:LobbyEventType)=>{
-      //TODO handle if connection aint established
       if(type == LobbyEventType.End){
         this.messages.push({sender:"server", content:"Game ended!"})
       }
