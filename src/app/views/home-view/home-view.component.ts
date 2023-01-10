@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
 import { MatchInfo } from 'src/app/services/api-service/api.service';
 import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
-import { UploadService } from 'src/app/services/upload.service';
-import { PrimeIcons } from 'primeng/api';
 @Component({
   selector: 'app-home-view',
   templateUrl: './home-view.component.html',
@@ -31,7 +29,7 @@ export class HomeViewComponent implements OnInit {
   };
   
 
-  constructor(private uploadService:UploadService, private connectionManager:ConnectionManagerService) {
+  constructor(private connectionManager:ConnectionManagerService) {
 
     // Actual refresh is done every 10 seconds only to not overwhelm server.
     if(this.autorefresh){

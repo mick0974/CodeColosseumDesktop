@@ -9,7 +9,7 @@ export class ConnectionManagerService {
   private _url: string = "ws://127.0.0.1:8088/";
   private _username: string = "Username";
 
-  private api:ApiService= new ApiService();
+  private api:ApiService= new ApiService(this);
   
   private _isConnected: boolean = false;
   //deve prenderlo dalla home
@@ -85,7 +85,6 @@ export class ConnectionManagerService {
     this._url = url;
     this._username = username;
     
-    // TODO: connect to server
     // Add the below lines to the connect method
     this.lobbyList();
     

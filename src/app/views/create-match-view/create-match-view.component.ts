@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CREATE_GAMES } from 'mock-create-match';
 import { GameDetails } from 'src/app/services/api-service/api.service';
-import { UploadService } from 'src/app/services/upload.service';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api-service/api.service';
-
+import { ConnectionManagerService } from 'src/app/services/connection-manager.service';
+import { UploadService } from 'src/app/services/upload.service';
 @Component({
   selector: 'app-create-match-view',
   templateUrl: './create-match-view.component.html',
@@ -41,9 +41,12 @@ export class CreateMatchViewComponent implements OnInit {
   public createError = "";
   waiting = false;
 
-  apiService = new ApiService();
+  apiService = new ApiService(this.connectionManager);
 
-  constructor(private uploadService:UploadService, private readonly router: Router) { 
+  constructor(
+    private uploadService:UploadService,
+    private connectionManager:ConnectionManagerService,
+    private readonly router: Router) { 
     
   }
 
@@ -75,12 +78,8 @@ export class CreateMatchViewComponent implements OnInit {
     console.log("[Createview] Resetting create match...")
     this.uploadService.reset()
 
-    //todo Loading table will probably have to be disabled if we refresh often 
-    setTimeout(() => {
-        this.gamedetails = CREATE_GAMES;
-        this.loading = false;
-    }, 1000);
-
+    this.gamedetails = CREATE_GAMES;
+    
     this.hasGames = this.gamedetails.length !== 0;
     
     let onSuccess = (gameNameList:string[])=>{ 
