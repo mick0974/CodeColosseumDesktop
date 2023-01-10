@@ -61,15 +61,10 @@ export enum ErrorType{
 })
 
 export class ApiService {
-  public url = 'ws://localhost:8088';
-  public ws?:CoCoSocket;
+  public url:string;
 
-  constructor(){
-
-  }
-  
-  private createCoCosocket(url:string) {
-    this.ws = new CoCoSocket(url);
+  constructor(url:string){
+    this.url = url;
   }
 
   public gameList(onResult:(gameList:string[])=>void){
