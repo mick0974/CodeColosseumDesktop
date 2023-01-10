@@ -1,8 +1,10 @@
 <div class="cc-page">
   <div class="cc-topbar">
     <div class="cc-topbar-logo">
-      <img src="{{ path }}" alt="{{ alttext }} " width="40px" height="40px" style="margin:10px">
-      <h2 >Code Colosseum</h2>
+      <a routerLink="home">
+        <img src="{{ path }}" alt="{{ alttext }} " width="40px" height="40px" style="margin:10px">
+      </a>
+      <h2>Code Colosseum</h2>
     </div>
     <div class="cc-topbar-info-list" *ngIf="isConnected">
       <div class="cc-topbar-info cc-topbar-info-username">

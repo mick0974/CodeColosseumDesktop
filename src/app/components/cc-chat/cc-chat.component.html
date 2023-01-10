@@ -12,7 +12,7 @@
                                 {{msg.sender}}
                             </p>
                         </div>
-                        <div [ngClass]="msg.sender === 'me' ? 'p-2 shadow-2 bg-cyan-500 text-white font-bold border-round m-2 flex align-items-center justify-content-center': 
+                        <div [innerHTML]="msg.content" [ngClass]="msg.sender === 'me' ? 'p-2 shadow-2 bg-cyan-500 text-white font-bold border-round m-2 flex align-items-center justify-content-center': 
                         msg.sender !== 'server' ? 'p-2 shadow-2 bg-yellow-500 text-white font-bold border-round m-2 flex align-items-center justify-content-center'
                         :'p-2 shadow-2 surface-700 text-white font-bold border-round m-2 flex align-items-center justify-content-center'">
                         {{msg.content}}
@@ -31,4 +31,3 @@
     </div>
 </p-scrollPanel>
 </div>
-

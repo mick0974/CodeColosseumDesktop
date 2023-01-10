@@ -36,10 +36,12 @@ export class ConnectionManagerService {
 
   async onApiError(message: string){
     console.log("Couldn't establish connection! For error " + message);
-    alert("Error: " + message)
+
+    // If we reach this point, it means connection with the server was lost (or the login went bad.) Let's go to connect page.
+
     this.error = true;
     this._isConnected = false;
-    this.reloadComponent(true);
+    this.reloadComponent(false,"/connect");
   }
 
   async lobbyList() {

@@ -14,6 +14,7 @@ export class ConnectViewComponent implements OnInit {
   //public username: string = "";
   
   submitted: boolean = false;
+  waiting:boolean = false;
   error:boolean = false;
   public connectData:any={};
     
@@ -32,12 +33,6 @@ export class ConnectViewComponent implements OnInit {
   public async connect(): Promise<void> {
     await this.connectionManager.connect(this.connectData.server, this.connectData.username);
 
-    if (this.connectionManager.isConnected && !this.connectionManager.error ) {
-      //this.router.navigateByUrl('/home');
-    } else {
-      // TODO: Show error message
-    }
-
   }
   serverChange(event: any){
     //console.log(event);
@@ -49,7 +44,9 @@ export class ConnectViewComponent implements OnInit {
   }
   onClick(){
     
-    if(this.connectData.server && this.connectData.username){
+    if(this.connectData.server && this.connectData.username && this.connectData.username.length<=25){
+      this.error = false;
+      this.waiting = true;
       this.connect();
       return;
     }

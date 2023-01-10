@@ -31,6 +31,10 @@
             "name": "sh",
             "cmd": "sh",
             "args": true
+          },{
+            "name":"sh-windows",
+            "cmd": "cmd",
+            "args": true
           }
         ]
       },
@@ -44,6 +48,9 @@
       	"readDir": true,
       	"exists": true,
       	"scope": ["**"]
+      },
+      "os": {
+        "all": true
       }
     },
     "bundle": {

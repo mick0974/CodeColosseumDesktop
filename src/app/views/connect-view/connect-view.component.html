@@ -2,9 +2,6 @@
   <div class="card" className="cc-card">
     <h1>Welcome to <br>Code Colosseum.</h1> 
       <div class="fromgrid grid" className="cc-grid">
-        <div class="field col-12" id="error-div">
-          <small class="p-error" *ngIf="(error)">Couldn't establish connection! Because server is not active.</small>
-        </div>
         <div class="field col-12" id="server-div">
           <span class="p-float-label" id="server-span">
             <input #server= "ngModel" [(ngModel)]="connectData.server" type="text" name="server" (change)="serverChange($event)"  id="server" required [ngClass]="{'ng-dirty': (server.invalid && submitted) || (server.dirty && server.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
@@ -15,14 +12,23 @@
         </div>
         <div class="field col-12" id="username-div">
           <span class="p-float-label" id="username-span">
-            <input #username="ngModel" type="text" name="username" (change)="usernameChange($event)" [(ngModel)]="connectData.username" id="username" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" required [ngClass]="{'ng-dirty': (username.invalid && submitted) || (username.dirty && username.invalid)}" pInputText/>
+            <input #username="ngModel" maxlength="24" type="text" name="username" (change)="usernameChange($event)" [(ngModel)]="connectData.username" id="username" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" required [ngClass]="{'ng-dirty': (username.invalid && submitted) || (username.dirty && username.invalid)}" pInputText/>
             <label for="username">Username</label>            
           </span>
           <br>
-          <small class="p-error" *ngIf="(username.invalid && submitted) || (username.dirty && username.invalid)">Username is required</small>
+          <small class="p-error" *ngIf="(username.invalid && submitted) || (username.dirty && username.invalid)">
+      Username is required</small>
         </div>
+
         <div class="field col-12" id="button-div">
           <button pButton pRipple type="button" id="button" (click)="onClick()" label="CONNECT" class="border-round"></button>
+        </div>
+        <div class="field col-12" id="error-div">
+          <small class="p-error" *ngIf="(error)">Unable to connect to the server. The server address may be incorrect or the server may be offline.</small>
+        </div>
+
+        <div class="col-12 flex justify-content-center">
+          <p-progressSpinner *ngIf="waiting"  [style]="{width: '50px', height: '50px'}" styleClass="custom-spinner" strokeWidth="8" animationDuration=".5s"></p-progressSpinner>
         </div>
     </div>     
   </div>
