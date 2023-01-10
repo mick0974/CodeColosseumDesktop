@@ -4,7 +4,7 @@
       <div class="fromgrid grid" className="cc-grid">
         <div class="field col-12" id="server-div">
           <span class="p-float-label" id="server-span">
-            <input #server= "ngModel" [(ngModel)]="connectData.server" type="text" name="server" (change)="serverChange($event)"  id="server" required [ngClass]="{'ng-dirty': (server.invalid && submitted) || (server.dirty && server.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
+            <input #server= "ngModel" (keyup)="onEnter($event)" [(ngModel)]="connectData.server" type="text" name="server" (change)="serverChange($event)"  id="server" required [ngClass]="{'ng-dirty': (server.invalid && submitted) || (server.dirty && server.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText required/>
             <label for="server">Server URL</label>  
           </span>
           <br>
@@ -12,7 +12,8 @@
         </div>
         <div class="field col-12" id="username-div">
           <span class="p-float-label" id="username-span">
-            <input #username="ngModel" maxlength="24" type="text" name="username" (change)="usernameChange($event)" [(ngModel)]="connectData.username" id="username" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" required [ngClass]="{'ng-dirty': (username.invalid && submitted) || (username.dirty && username.invalid)}" pInputText/>
+            <input #username="ngModel" (keyup)="onEnter($event)" 
+              maxlength="24" type="text" name="username" (change)="usernameChange($event)" [(ngModel)]="connectData.username" id="username" class="text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" required [ngClass]="{'ng-dirty': (username.invalid && submitted) || (username.dirty && username.invalid)}" pInputText/>
             <label for="username">Username</label>            
           </span>
           <br>

@@ -190,5 +190,5 @@ export class CreateMatchViewComponent implements OnInit {
   toggleDesc(){
     this.showDesc = !this.showDesc;
   }
-  
+
 }

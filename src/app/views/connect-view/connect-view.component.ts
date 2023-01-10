@@ -54,4 +54,10 @@ export class ConnectViewComponent implements OnInit {
     this.submitted = true;
     
   }
+
+  onEnter(event:any){
+    if(event.keyCode === 13){
+      this.onClick();
+    }
+  }
 }

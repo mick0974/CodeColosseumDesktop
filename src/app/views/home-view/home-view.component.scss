@@ -1,3 +1,11 @@
+.toggleicon {
+    transform: translateX(+50%); // è bruttissimo ma con questi nuovi css "generali" non riesco a cetrarlo in nessun altro modo.
+    -webkit-transform: translateX(+50%);
+    -moz-transform: translateX(+50%);
+    -ms-transform: translateX(+50%);
+    -o-transform: translateX(+50%);
+}
+
 
 .cc-gamelist-header {
     display:flex;

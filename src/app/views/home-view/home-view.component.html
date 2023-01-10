@@ -4,9 +4,9 @@
     <h1 >Join game</h1>
 
     <div class="cc-gamelist-header"> 
-        <p-selectButton [style]="{'align-items': 'center',display:'inline-block','box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
+        <p-selectButton class="flex justify-content-center align-self-center align-items-baseline" [style]="{'box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
             <ng-template let-item>
-                <i [class]="item.icon"></i>
+                <i [class]="item.icon + ' toggleicon'"></i>
             </ng-template>
         </p-selectButton> 
 
@@ -45,7 +45,7 @@
                                     <div>
                                         <div class="text-xl font-medium text-900 mb-2">
                                             {{game.name}} 
-                                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
+                                            <i class="pi pi-lock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
                                             <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
                                         
                                         </div>
@@ -129,7 +129,7 @@
                     <tr>
                         <td>
                             {{game.name}} 
-                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
+                            <i class="pi pi-lock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
                             <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
                         </td>
                         <td>{{game.id}}</td>
