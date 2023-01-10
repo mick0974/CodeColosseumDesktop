@@ -46,7 +46,7 @@
                                         <div class="text-xl font-medium text-900 mb-2">
                                             {{game.name}} 
                                             <i class="pi pi-lock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
-                                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
+                                            <i class="pi pi-verified" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
                                         
                                         </div>
                                         <p class="mt-0 mb-3 text-600">
@@ -130,7 +130,7 @@
                         <td>
                             {{game.name}} 
                             <i class="pi pi-lock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
-                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
+                            <i class="pi pi-verified" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
                         </td>
                         <td>{{game.id}}</td>
                         <td>{{game.game}}</td>
