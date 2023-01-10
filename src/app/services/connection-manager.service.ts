@@ -37,16 +37,11 @@ export class ConnectionManagerService {
   async onApiError(message: string){
     console.log("Couldn't establish connection! For error " + message);
 
-    // If we're on connect page, there's already error handling in the html. Anywhere else,
-    // we want to stop the user from interacting with the (unconnected) page and go back to connect.
-    if ( this.router.url != "/connect"){
-      alert("Connection error: The server could not be reached. \"" + message + "\".\nYou'll be redirected to connect page.")
-    }
+    // If we reach this point, it means connection with the server was lost (or the login went bad.) Let's go to connect page.
 
-    this.router.navigateByUrl("/connect")
     this.error = true;
     this._isConnected = false;
-    this.reloadComponent(true);
+    this.reloadComponent(false,"/connect");
   }
 
   async lobbyList() {
