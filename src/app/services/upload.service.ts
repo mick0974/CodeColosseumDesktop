@@ -9,7 +9,7 @@ import { ConnectionManagerService } from './connection-manager.service';
 export class UploadService {
   game! : MatchInfo | null;
   validLobbies:MatchInfo[]=[];
-  private api:ApiService= new ApiService(this.connectionManager);
+  private api:ApiService= new ApiService(this.connectionManager.url);
   //deve prenderlo dalla createNewMatch
   public lobbyIdvar?: string;
   public gameDetailsvar: GameDetails = {};
