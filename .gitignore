@@ -5,6 +5,8 @@
 /tmp
 /out-tsc
 /bazel-out
+/build
+/src-tauri/target
 
 # Node
 /node_modules
@@ -42,3 +44,10 @@ testem.log
 Thumbs.db
 
 CodeColosseum/*
+
+
+# Compiled rockaperscissor executable
+/data/executable
+/data/executable.exe
+/data/rock-paper-scissor
+/data/rock-paper-scissor.exe

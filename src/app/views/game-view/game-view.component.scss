@@ -1,6 +1,12 @@
-.cc-column-layout{
-    width:90%;
-    > div {
-        text-align: center;
+
+.cc-fields{
+    display: flex;
+    align-items: stretch;
+    > *{
+        margin:10px;
     }
+}
+
+.true-input-button{
+    display: none;
 }

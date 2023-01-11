@@ -14,50 +14,50 @@ export class ConnectViewComponent implements OnInit {
   //public username: string = "";
   
   submitted: boolean = false;
-  
+  waiting:boolean = false;
+  error:boolean = false;
   public connectData:any={};
-  
+    
   constructor(
     private readonly connectionManager: ConnectionManagerService,
     private readonly router: Router,
-  ) { }
+  ) {
+    this.error = this.connectionManager.error;
+   }
 
   ngOnInit(): void {
+    this.error = this.connectionManager.error;
+    console.log('Page reload error = ' + this.error);
   }
 
   public async connect(): Promise<void> {
     await this.connectionManager.connect(this.connectData.server, this.connectData.username);
 
-    if (this.connectionManager.isConnected) {
-      this.router.navigateByUrl('/home');
-    } else {
-      // TODO: Show error message
-    }
   }
   serverChange(event: any){
-    console.log(event);
-    console.log(this.connectData);
+    //console.log(event);
+    //console.log(this.connectData);
   }
   usernameChange(event: any){
-    console.log(event);
-    console.log(this.connectData);
+    //console.log(event);
+    //console.log(this.connectData);
   }
   onClick(){
-    /*if(!this.server){
-      alert('Please insert a server url!')
-      return;
-    }
-    if(!this.username){
-      alert('Please insert a username!')
-      return;
-    }*/
-    if(this.connectData.server && this.connectData.username){
+    
+    if(this.connectData.server && this.connectData.username && this.connectData.username.length<=25){
+      this.error = false;
+      this.waiting = true;
       this.connect();
       return;
     }
-    
     //this.newConnection.emit();
     this.submitted = true;
     
+  }
+
+  onEnter(event:any){
+    if(event.keyCode === 13){
+      this.onClick();
+    }
   }
 }

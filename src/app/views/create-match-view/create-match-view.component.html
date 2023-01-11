@@ -1,0 +1,125 @@
+<div class="cc-create-match-container">
+    <div class="cc-column-layout">
+        <div class="p-fluid" class="field">
+            <h1>Create match</h1> 
+            <div class="fromgrid grid" className="cc-grid">
+                <div class="field col-12" id="lobby-div" >
+                    <span class="p-float-label" id="lobby-span">
+                        <input #lobby= "ngModel" [(ngModel)]="createMatchData.lobby" type="text" name="lobby" (change)="lobbyChange($event)" id="lobby" required  [ngClass]="{'ng-dirty': (lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)}" class="form-control text-base text-color surface-overlay border-solid surface-border border-round appearance-none focus:border-primary" pInputText maxlength="24" required/>
+                        <label for="lobby">Lobby name</label>
+                    </span>
+                </div>
+                <div class="field col-12 flex justify-content-center" id="password-div">
+                    <p-inplace [closable]="true" (onDeactivate)="resetPassword()">                        
+                        <ng-template pTemplate="display">
+                            <button pButton pRipple type="button" id="btnpassword" label="Set password protection" class="border-round"
+                            pTooltip="Limit access to your game with a password for players to enter." tooltipPosition="top" icon="pi pi-lock"></button>
+                        </ng-template>
+                        <ng-template pTemplate="content">
+                            <p-password [(ngModel)]="createMatchData.password" id="password" [feedback]="false" placeholder="Game password" ></p-password>
+                        </ng-template>
+                    </p-inplace>
+                    <p-inplace [closable]="true" (onDeactivate)="resetVerified()">
+                        <ng-template pTemplate="display">
+                            <button pButton pRipple type="button" id="btnstatus" label="Unlock verified status" class="border-round"
+                             pTooltip="Unlock verified status by entering the server's password." tooltipPosition="top" icon="pi pi-verified"></button>
+                            
+                        </ng-template>
+                        <ng-template pTemplate="content">
+                        <p-password [(ngModel)] = "createMatchData.serverpwd" id="serverpwd" [feedback]="false" placeholder="Server master password" ></p-password>
+                        </ng-template>
+                    </p-inplace>
+                </div>
+                    
+            </div>        
+            <p-tabView (onChange)="handleChange($event)" >
+                <ng-template ngFor let-game [ngForOf]="gamedetails" let-i="index">
+                    
+                    <p-tabPanel header="{{game.game_description.game_name}}" ngDefaultControl name="game_name" [(ngModel)]="createMatchData.game_name" leftIcon="pi pi-plus">
+                        
+                        <div  class="flex-column m-4 justify-content-center">
+                            <div class="flex justify-content-center ">
+                                <p-button (onClick)="toggleDesc()" [ngClass]="showDesc?'':'p-button-text'" class="mb-4"
+                                [label]="showDesc ? 'Hide game description' : 'Show game description'" 
+                                [icon]="showDesc ? 'pi pi-chevron-up' : 'pi pi-chevron-down'">     
+                                </p-button>
+                            </div>
+                            <p-scrollPanel *ngIf="showDesc" class="description-info surface-ground p-3 border-round-md">
+                                <p [innerHTML]="game.game_description.game_descr | markdown"></p>
+                            </p-scrollPanel>
+                        
+                            
+                            <div class="container-inner">
+                                    <h4> General parameters</h4>
+                                <section class="game-params">
+                                    <div class="grid p-fluid">
+                                        <div class="field col-12 md:col-4">
+                                            <label for="player-num">Players</label>
+                                            <p-inputNumber [(ngModel)]="gamedetails[i].game_params.players" mode="decimal" [showButtons]="true" [min]="2" [max]="2">
+                                            </p-inputNumber>
+                                        </div>
+                                        <div class="field col-12 md:col-4">
+                                            <label for="bots-num">Server bots</label>
+                                            <div *ngIf="gamedetails[i].game_description.game_name == 'royalur'; else otherGames">
+                                                <p-inputNumber [(ngModel)]="gamedetails[i].game_params.bots" mode="decimal" [showButtons]="true" [min]="1" [max]="1">
+                                                </p-inputNumber>
+                                          
+                                            </div>
+                                            <ng-template #otherGames>
+                                                <p-inputNumber [(ngModel)]="gamedetails[i].game_params.bots" mode="decimal" [showButtons]="true" [min]="0" [max]="100">
+                                                </p-inputNumber>
+                                      
+                                            </ng-template>
+                                            
+                                        </div>
+                                        <div class="field col-12 md:col-4">
+                                            <label for="timeout">Inactivity timeout</label>
+                                            <p-inputNumber [(ngModel)]="gamedetails[i].game_params.timeout" mode="decimal" [showButtons]="true" inputId="timeout" [min]="2" [max]="100">
+                                            </p-inputNumber>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="args-content">
+                                    <!--<div class="cc-column-layout">-->
+                                        <div class="p-fluid" class="field">
+                                            <h4> Game-specific parameters </h4>
+                                    
+                                            <ng-template ngFor let-arg [ngForOf]="game.args" let-j="index">
+                                                <div class="flex-column ">
+                                                    <div class="my-2">
+                                                    <label  [(ngModel)]="gamedetails[i].args[j].name" ngDefaultControl id="label-arg">{{ arg.name }}</label></div>
+                                                    <input type="text" [(ngModel)]="gamedetails[i].args[j].value"  ngDefaultControl id="{{ arg.name }}" class="border-round appearance-none focus:border-primary" pInputText>
+                                                </div>
+                                            </ng-template>
+                                        </div>
+                                    <!--</div>-->
+                        
+                                </section>
+                            </div>
+                        </div>
+                                
+                        <div className="cc-grid" id="div-btn">
+                            <div class="flex align-items-centert justify-content-center">                    <br>
+                                <small class="p-error" *ngIf="(lobby.invalid && submitted) || (lobby.dirty && lobby.invalid)">Lobby name is required</small>
+                                <br>
+                                <small class="p-error">{{createError}}</small>            
+                                <p-progressSpinner *ngIf="waiting"  [style]="{width: '50px', height: '50px'}" styleClass="custom-spinner" strokeWidth="8" animationDuration=".5s"></p-progressSpinner>
+                            </div>
+                        </div>
+                        
+                        <div class="field flex align-items-baseline justify-content-center bottombuttonspane" id="btn-create" >
+                            <button  pButton pRipple class="p-button-secondary p-button-outlined mx-5" type="button" label="Go back to game list" [routerLink]="'/home'"></button>
+                            <button pButton pRipple class=" mx-5" type="button" id="btncreate" label="Create match" class="border-round" (click)="onClickCreateMatch(game, i)"></button>
+                        </div>   
+                    </p-tabPanel> 
+                </ng-template>
+                <p-tabPanel header="More coming!" [disabled]="true">
+                </p-tabPanel>
+                
+            </p-tabView>
+
+            
+            
+        </div>
+    </div>
+</div>

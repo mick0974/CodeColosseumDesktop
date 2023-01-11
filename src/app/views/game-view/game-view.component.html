@@ -1,20 +1,73 @@
 <div class="cc-column-layout">
 
-    <div class="cc-error-404" *ngIf="(game===null)"  >
+
+    <div class="cc-error-404 flex-column justify-content-center" *ngIf="game===null"  >
         <h2> It looks like this game doesn't exist. </h2>
-        <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'"></button>
-    </div>
-
-    <div>
-        <h1> Playing game {{this.gameId}}</h1>
+        <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
     </div>
 
 
-    <p-steps [(activeIndex)]="currStep" [model]="items" ></p-steps>
+    <div *ngIf="!(game===null)">
+        <!-- Header&testing-->
+        <div>
+            <h1>{{newMsg}}</h1>
+            <h1> Playing game {{this.gameName}}</h1>
+            <h4> ID: {{this.gameId}} </h4>
+        </div>
 
-    <router-outlet></router-outlet>
+        <div class="cc-column-layout surface-card shadow-2 border-round w-12 flex-column">
 
-    <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
+            <!-- Upload screen -->
+            <div *ngIf="currStep==0">    
+                <div class="flex justify-content-center">
+                    <h2> Match setup</h2>
+                </div>     
+                <div class="grid formgrid p-fluid"> <!--"grid formgrid p-fluid w-7">-->
+                    <div class="field mb-4 col-12 ">
+                        <label for="fileuploader" class="font-medium text-900">Upload bot</label>
+                        <div class="true-input-button">
+                            <input  id="fileuploader" type="file" class="file-upload" (change)="fileUpload($event)" #fileUploader></div>
+                        <div class="flex align-content-center align-items-baseline">
+                            <button pRipple class="p-element p-ripple w-auto mt-3 p-button p-component" pbutton="" (click)="fileUploader.click()">Upload</button>
+                            <div class="m-4">{{currProgramName}}</div>
+                        </div>
+                        <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
+                    </div>
+
+                    <div class="field mb-4 col-12" *ngIf="hasPassword">
+                        <label for="password" class="font-medium text-900">Match password</label>
+                        <p-password required #password="ngModel" name="password" [(ngModel)]="uploadData.password"  id="password" [feedback]="false"  [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}"></p-password>
+                        <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">This game requires a password.</small>
+                    
+
+                    
+                    </div>
 
 
+                    <div class="field mb-4 col-12">
+                        <label for="parameters" class="font-medium text-900">Parameters</label>
+                        <textarea id="parameters" [(ngModel)]="executableParameters" type="text" pinputtextarea="" rows="5" class="p-inputtextarea p-inputtext p-component p-element p-inputtextarea-resizable" style="height: 132px; overflow: hidden;"></textarea>
+                        <small>Your parameters must be separated by a comma (,). Parameters that contain commas are currently not supported.</small>
+                    </div>
+
+
+                    <div class="col-12 ">
+                        <button pRipple (click)="navigateToPlay()" pbutton="" pripple="" label="Start match!" class="p-element p-ripple w-auto mt-3 p-button p-component"><span class="p-button-label">Start match!</span><span class="p-ink"></span></button>
+                        <small class="m-2 p-error">{{errorMessage}}</small>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Chat/game screen-->
+            <div *ngIf="currStep==1" class="text-center">
+                <h2> Match chat </h2>    
+                <cc-chat [messages]="this.messages"></cc-chat></div>
+
+        </div>
+        <div class=" flex justify-content-center ">
+            <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
+        </div>
+    </div>
 </div>
+

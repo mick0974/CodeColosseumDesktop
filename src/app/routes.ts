@@ -3,9 +3,10 @@ import { AuthGuard } from './guards/auth.guard';
 import { ConnectViewComponent } from './views/connect-view/connect-view.component';
 import { GameViewComponent } from './views/game-view/game-view.component';
 import { HomeViewComponent } from './views/home-view/home-view.component';
-import { CcUploadComponent } from './views/game-view/cc-upload/cc-upload.component';
-import { CcResultsComponent } from './views/game-view/cc-results/cc-results.component';
-import { CcReviewComponent } from './views/game-view/cc-review/cc-review.component';
+import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
+import { CreateMatchViewComponent } from './views/create-match-view/create-match-view.component';
+import { AboutViewComponent } from './views/about-view/about-view.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -20,23 +21,23 @@ export const routes: Routes = [
         path: 'home',
         canActivate: [AuthGuard],
         component: HomeViewComponent
+    },{
+        path:'game/:id',
+        canActivate: [AuthGuard],
+        component: GameViewComponent
     },
     {
-        path: 'game/set/:id',
+        path: 'newmatch',
         canActivate: [AuthGuard],
-        component: GameViewComponent,
-        
+        component: CreateMatchViewComponent,
     },
     {
-        path: 'game',
+        path: 'spectate/:id',
         canActivate: [AuthGuard],
-        component: GameViewComponent,
-        children: [
-            { path: 'upload', component: CcUploadComponent, pathMatch: 'full'  },
-            { path: 'results', component: CcResultsComponent, pathMatch: 'full'  },
-            { path: 'review', component: CcReviewComponent, pathMatch: 'full'  }
-        ]
+        component: SpectateViewComponent,
+    },
+    {
+        path: 'about',
+        component: AboutViewComponent,
     }
-/*
-    { path: "**", redirectTo: "/connect" },*/
 ];

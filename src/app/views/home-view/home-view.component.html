@@ -1,24 +1,34 @@
-
-
-
 <div class="cc-home-container">
-    <h1 >Join game</h1>
 
+
+    <h1 >Join game</h1>
+    
+    <!--Header with toggles, button-->
     <div class="cc-gamelist-header"> 
-        <p-selectButton [style]="{'align-items': 'center',display:'inline-block','box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
+        <p-selectButton class="flex justify-content-center align-self-center align-items-baseline" [style]="{'box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
             <ng-template let-item>
-                <i [class]="item.icon"></i>
+                <i [class]="item.icon + ' toggleicon'"></i>
             </ng-template>
         </p-selectButton> 
 
-        <div>
-            <button pButton type="button" class="p-button-rounded p-button-outlined" icon="pi pi-refresh"></button>
-            <button pButton class="p-button-raised" label="Create new game" icon="pi pi-plus" routerLink="newgame"></button>
-        </div>
-</div>
-    
+        <div class="align-items-end">
+           
+            <button *ngIf="!autorefresh"  pButton pRipple type="button" class="topbuttons p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClickRefresh()" 
+            pTooltip="This will manually refresh the lobby list." tooltipPosition="top"></button>
 
-    <p-scrollPanel [style]="{width:'100%',height:'600px'}">
+            <p-toggleButton class="topbuttons"  [(ngModel)]="autorefresh" onLabel="Auto-refresh lobby list" offLabel="Autorefresh" onIcon="pi pi-check" offIcon="pi pi-times" 
+                pTooltip="Auto-refresh reloads the lobby list automatically every 10 seconds." tooltipPosition="top"></p-toggleButton>
+
+            <button pButton pRipple class="p-button-raised topbuttons" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch' "></button>
+        </div>
+    </div>
+
+    <div *ngIf='loading' class="flex justify-content-center ">
+        <p-progressSpinner strokeWidth="8" [styleClass]="'custom-spinner'" ></p-progressSpinner></div>
+
+
+    <!-- Actual data if present-->
+    <p-scrollPanel *ngIf="!loading" [style]="{width:'100%',height:'600px'}">
 
         <!-- No games view-->
         <div *ngIf="!hasGames">
@@ -35,31 +45,31 @@
                             <div class="surface-card shadow-2 border-rounded p-3" style="border-radius: 6px">
                                 <div class="flex justify-content-between align-items-start">
                                     <div>
-                                        <div class="text-xl font-medium text-900 mb-2">
-                                            {{game.name}} 
-                                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
-                                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
-                                        
+                                        <div class=" flex justify-content-start align-items-baseline font-medium text-900 mb-2">
+                                            {{game.name+" "}}
+                                            <div class="mx-2">
+                                                <i class="pi pi-lock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
+                                                <i class="pi pi-verified" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i>
+                                            </div>
                                         </div>
                                         <p class="mt-0 mb-3 text-600">
                                             {{game.id}} <br>
                                         </p>
                                     </div>
                                     <div class="p-buttonset">
-                                            <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game/set', game.id]"></button>
-                                            <button pButton class="p-button-round p-button-secondary" disabled="true"  icon="pi pi-eye" pTooltip="Coming soon!" tooltipPosition="top"></button>
+                                            <button pButton pRipple icon="pi pi-play" class="p-button-round" [routerLink]="['/game', game.id]" pTooltip="Play" tooltipPosition="top"></button>
+                                            <button pButton class="p-button-round p-button-secondary" [routerLink]="['/spectate', game.id]"  icon="pi pi-eye" pTooltip="Spectate" tooltipPosition="top"></button>
                                     </div>
                                 </div>
                                 <ul class="list-none m-0 p-0">
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         
                                         <span class="text-600 font-medium text-sm">
-                                            <p-tag  value="{{game.current ? 'Running':'Waiting for players'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
+                                            <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
                                         </span>
                                         <span class="text-900 font-medium text-sm">
-                                            {{getFormatTime(game.time)}} s
-                                            <span *ngIf="game.current"> elapsed </span>
-                                            <span *ngIf="!game.current"> remaining </span>
+                                            {{truncateDecimals(game.time/60)}}m {{truncateDecimals(game.time%60).toFixed(0)}}s 
+                                            {{game.running? " elapsed" : " left"}}
                                         </span>
                                     </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
@@ -69,8 +79,8 @@
                                     </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         
-                                        <span class="text-600 font-medium text-sm"><i class="pi pi-user"></i>  Players</span>
-                                        <span class="text-900 font-medium text-sm">{{game.players}}/{{game.maxplayers}}</span>
+                                        <span class="text-600 font-medium text-sm"><i class="pi pi-user"></i>  Players or bots</span>
+                                        <span class="text-900 font-medium text-sm">{{game.connected.length+game.bots}}/{{game.players}}</span>
                                     </li>
                                     <li class="px-0 py-2 flex justify-content-between align-items-center border-bottom-1 surface-border">
                                         <span class="text-600 font-medium text-sm"><i class="pi pi-eye"></i>  Spectators</span>
@@ -89,7 +99,7 @@
 
         <!-- Table view-->
         <div  *ngIf="view_mode === 'table' && hasGames" class="cc-gamelist">
-            <p-table [value]="gamelist" [loading]="loading" responsiveLayout="scroll" [breakpoint]="'960px'">
+            <p-table [loading]="loading" [value]="gamelist" responsiveLayout="scroll" [breakpoint]="'960px'">
                 <ng-template pTemplate="header">
                     <tr>
                         <th [pSortableColumn]="'name'"> Match name 
@@ -106,7 +116,7 @@
                             <p-sortIcon [field]="'game'"></p-sortIcon>
                         </th>
                         
-                        <th>Players</th>
+                        <th>Players or bots</th>
                         <th>Spectators</th>
                         <th>Timeout</th>
 
@@ -122,26 +132,28 @@
                     <tr>
                         <td>
                             {{game.name}} 
-                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
-                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
+                            <i class="pi pi-lock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
+                            <i class="pi pi-verified" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
                         </td>
                         <td>{{game.id}}</td>
                         <td>{{game.game}}</td>
-                        <td>{{game.players}} / {{game.maxplayers}}</td>
+                        <td>{{game.connected.length+game.bots}} / {{game.players}}</td>
                         <td>{{game.spectators}}</td>
                         <td>{{game.timeout}} s</td>
-                        <td>
-                            <p-tag  value="{{game.current ? 'Running':'Waiting for players'}}" [severity]="game.current ? 'success' : 'warning'"></p-tag>
-                                        
+                        <td class="flex-column">     
                             <span class="text-900 font-medium text-sm">
-                                <span *ngIf="game.current"> - </span>
-                                {{getFormatTime(game.time)}} s
+                                {{truncateDecimals(game.time/60)}}m {{truncateDecimals(game.time%60).toFixed(0)}}s 
+                                {{game.running? " elapsed" : " left"}}
                             </span>
+                            
+                            <br>
+                            <p-tag  value="{{game.running ? 'Running':'Waiting for players'}}" [severity]="game.running ? 'success' : 'warning'"></p-tag>
                         </td>
                         <td>
-                            <div class="cc-play-buttons">
-                                <button pButton class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/set', game.id]"></button>
-                                <button pButton class="p-button-sm p-button-secondary" disabled="true" label="Spectate" icon="pi pi-eye" iconPos="left" pTooltip="Coming soon!" tooltipPosition="top"></button>
+                            <div class="cc-play-buttons">   
+                                <button *ngIf="game.running" pButton disabled class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/set', game.id]"></button>
+                                <button *ngIf="!game.running" pButton class="p-button-sm" label="Play" icon="pi pi-play" iconPos="left" [routerLink]="['/game/', game.id]"></button>
+                                <button pButton class="p-button-sm  p-button-secondary" label="Spectate" icon="pi pi-eye" iconPos="left" [routerLink]="['/spectate/', game.id]"></button>
                             </div>
                         </td>
                     </tr>
