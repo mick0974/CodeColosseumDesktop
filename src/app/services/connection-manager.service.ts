@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { runInThisContext } from 'vm';
 import { ApiService, MatchInfo } from './api-service/api.service';
 
 @Injectable({
@@ -60,7 +59,7 @@ export class ConnectionManagerService {
     }
     
     let req = this.api!.lobbyList( onSuccess );
-    req.onError = this.onApiError;
+    req.onError = (error)=> { this.onApiError(error) };
     console.log(req)
   }
 
