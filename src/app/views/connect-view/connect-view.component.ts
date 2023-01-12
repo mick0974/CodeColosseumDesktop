@@ -32,7 +32,6 @@ export class ConnectViewComponent implements OnInit {
 
   public async connect(): Promise<void> {
     await this.connectionManager.connect(this.connectData.server, this.connectData.username);
-
   }
   serverChange(event: any){
     //console.log(event);
@@ -44,6 +43,19 @@ export class ConnectViewComponent implements OnInit {
   }
   onClick(){
     
+    let valid = true;
+    try {
+      let url = new URL(this.connectData.server);
+      valid = url.protocol == 'ws:' || url.protocol == 'wss:';
+    } catch (_) {
+      valid = false
+    }
+    if(!valid){
+      this.error = true
+      return
+    }
+    
+
     if(this.connectData.server && this.connectData.username && this.connectData.username.length<=25){
       this.error = false;
       this.waiting = true;
