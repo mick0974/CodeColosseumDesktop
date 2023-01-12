@@ -25,7 +25,7 @@
           <button pButton pRipple type="button" id="button" (click)="onClick()" label="CONNECT" class="border-round"></button>
         </div>
         <div class="field col-12" id="error-div">
-          <small class="p-error" *ngIf="(error)">Unable to connect to the server. The server address may be incorrect or the server may be offline.</small>
+          <small class="p-error" *ngIf="(error)">{{error_msg}}</small>
         </div>
 
         <div class="col-12 flex justify-content-center">
