@@ -16,6 +16,7 @@ export class ConnectViewComponent implements OnInit {
   submitted: boolean = false;
   waiting:boolean = false;
   error:boolean = false;
+  error_msg:string = "";
   public connectData:any={};
     
   constructor(
@@ -23,10 +24,16 @@ export class ConnectViewComponent implements OnInit {
     private readonly router: Router,
   ) {
     this.error = this.connectionManager.error;
+    if(this.error)
+      this.error_msg = "Unable to connect to the server. The server address may be incorrect or the server may be offline.";
+    
    }
 
   ngOnInit(): void {
     this.error = this.connectionManager.error;
+    if(this.error)
+      this.error_msg = "Unable to connect to the server. The server address may be incorrect or the server may be offline.";
+    
     console.log('Page reload error = ' + this.error);
   }
 
@@ -52,6 +59,7 @@ export class ConnectViewComponent implements OnInit {
     }
     if(!valid){
       this.error = true
+      this.error_msg = "Server name not valid."
       return
     }
     
