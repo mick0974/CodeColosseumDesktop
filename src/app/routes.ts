@@ -6,6 +6,7 @@ import { HomeViewComponent } from './views/home-view/home-view.component';
 import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
 import { CreateMatchViewComponent } from './views/create-match-view/create-match-view.component';
 import { AboutViewComponent } from './views/about-view/about-view.component';
+import { FeedbackViewComponent } from './views/feedback-view/feedback-view.component';
 
 export const routes: Routes = [
     {
@@ -39,5 +40,9 @@ export const routes: Routes = [
     {
         path: 'about',
         component: AboutViewComponent,
+    }
+    ,{
+        path:'feedback',
+        component: FeedbackViewComponent,
     }
 ];
