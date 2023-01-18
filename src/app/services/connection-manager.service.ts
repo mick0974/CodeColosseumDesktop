@@ -6,10 +6,11 @@ import { ApiService, MatchInfo } from './api-service/api.service';
   providedIn: 'root'
 })
 export class ConnectionManagerService {
-  private _url: string = "ws://127.0.0.1:8088/";
+  //private _url: string = "ws://127.0.0.1:8088/";
+  private _url: string = "";
   private _username: string = "Username";
 
-  private api:ApiService= new ApiService();
+  private api?:ApiService;
   
   private _isConnected: boolean = false;
   //deve prenderlo dalla home
@@ -36,10 +37,12 @@ export class ConnectionManagerService {
 
   async onApiError(message: string){
     console.log("Couldn't establish connection! For error " + message);
-    alert("Error: " + message)
+
+    // If we reach this point, it means connection with the server was lost (or the login went bad.) Let's go to connect page.
+
     this.error = true;
     this._isConnected = false;
-    this.reloadComponent(true);
+    this.reloadComponent(false,"/connect");
   }
 
   async lobbyList() {
@@ -55,13 +58,13 @@ export class ConnectionManagerService {
       
     }
     
-    let req = this.api.lobbyList( onSuccess );
-    req.onError = this.onApiError;
+    let req = this.api!.lobbyList( onSuccess );
+    req.onError = (error)=> { this.onApiError(error) };
     console.log(req)
   }
 
   async lobbyList1(onSuccess:(gameList:MatchInfo[])=>void ) {
-    let req = this.api.lobbyList( onSuccess );
+    let req = this.api!.lobbyList( onSuccess );
     req.onError = this.onApiError;
     //qui avviene l'errore che non riesce a connettersi al server
     console.log(req)
@@ -82,8 +85,8 @@ export class ConnectionManagerService {
   public async connect(url: string, username: string): Promise<boolean> {
     this._url = url;
     this._username = username;
+    this.api = new ApiService(this._url);
     
-    // TODO: connect to server
     // Add the below lines to the connect method
     this.lobbyList();
     
