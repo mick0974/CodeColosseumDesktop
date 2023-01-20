@@ -12,6 +12,16 @@ on:
         - 'ubuntu-latest'
         - 'macos-latest'
         - 'windows-latest'
+      draftRelease:
+        description: 'Draft Release'
+        required: true
+        default: true
+        type: boolean
+      preRelease:
+        description: 'Pre Release'
+        required: true
+        default: false
+        type: boolean
   #push:
   #  branches:
   #    - release
@@ -46,5 +56,5 @@ jobs:
           tagName: codecolosseum-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'CodeColosseum v__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: true
-          prerelease: false
+          releaseDraft: ${{ inputs.draftRelease }}
+          prerelease: ${{ inputs.preRelease }}
