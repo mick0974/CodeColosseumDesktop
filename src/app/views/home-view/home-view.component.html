@@ -2,24 +2,32 @@
 
 
     <h1 >Join game</h1>
-
+    
+    <!--Header with toggles, button-->
     <div class="cc-gamelist-header"> 
-        <p-selectButton [style]="{'align-items': 'center',display:'inline-block','box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
+        <p-selectButton class="flex justify-content-center align-self-center align-items-baseline" [style]="{'box-shadow': 'none'}"  [options]="stateOptions" [(ngModel)]="view_mode">
             <ng-template let-item>
-                <i [class]="item.icon"></i>
+                <i [class]="item.icon + ' toggleicon'"></i>
             </ng-template>
         </p-selectButton> 
 
-        <div>
-            <button pButton pRipple type="button" class="p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClickRefresh()"></button>
-            <button pButton pRipple class="p-button-raised" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch' "></button>
+        <div class="align-items-end">
+           
+            <button *ngIf="!autorefresh"  pButton pRipple type="button" class="topbuttons p-button-rounded p-button-outlined" icon="pi pi-refresh" (click)="onClickRefresh()" 
+            pTooltip="This will manually refresh the lobby list." tooltipPosition="top"></button>
+
+            <p-toggleButton class="topbuttons"  [(ngModel)]="autorefresh" onLabel="Auto-refresh lobby list" offLabel="Autorefresh" onIcon="pi pi-check" offIcon="pi pi-times" 
+                pTooltip="Auto-refresh reloads the lobby list automatically every 10 seconds." tooltipPosition="top"></p-toggleButton>
+
+            <button pButton pRipple class="p-button-raised topbuttons" label="Create new match" icon="pi pi-plus" [routerLink]="'/newmatch' "></button>
         </div>
-</div>
+    </div>
 
     <div *ngIf='loading' class="flex justify-content-center ">
         <p-progressSpinner strokeWidth="8" [styleClass]="'custom-spinner'" ></p-progressSpinner></div>
 
 
+    <!-- Actual data if present-->
     <p-scrollPanel *ngIf="!loading" [style]="{width:'100%',height:'600px'}">
 
         <!-- No games view-->
@@ -37,11 +45,12 @@
                             <div class="surface-card shadow-2 border-rounded p-3" style="border-radius: 6px">
                                 <div class="flex justify-content-between align-items-start">
                                     <div>
-                                        <div class="text-xl font-medium text-900 mb-2">
-                                            {{game.name}} 
-                                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
-                                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
-                                        
+                                        <div class=" flex justify-content-start align-items-baseline font-medium text-900 mb-2">
+                                            {{game.name+" "}}
+                                            <div class="mx-2">
+                                                <i class="pi pi-lock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
+                                                <i class="pi pi-verified" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i>
+                                            </div>
                                         </div>
                                         <p class="mt-0 mb-3 text-600">
                                             {{game.id}} <br>
@@ -123,8 +132,8 @@
                     <tr>
                         <td>
                             {{game.name}} 
-                            <i class="pi pi-unlock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
-                            <i class="pi pi-check" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
+                            <i class="pi pi-lock" *ngIf="game.password" pTooltip="Requires password" tooltipPosition="top"> </i> 
+                            <i class="pi pi-verified" *ngIf="game.verified" pTooltip="Verified" tooltipPosition="top"> </i> 
                         </td>
                         <td>{{game.id}}</td>
                         <td>{{game.game}}</td>

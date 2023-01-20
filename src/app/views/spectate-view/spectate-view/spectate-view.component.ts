@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService, LobbyEventType } from 'src/app/services/api-service/api.service';
+import { LobbyEventType } from 'src/app/services/api-service/api.service';
 import { MatchInfo } from 'src/app/services/api-service/api.service';
 import { ChatMessage } from 'src/app/ChatMessage';
+import { ConnectionManagerService } from '../../../services/connection-manager.service';
+import { ApiService } from '../../../services/api-service/api.service';
 @Component({
   selector: 'app-spectate-view',
   templateUrl: './spectate-view.component.html',
@@ -15,8 +17,12 @@ export class SpectateViewComponent implements OnInit {
   newMsg:string="";
   messages:ChatMessage[]=[];
 
+  apiService:ApiService;
+
   constructor(private activatedRoute:ActivatedRoute,
-    private apiService:ApiService) { }
+    connectionService:ConnectionManagerService) { 
+      this.apiService = connectionService.api!;
+    }
 
   ngOnInit(): void {
     this.gameId = this.activatedRoute.snapshot.params['id'];
@@ -35,7 +41,6 @@ export class SpectateViewComponent implements OnInit {
           }
           this.newMsg = this.newMsg.substring(0,this.newMsg.length-2)
           this.messages.push({sender:"server",content:this.newMsg})
-        
         }
       }
       else{ 
@@ -43,13 +48,11 @@ export class SpectateViewComponent implements OnInit {
         // Check if game started running
         if (!this.lastMatchState.running && matchInfo.running){
           this.messages.push({sender:"server",content:"Game is starting!"})
+          this.messages.push({sender:"divider",content:"Game started!"})
         }
 
-
-
-
         // this finds the name of the new player that has joined.
-        let newPlayer=""
+        let newPlayer="";
         let pastConnected=this.lastMatchState.connected;
         let newConnected=matchInfo.connected=matchInfo.connected
         if(pastConnected.length < newConnected.length){
@@ -62,22 +65,20 @@ export class SpectateViewComponent implements OnInit {
           this.newMsg=newPlayer+" has left the match!";
           this.messages.push({sender:"server",content:this.newMsg})
         }
-      
       }
       this.lastMatchState=matchInfo;
     }
   
 
     let onData = (data:string)=>{
-      console.log("---ondata happened")
-      console.log(data)
+      this.messages.push({sender:"server", content:data.replaceAll("\n", "<br>")});
     }
 
     let onEvent = (type:LobbyEventType)=>{
-      //TODO handle if connection aint established
-      console.log("onEvent (join) was executed")
-      console.log(type)
+      if(type == LobbyEventType.End){
+        this.messages.push({sender:"server", content:"Game ended!"})
       }
+    }
 
     // gestire se l'id è canato
     this.apiService.connectToSpectate(
@@ -86,12 +87,5 @@ export class SpectateViewComponent implements OnInit {
       onMatchUpdate,
       onData
     )
-    
-
-
-
-
-
   }
-
 }

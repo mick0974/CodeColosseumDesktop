@@ -14,7 +14,9 @@ export class ConnectViewComponent implements OnInit {
   //public username: string = "";
   
   submitted: boolean = false;
+  waiting:boolean = false;
   error:boolean = false;
+  error_msg:string = "";
   public connectData:any={};
     
   constructor(
@@ -22,22 +24,21 @@ export class ConnectViewComponent implements OnInit {
     private readonly router: Router,
   ) {
     this.error = this.connectionManager.error;
+    if(this.error)
+      this.error_msg = "Unable to connect to the server. The server address may be incorrect or the server may be offline.";
+    
    }
 
   ngOnInit(): void {
     this.error = this.connectionManager.error;
+    if(this.error)
+      this.error_msg = "Unable to connect to the server. The server address may be incorrect or the server may be offline.";
+    
     console.log('Page reload error = ' + this.error);
   }
 
   public async connect(): Promise<void> {
     await this.connectionManager.connect(this.connectData.server, this.connectData.username);
-
-    if (this.connectionManager.isConnected && !this.connectionManager.error ) {
-      //this.router.navigateByUrl('/home');
-    } else {
-      // TODO: Show error message
-    }
-
   }
   serverChange(event: any){
     //console.log(event);
@@ -49,12 +50,34 @@ export class ConnectViewComponent implements OnInit {
   }
   onClick(){
     
-    if(this.connectData.server && this.connectData.username){
+    let valid = true;
+    try {
+      let url = new URL(this.connectData.server);
+      valid = url.protocol == 'ws:' || url.protocol == 'wss:';
+    } catch (_) {
+      valid = false
+    }
+    if(!valid){
+      this.error = true
+      this.error_msg = "Server name not valid."
+      return
+    }
+    
+
+    if(this.connectData.server && this.connectData.username && this.connectData.username.length<=25){
+      this.error = false;
+      this.waiting = true;
       this.connect();
       return;
     }
     //this.newConnection.emit();
     this.submitted = true;
     
+  }
+
+  onEnter(event:any){
+    if(event.keyCode === 13){
+      this.onClick();
+    }
   }
 }

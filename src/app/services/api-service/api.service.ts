@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Packets } from './api.packets';
 import { Commands } from './api.commands';
-import { CoCoSocket } from './api.socket';
 
 
 export interface GameParams extends Packets.GameParams{}
@@ -26,7 +24,7 @@ export class GameDescription {
   }
 }
 
-export class GameDetails{
+export class GameDetails {
   public lobby_name?:string;
   public password?:string;
   public game_description?:GameDescription;
@@ -56,22 +54,17 @@ export enum ErrorType{
   LobbyCreateFailed = 'LobbyCeateFailed'
 }
 
-
-
+/*
 @Injectable({
   providedIn: 'root'
 })
+*/
 
 export class ApiService {
-  public url = 'ws://localhost:8088';
-  public ws?:CoCoSocket;
+  public url:string="";
 
-  constructor(){
-
-  }
-  
-  private createCoCosocket(url:string) {
-    this.ws = new CoCoSocket(url);
+  constructor(url:string){
+    this.url=url;
   }
 
   public gameList(onResult:(gameList:string[])=>void){
@@ -107,16 +100,8 @@ export class ApiService {
 
   public createNewLobby( 
       onData:(newGame:string)=>void, 
+      onError:(error:string)=>void,
       gameDetails:GameDetails
-      /*
-      lobby_name:string, 
-      game_name:string, 
-      players?:number,
-      bots?:number,
-      timeout?:number,
-      args?:{}, //new RoshamboArgs || new RoyalurArgs
-      password?:string
-      */
     ){
       let gameArgs;
       if(gameDetails.args!.length > 1) { 
@@ -127,6 +112,7 @@ export class ApiService {
       }
 
       let cmdNewGame = new Commands.NewLobby(this.url, gameDetails.lobby_name, gameDetails.game_description!.game_name, gameDetails.game_params!.players, gameDetails.game_params!.bots, gameDetails.game_params!.timeout, gameArgs, gameDetails.password, gameDetails.verification);
+      cmdNewGame.onError = onError;
       cmdNewGame.onReciveNewLobby = (message)=>{
         if(onData){
           if(message.id["Err"] != undefined){

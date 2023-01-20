@@ -1,10 +1,9 @@
 <div class="cc-column-layout">
 
-    <h1>{{errorMessage}}</h1>
 
     <div class="cc-error-404 flex-column justify-content-center" *ngIf="game===null"  >
         <h2> It looks like this game doesn't exist. </h2>
-        <button  pButton type="button" label="Go back to game list" [routerLink]="'/home'"></button>
+        <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
     </div>
 
 
@@ -33,25 +32,28 @@
                             <div class="m-4">{{currProgramName}}</div>
                         </div>
                         <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
-                    </div>                        
-
-
+                    </div>
 
                     <div class="field mb-4 col-12" *ngIf="hasPassword">
                         <label for="password" class="font-medium text-900">Match password</label>
-                        <input #password="ngModel" id="password" type="text" required pInputText [(ngModel)]="uploadData.password" [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}">
-                        <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">Password is required for this game.</small>
+                        <p-password required #password="ngModel" name="password" [(ngModel)]="uploadData.password"  id="password" [feedback]="false"  [ngClass]="{'ng-dirty': (password.invalid && submitted) || (password.dirty && password.invalid)}"></p-password>
+                        <small class="p-error" *ngIf="(password.invalid && submitted) || (password.dirty && password.invalid)">This game requires a password.</small>
+                    
+
+                    
                     </div>
 
 
                     <div class="field mb-4 col-12">
                         <label for="parameters" class="font-medium text-900">Parameters</label>
-                        <textarea id="parameters" type="text" pinputtextarea="" rows="5" class="p-inputtextarea p-inputtext p-component p-element p-inputtextarea-resizable" style="height: 132px; overflow: hidden;"></textarea>
+                        <textarea id="parameters" [(ngModel)]="executableParameters" type="text" pinputtextarea="" rows="5" class="p-inputtextarea p-inputtext p-component p-element p-inputtextarea-resizable" style="height: 132px; overflow: hidden;"></textarea>
+                        <small>Your parameters must be separated by a comma (,). Parameters that contain commas are currently not supported.</small>
                     </div>
 
 
-                    <div class="col-12">
+                    <div class="col-12 ">
                         <button pRipple (click)="navigateToPlay()" pbutton="" pripple="" label="Start match!" class="p-element p-ripple w-auto mt-3 p-button p-component"><span class="p-button-label">Start match!</span><span class="p-ink"></span></button>
+                        <small class="m-2 p-error">{{errorMessage}}</small>
                     </div>
                 </div>
             </div>
@@ -60,13 +62,12 @@
             <!-- Chat/game screen-->
             <div *ngIf="currStep==1" class="text-center">
                 <h2> Match chat </h2>    
-                <cc-chat [messages]="this.messages"></cc-chat>
-                <button  pButton type="button" label="Go back to setup" (click)="navigateToUpload()"></button>
-                <button disabled="true" pButton type="button" label="Next" pTooltip="This feature has not yet been implemented. Come back to see how your program did, step by step!"></button>
-            </div>
+                <cc-chat [messages]="this.messages"></cc-chat></div>
 
         </div>
-        <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
+        <div class=" flex justify-content-center ">
+            <button pButton class="p-button-secondary p-button-outlined" type="button" label="Go back to game list" [routerLink]="'/home'" style="margin:30px"></button>
+        </div>
     </div>
 </div>
 

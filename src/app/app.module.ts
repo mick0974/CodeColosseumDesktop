@@ -31,6 +31,7 @@ import {InplaceModule} from 'primeng/inplace';
 import {TabViewModule} from 'primeng/tabview';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {ToggleButtonModule} from 'primeng/togglebutton';
 
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -38,6 +39,8 @@ import { CreateMatchViewComponent } from './views/create-match-view/create-match
 import { CcChatComponent } from './components/cc-chat/cc-chat.component';
 import { SpectateViewComponent } from './views/spectate-view/spectate-view/spectate-view.component';
 import { MarkdownPipe } from './markdown.pipe';
+import { AboutViewComponent } from './views/about-view/about-view.component';
+import { FeedbackViewComponent } from './views/feedback-view/feedback-view.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +51,9 @@ import { MarkdownPipe } from './markdown.pipe';
     CreateMatchViewComponent,
     CcChatComponent,
     SpectateViewComponent,
-    MarkdownPipe
+    MarkdownPipe,
+    AboutViewComponent,
+    FeedbackViewComponent
   ],
   imports: [
     BrowserModule,
@@ -74,6 +79,7 @@ import { MarkdownPipe } from './markdown.pipe';
     TabViewModule,
     InputNumberModule,
     ProgressSpinnerModule,
+    ToggleButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent],

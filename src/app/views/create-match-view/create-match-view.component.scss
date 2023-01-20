@@ -1,3 +1,6 @@
+.cc-column-layout{
+    width:80%
+}
 .div.cc-create-match-container{
     text-align: center;
     margin-top: 0px;
@@ -96,26 +99,25 @@ img{
 }
 .description-info {
     display: flex;          /* nested flexbox, to enable flex properties */
-    flex-direction: column;
+    //flex-direction: column;
     //justify-content: center;
     //align-items: center;
-    width: 75%;
-    overflow: hidden;
+    width: 100%;
+    height: 500px;
+    //overflow:scroll;
     //border: 3px solid red;
     //font-family: verdana;
     //font-weight: bold;
     //font-size: 2em;
     //color: red;
-    box-sizing: border-box;
-    overflow: auto;
-    margin-right: 30px;
+    //box-sizing: border-box;
+    //margin-right: 30px;
 }
 .container-inner {
     display: flex;         /* nested flexbox */
     flex-direction: column;
     width: 100%;
     //border: 3px dashed black;
-    overflow: auto;
     margin-left: 30px;
 }
 .game-params {
@@ -129,10 +131,11 @@ img{
     //font-size: 1.5em;
     //color: green;
     box-sizing: border-box;
-    overflow: auto;
+    //overflow: auto;
 }
 .args-content {
-    display: flex;          /* nested flexbox */
+    display: flex;  
+    width:100%;        /* nested flexbox */
     //justify-content: center;
     //align-items: center;
     flex-grow: 1;          /* box takes all available space (stretch, basically) */
@@ -142,7 +145,7 @@ img{
     //font-size: 2em;
     //color: blue;
     box-sizing: border-box;
-    overflow: auto;
+    //overflow: auto;
 }
 #label-arg{
 margin-top: 10px;
@@ -154,4 +157,24 @@ input{
 }
 #div-btn{
     margin-top: 10px;
+}
+
+
+
+:host ::ng-deep .custom-spinner .p-progress-spinner-circle {
+    animation: ease-in-out infinite, custom-progress-spinner-color 6s ease-in-out infinite;
+    -webkit-animation: ease-in-out infinite, custom-progress-spinner-color 6s ease-in-out infinite;
+}
+
+@keyframes custom-progress-spinner-color {
+    100%,0% {
+        stroke: #2196f3;
+    }
+    90% {
+        stroke: #2196f3;
+    }
+}
+
+.bottombuttonspane>*{
+    height:100%
 }

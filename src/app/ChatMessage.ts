@@ -1,4 +1,6 @@
 export interface ChatMessage{
-    sender:string;
+    sender:ChatSender;
     content:string;
 }
+
+export type ChatSender = "server" | "other" | "me" | "divider";
