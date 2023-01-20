@@ -41,9 +41,7 @@ export class TauriService {
           if (osType!="Windows_NT"){
             const command = new Command("sh", ["-c", `chmod +x ${absolutepath}`]);
 
-            console.log("lol1")
             command.on("close", ()=>{
-              console.log("lol2")
               onFileWritten();
             })
 
@@ -52,6 +50,9 @@ export class TauriService {
             })
 
             command.spawn();
+          }
+          else{
+            onFileWritten();
           }
 
           }, (reason:any)=>{
@@ -108,12 +109,11 @@ export class TauriService {
       
     const osType = await type();
 
-    let command;
-
+    let command: Command;
     // TODO! At the moment, spaces in the filepath break the program.
     // In Windows, a new cmd is executed to run the file with its arguments. 
     if (osType == "Windows_NT"){
-      command = new Command('sh-windows', [ "/c", `${this.absoluteFilePath} 10 1`])
+      command = new Command('sh-windows', [ "/c", `${this.absoluteFilePath} ${args.join(" ")}`])
     // In Linux/MacOs, sh is used.
     }else{
       command = new Command("sh", ["-c", `${this.filepath} ${args.join(" ")}`]);
@@ -126,6 +126,7 @@ export class TauriService {
 
       onProcessStdOut(line);
     });
+    
     command.stderr.on("data", (line:any) => {
       if(onProcessStdErr){
         onProcessStdErr(line);

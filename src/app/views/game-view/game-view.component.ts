@@ -19,6 +19,8 @@ export class GameViewComponent implements OnInit {
   //Connect command
   connectCmd?: ConnectCommand;
 
+  apiService: ApiService;
+
   //Gen
   game! : MatchInfo | null;
   gameId : string= "" ;
@@ -44,12 +46,12 @@ export class GameViewComponent implements OnInit {
 
   tauriService = new TauriService();
 
-  constructor(private router:Router,
+  constructor(
     private activatedroute:ActivatedRoute,
-    private connectionManager:ConnectionManagerService,
-    private apiService:ApiService,
     private connectionService:ConnectionManagerService,
-    private ref:ChangeDetectorRef) { }
+    private ref:ChangeDetectorRef) { 
+      this.apiService = connectionService.api!;
+     }
 
   ngOnInit(): void {
     let token = this.activatedroute.snapshot.paramMap.get('id');
@@ -68,10 +70,10 @@ export class GameViewComponent implements OnInit {
         }
         else{
           this.game=null;
-          console.log("Gameview: game token is not valid.")
+          console.log("Gameview: game token is not valid.");
         }
       }
-      this.connectionManager.lobbyList1(onSuccess)
+      this.connectionService.lobbyList1(onSuccess)
     }
     else {
       this.game=null;
