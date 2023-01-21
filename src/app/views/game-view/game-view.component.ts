@@ -234,8 +234,6 @@ export class GameViewComponent implements OnInit {
       }
     }
 
-    console.log(paramsArray.toString());
-
     //Todo put in actual parameters, these are now hardcoded
     this.tauriService.execProgram(paramsArray, onStdOut, onStdErr);
   }
