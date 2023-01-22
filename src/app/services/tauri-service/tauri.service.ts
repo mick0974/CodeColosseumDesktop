@@ -105,7 +105,6 @@ export class TauriService {
     args: string[],
     onProcessStdOut: (output:string)=>void,
     onProcessStdErr?: (error:string)=>void){
-
       
     const osType = await type();
 
@@ -113,9 +112,11 @@ export class TauriService {
     // TODO! At the moment, spaces in the filepath break the program.
     // In Windows, a new cmd is executed to run the file with its arguments. 
     if (osType == "Windows_NT"){
-      command = new Command('sh-windows', [ "/c", `${this.absoluteFilePath} ${args.join(" ")}`])
+      command = new Command('sh-windows', [ "/c", `${this.absoluteFilePath} ${args.join(" ")}`], 
+        {"encoding": "utf-8"})
     // In Linux/MacOs, sh is used.
-    }else{
+    }
+    else{
       command = new Command("sh", ["-c", `${this.filepath} ${args.join(" ")}`]);
     }
 
@@ -141,11 +142,13 @@ export class TauriService {
           console.log("Error, could not delete executable: " + reason)
         })
       }, (reason:any)=>{
-        console.log("Error, could not resolve path to executable to delete it")
+        console.log("Error, could not resolve path to executable to delete it: " + reason)
       })
     })
 
-    command.on("error", ()=>{
+    command.on("error", (error:any)=>{
+      console.log("Error occurred during execution: " + error)
+      
       path.resolve(this.filepath).then((absolutepath:string)=>{
         fs.removeFile(absolutepath).then(()=>{
           console.log("Successfully deleted executable after error")
@@ -153,7 +156,7 @@ export class TauriService {
           console.log("Error, could not delete executable: " + reason)
         })
       }, (reason:any)=>{
-        console.log("Error, could not resolve path to executable to delete it")
+        console.log("Error, could not resolve path to executable to delete it: " + reason)
       })
     })
 
