@@ -1,4 +1,4 @@
-name: 'Release All'
+name: 'Publish All'
 on:
   workflow_dispatch:
   #push:
@@ -12,18 +12,18 @@ jobs:
     - name: Build Ubuntu
       uses: benc-uk/workflow-dispatch@v1
       with:
-        workflow: release.yaml
+        workflow: publish.yaml
         inputs: '{ "os": "ubuntu-latest"}'
     
     - name: Build Windows
       uses: benc-uk/workflow-dispatch@v1
       with:
-        workflow: release.yaml
+        workflow: publish.yaml
         inputs: '{ "os": "windows-latest"}'
         
     - name: Build MacOS
       uses: benc-uk/workflow-dispatch@v1
       with:
-        workflow: release.yaml
+        workflow: publish.yaml
         inputs: '{ "os": "macos-latest"}'
         
