@@ -1,0 +1,29 @@
+name: 'Release All'
+on:
+  workflow_dispatch:
+  #push:
+  #  branches:
+  #    - release
+
+jobs:
+  publish-all:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build Ubuntu
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: release.yaml
+        inputs: '{ "os": "ubuntu-latest"}'
+    
+    - name: Build Windows
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: release.yaml
+        inputs: '{ "os": "windows-latest"}'
+        
+    - name: Build MacOS
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: release.yaml
+        inputs: '{ "os": "macos-latest"}'
+        
