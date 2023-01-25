@@ -62,7 +62,12 @@
             <!-- Chat/game screen-->
             <div *ngIf="currStep==1" class="text-center">
                 <h2> Match chat </h2>    
-                <cc-chat [messages]="this.messages"></cc-chat></div>
+                <cc-chat [messages]="this.messages"></cc-chat>
+            </div>
+
+            <div class="text-center">
+                <small class="m-2 p-error">{{gameErrorMessage}}</small>
+            </div>
 
         </div>
         <div class=" flex justify-content-center ">

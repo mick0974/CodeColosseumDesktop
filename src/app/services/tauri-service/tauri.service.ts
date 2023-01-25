@@ -139,15 +139,25 @@ export class TauriService {
         fs.removeFile(absolutepath).then(()=>{
           console.log("Successfully deleted executable after completion")
         }, (reason)=>{
-          console.log("Error, could not delete executable: " + reason)
+          console.log("Error, could not delete executable: " + reason);
+          if(onProcessStdErr){
+            onProcessStdErr(reason);
+          }
         })
       }, (reason:any)=>{
         console.log("Error, could not resolve path to executable to delete it: " + reason)
+        if(onProcessStdErr){
+          onProcessStdErr(reason);
+        }
       })
     })
 
     command.on("error", (error:any)=>{
       console.log("Error occurred during execution: " + error)
+
+      if(onProcessStdErr){
+        onProcessStdErr(error);
+      }
       
       path.resolve(this.filepath).then((absolutepath:string)=>{
         fs.removeFile(absolutepath).then(()=>{

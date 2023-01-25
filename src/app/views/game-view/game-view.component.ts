@@ -28,6 +28,7 @@ export class GameViewComponent implements OnInit {
   currStep : number = 0;
   hasPassword:boolean = true;
   errorMessage:string="";
+  gameErrorMessage:string="";
 
   // Upload screen
   myfile:any[] = [];
@@ -220,7 +221,8 @@ export class GameViewComponent implements OnInit {
     }
 
     let onStdErr = (error:string) => {
-      console.log("Errore nel processo tauri: " + error);
+      this.gameErrorMessage = "Error occurred during execution: " + error;
+      console.log("Error occurred during execution: " + error);
     }
 
     let params = this.executableParameters.trim();
