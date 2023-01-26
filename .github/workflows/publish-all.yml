@@ -1,6 +1,17 @@
 name: 'publish all'
 on:
   workflow_dispatch:
+    inputs:
+      draftRelease:
+        description: 'Draft Release'
+        required: true
+        default: false
+        type: boolean
+      preRelease:
+        description: 'Pre Release'
+        required: true
+        default: false
+        type: boolean
   #push:
   #  branches:
   #    - release
@@ -35,5 +46,5 @@ jobs:
           tagName: TALight-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'TALight v__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: false
-          prerelease: false
+          releaseDraft: ${{ inputs.draftRelease }}
+          prerelease: ${{ inputs.preRelease }}
