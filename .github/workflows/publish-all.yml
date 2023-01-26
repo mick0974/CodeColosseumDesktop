@@ -1,4 +1,4 @@
-name: 'release all'
+name: 'publish all'
 on:
   workflow_dispatch:
   #push:
