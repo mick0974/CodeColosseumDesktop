@@ -12,18 +12,18 @@ jobs:
     - name: Build Ubuntu
       uses: benc-uk/workflow-dispatch@v1
       with:
-        workflow: publish.yaml
+        workflow: Publish
         inputs: '{ "os": "ubuntu-latest"}'
     
     - name: Build Windows
       uses: benc-uk/workflow-dispatch@v1
       with:
-        workflow: publish.yaml
+        workflow: Publish
         inputs: '{ "os": "windows-latest"}'
         
     - name: Build MacOS
       uses: benc-uk/workflow-dispatch@v1
       with:
-        workflow: publish.yaml
+        workflow: Publish
         inputs: '{ "os": "macos-latest"}'
         
