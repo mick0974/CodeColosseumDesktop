@@ -84,16 +84,13 @@ export class GameViewComponent implements OnInit {
 
 
   // UPLOAD METHODS
-
-  
-  fileUpload(event:any){
-    this.uploadData.program = event.target.files[0];
-    this.currProgramName = this.uploadData.program.name;
-
+  openFilePicker(){
     // Uses Tauriserver to make a local copy in the front-end server of the player's bot.
     // This is necessary because Tauri wants a path, and we can't see the user's path for
     // security reasons.
-    this.tauriService.uploadFile(this.uploadData.program, ()=>{
+    this.tauriService.openFilePicker((absolutePath:string)=>{
+      this.uploadData.program = {};
+      this.uploadData.program.name = absolutePath.split('\\').pop()?.split('/').pop();
       this.currProgramName = this.uploadData.program.name;
       this.ref.detectChanges();
     }, (reason)=>{
@@ -105,7 +102,7 @@ export class GameViewComponent implements OnInit {
   navigateToPlay():void{
     this.submitted=true;
     
-    if ((this.hasPassword && this.uploadData.password&&this.uploadData.program)||(!this.hasPassword &&this.uploadData.program)){ 
+    if ((this.hasPassword && this.uploadData.password && this.uploadData.program)||(!this.hasPassword &&this.uploadData.program)){ 
   
     // When first connection is established with apiService.connectToPlay, 
     // client will receive a JoinEvent (that will execute a onEvent)
