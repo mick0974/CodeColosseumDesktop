@@ -145,8 +145,13 @@ export class CreateMatchViewComponent implements OnInit {
     }
     let onError = (reason:any)=>{
       console.log("Error, could not create new lobby: " + reason);
-      this.createError = reason;
-      
+      let lobby_name = newMatch.lobby_name ?? "";
+      if(lobby_name.length > 24){
+        this.createError = "The lobby name must be shorter than 24 characters";
+      }
+      else{
+        this.createError = reason;
+      }
     }
     this.apiService.createNewLobby(onSuccess, onError, newMatch);
       this.waiting = false; // hides the loading wheel as server operations have ended
@@ -184,7 +189,6 @@ export class CreateMatchViewComponent implements OnInit {
   handleChange(event: any){
     var index = event.index;
     console.log("Index of tab that had an event: " + index);
-
   }
 
   toggleDesc(){

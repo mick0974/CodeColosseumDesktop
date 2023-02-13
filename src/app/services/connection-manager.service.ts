@@ -10,7 +10,7 @@ export class ConnectionManagerService {
   private _url: string = "";
   private _username: string = "Username";
 
-  private api?:ApiService;
+  public api?:ApiService;
   
   private _isConnected: boolean = false;
   //deve prenderlo dalla home
@@ -19,7 +19,6 @@ export class ConnectionManagerService {
 
   constructor(
     private readonly router: Router,
-    
   ) { 
     this.onApiError = this.onApiError.bind(this)
   }
