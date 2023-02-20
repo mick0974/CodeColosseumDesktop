@@ -21,14 +21,12 @@
             <div *ngIf="currStep==0">    
                 <div class="flex justify-content-center">
                     <h2> Match setup</h2>
-                </div>     
+                </div>
                 <div class="grid formgrid p-fluid"> <!--"grid formgrid p-fluid w-7">-->
                     <div class="field mb-4 col-12 ">
                         <label for="fileuploader" class="font-medium text-900">Upload bot</label>
-                        <div class="true-input-button">
-                            <input  id="fileuploader" type="file" class="file-upload" (change)="fileUpload($event)" #fileUploader></div>
                         <div class="flex align-content-center align-items-baseline">
-                            <button pRipple class="p-element p-ripple w-auto mt-3 p-button p-component" pbutton="" (click)="fileUploader.click()">Upload</button>
+                            <button pRipple class="p-element p-ripple w-auto mt-3 p-button p-component" pbutton="" (click)="openFilePicker()">Upload</button>
                             <div class="m-4">{{currProgramName}}</div>
                         </div>
                         <div><small class="p-error" *ngIf="!uploadData.program && submitted">You need to upload your program file.</small></div>
@@ -62,7 +60,12 @@
             <!-- Chat/game screen-->
             <div *ngIf="currStep==1" class="text-center">
                 <h2> Match chat </h2>    
-                <cc-chat [messages]="this.messages"></cc-chat></div>
+                <cc-chat [messages]="this.messages"></cc-chat>
+            </div>
+
+            <div class="text-center">
+                <small class="m-2 p-error">{{gameErrorMessage}}</small>
+            </div>
 
         </div>
         <div class=" flex justify-content-center ">

@@ -30,6 +30,7 @@ export class ConnectViewComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.connectData.server = "ws://localhost:8088"
     this.error = this.connectionManager.error;
     if(this.error)
       this.error_msg = "Unable to connect to the server. The server address may be incorrect or the server may be offline.";
