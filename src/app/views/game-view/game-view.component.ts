@@ -19,6 +19,8 @@ export class GameViewComponent implements OnInit {
   //Connect command
   connectCmd?: ConnectCommand;
 
+  apiService: ApiService;
+
   //Gen
   game! : MatchInfo | null;
   gameId : string= "" ;
@@ -26,6 +28,7 @@ export class GameViewComponent implements OnInit {
   currStep : number = 0;
   hasPassword:boolean = true;
   errorMessage:string="";
+  gameErrorMessage:string="";
 
   // Upload screen
   myfile:any[] = [];
@@ -44,12 +47,12 @@ export class GameViewComponent implements OnInit {
 
   tauriService = new TauriService();
 
-  constructor(private router:Router,
+  constructor(
     private activatedroute:ActivatedRoute,
-    private connectionManager:ConnectionManagerService,
-    private apiService:ApiService,
     private connectionService:ConnectionManagerService,
-    private ref:ChangeDetectorRef) { }
+    private ref:ChangeDetectorRef) { 
+      this.apiService = connectionService.api!;
+     }
 
   ngOnInit(): void {
     let token = this.activatedroute.snapshot.paramMap.get('id');
@@ -68,10 +71,10 @@ export class GameViewComponent implements OnInit {
         }
         else{
           this.game=null;
-          console.log("Gameview: game token is not valid.")
+          console.log("Gameview: game token is not valid.");
         }
       }
-      this.connectionManager.lobbyList1(onSuccess)
+      this.connectionService.lobbyList1(onSuccess)
     }
     else {
       this.game=null;
@@ -81,16 +84,13 @@ export class GameViewComponent implements OnInit {
 
 
   // UPLOAD METHODS
-
-  
-  fileUpload(event:any){
-    this.uploadData.program = event.target.files[0];
-    this.currProgramName = this.uploadData.program.name;
-
+  openFilePicker(){
     // Uses Tauriserver to make a local copy in the front-end server of the player's bot.
     // This is necessary because Tauri wants a path, and we can't see the user's path for
     // security reasons.
-    this.tauriService.uploadFile(this.uploadData.program, ()=>{
+    this.tauriService.openFilePicker((absolutePath:string)=>{
+      this.uploadData.program = {};
+      this.uploadData.program.name = absolutePath.split('\\').pop()?.split('/').pop();
       this.currProgramName = this.uploadData.program.name;
       this.ref.detectChanges();
     }, (reason)=>{
@@ -102,7 +102,7 @@ export class GameViewComponent implements OnInit {
   navigateToPlay():void{
     this.submitted=true;
     
-    if ((this.hasPassword && this.uploadData.password&&this.uploadData.program)||(!this.hasPassword &&this.uploadData.program)){ 
+    if ((this.hasPassword && this.uploadData.password && this.uploadData.program)||(!this.hasPassword &&this.uploadData.program)){ 
   
     // When first connection is established with apiService.connectToPlay, 
     // client will receive a JoinEvent (that will execute a onEvent)
@@ -218,7 +218,8 @@ export class GameViewComponent implements OnInit {
     }
 
     let onStdErr = (error:string) => {
-      console.log("Errore nel processo tauri: " + error);
+      this.gameErrorMessage = "Error occurred during execution: " + error;
+      console.log("Error occurred during execution: " + error);
     }
 
     let params = this.executableParameters.trim();
@@ -231,8 +232,6 @@ export class GameViewComponent implements OnInit {
         paramsArray[i] = paramsArray[i].trim();
       }
     }
-
-    console.log(paramsArray.toString());
 
     //Todo put in actual parameters, these are now hardcoded
     this.tauriService.execProgram(paramsArray, onStdOut, onStdErr);

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService, LobbyEventType } from 'src/app/services/api-service/api.service';
+import { LobbyEventType } from 'src/app/services/api-service/api.service';
 import { MatchInfo } from 'src/app/services/api-service/api.service';
 import { ChatMessage } from 'src/app/ChatMessage';
+import { ConnectionManagerService } from '../../../services/connection-manager.service';
+import { ApiService } from '../../../services/api-service/api.service';
 @Component({
   selector: 'app-spectate-view',
   templateUrl: './spectate-view.component.html',
@@ -15,8 +17,12 @@ export class SpectateViewComponent implements OnInit {
   newMsg:string="";
   messages:ChatMessage[]=[];
 
+  apiService:ApiService;
+
   constructor(private activatedRoute:ActivatedRoute,
-    private apiService:ApiService) { }
+    connectionService:ConnectionManagerService) { 
+      this.apiService = connectionService.api!;
+    }
 
   ngOnInit(): void {
     this.gameId = this.activatedRoute.snapshot.params['id'];
@@ -46,7 +52,7 @@ export class SpectateViewComponent implements OnInit {
         }
 
         // this finds the name of the new player that has joined.
-        let newPlayer=""
+        let newPlayer="";
         let pastConnected=this.lastMatchState.connected;
         let newConnected=matchInfo.connected=matchInfo.connected
         if(pastConnected.length < newConnected.length){

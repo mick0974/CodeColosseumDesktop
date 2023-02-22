@@ -1,8 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Packets } from './api.packets';
 import { Commands } from './api.commands';
-import { CoCoSocket } from './api.socket';
-import { ConnectionManagerService } from '../connection-manager.service';
 
 
 export interface GameParams extends Packets.GameParams{}
@@ -27,7 +24,7 @@ export class GameDescription {
   }
 }
 
-export class GameDetails{
+export class GameDetails {
   public lobby_name?:string;
   public password?:string;
   public game_description?:GameDescription;
@@ -65,16 +62,6 @@ export enum ErrorType{
 
 export class ApiService {
   public url:string="";
-
-  // Takes connectionManagerService as the parameter as it would give error
-  // if I just gave the url ^^"
-  // ConnectionManagerService is a singleton and can always be imported and passed by
-  // importing { ConnectionManagerService } class and passing it as an argument with "private".
-  /*
-  constructor(private connectionManager:ConnectionManagerService){
-    this.url=connectionManager.url;
-  }
-  */
 
   constructor(url:string){
     this.url=url;
